@@ -229,6 +229,142 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/MMoE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="没有知识的荒原">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/20/RecommendSystem/Rank/MMoE/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Modeling-Task-Relationships-in-Multi-task-Learning-with-Multi-gate-Mixture-of-Experts"><a href="#Modeling-Task-Relationships-in-Multi-task-Learning-with-Multi-gate-Mixture-of-Experts" class="headerlink" title="Modeling Task Relationships in Multi-task Learning with Multi-gate Mixture-of-Experts"></a>Modeling Task Relationships in Multi-task Learning with Multi-gate Mixture-of-Experts</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在工业界基于神经网络的多任务学习在推荐等场景业务应用广泛，比如在推荐系统中对用户推荐物品时，不仅要推荐用户感兴趣的物品，还要尽可能地促进转化和购买，因此要对用户评分和购买两种目标同时建模。阿里之前提出的ESSM模型属于同时对点击率和转换率进行建模，提出的模型是典型的shared-bottom结构。多任务学习中有个问题就是如果子任务差异很大，往往导致多任务模型效果不佳。今天要介绍的这篇文章是谷歌的一个内容推荐团队考虑了多任务之间的区别提出了MMoE模型，并取得了不错的效果。</p>
+<h3 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h3><p>多任务模型通过学习不同任务的联系和差异，可提高每个任务的学习效率和质量。多任务学习的的框架广泛采用shared-bottom的结构，不同任务间共用底部的隐层。这种结构本质上可以减少过拟合的风险，但是效果上可能受到任务差异和数据分布带来的影响。也有一些其他结构，比如两个任务的参数不共用，但是通过对不同任务的参数增加L2范数的限制；也有一些对每个任务分别学习一套隐层然后学习所有隐层的组合。和shared-bottom结构相比，这些模型对增加了针对任务的特定参数，在任务差异会影响公共参数的情况下对最终效果有提升。缺点就是模型增加了参数量所以需要更大的数据量来训练模型，而且模型更复杂并不利于在真实生产环境中实际部署使用。</p>
+<p>因此，论文中提出了一个Multi-gate Mixture-of-Experts(MMoE)的多任务学习结构。MMoE模型刻画了任务相关性，基于共享表示来学习特定任务的函数，避免了明显增加参数的缺点。</p>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p>MMoE模型的结构(c)<strong>基于广泛使用的Shared-Bottom结构(a)和MoE结构</strong>，其中图(b)是图(c)的一种特殊情况，下面依次介绍。</p>
+<p><img src="http://guoshihao.site:8085/pic/MMoE0.jpg"></p>
+<h3 id="Shared-Bottom-Multi-task-Model"><a href="#Shared-Bottom-Multi-task-Model" class="headerlink" title="Shared-Bottom Multi-task Model"></a>Shared-Bottom Multi-task Model</h3><p>如上图a所示，shared-bottom网络（表示为函数$f$）位于底部，多个任务共用这一层。往上，$K$个子任务分别对应一个tower network（表示为$h^k$），每个子任务的输出为$y_k=h^k(f(x))$。</p>
+<h3 id="Mixture-of-Experts"><a href="#Mixture-of-Experts" class="headerlink" title="Mixture-of-Experts"></a>Mixture-of-Experts</h3><p>MoE模型可以形式化表示为$y=\sum^n_{i+1}g(x)_if_i(x)$，其中$\sum^n_{i+1}g(x)_i=1$。</p>
+<p>$f_i,(i=1,…,n)$是n个expert network（expert network可认为是一个神经网络）。g是组合experts结果的gating network，具体来说g产生n个experts上的概率分布，最终的输出是<strong>所有experts的带权加和</strong>。显然，MoE可看做基于多个独立模型的集成方法。这里注意MoE并不对应上图中的b部分。</p>
+<h3 id="Multi-gate-Mixture-of-Experts"><a href="#Multi-gate-Mixture-of-Experts" class="headerlink" title="Multi-gate Mixture-of-Experts"></a>Multi-gate Mixture-of-Experts</h3><p>文章提出的模型（简称MMoE）目的就是<strong>相对于shared-bottom结构不明显增加模型参数的要求下捕捉任务的不同</strong>。其核心思想是将<strong>shared-bottom网络中的函数f替换成MoE层</strong>，如上图c所示，形式化表达为：<br>$$<br>y_k=h^k(f^k(x)),f^k(x)=\sum^n_{i=1}g^k(x)<em>if_i(x),f_i(x)=W</em>{h \times d}x+b_{h \times 1}<br>$$<br>其中$g^k(x)=softmax(W_{gk}x+b_{gk}),W_{gk}\in\mathbb{R}^{n \times d},b_{gk}\in\mathbb{R}^{n \times 1}$，$W_{gk}$是可更新的参数矩阵，$k$是任务的编号，$n$是expert的个数，$d$是输入特征的维度。输入就是input feature，输出是所有experts上的权重。</p>
+<p>一方面，因为gating networks通常是轻量级的，而且expert networks是所有任务共用，所以相对于论文中提到的一些baseline方法在计算量和参数量上具有优势。</p>
+<p>另一方面，相对于所有任务公共一个门控网络(One-gate MoE model，如上图b)，这里MMoE(上图c)中每个任务使用单独的gating networks。每个任务的gating networks通过最终输出权重不同实现对experts的选择性利用。不同任务的gating networks可以学习到不同的组合experts的模式，因此模型考虑到了捕捉到任务的相关性和区别。</p>
+<p><img src="http://guoshihao.site:8085/pic/MMoE1.jpg"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><h3 id="人工构造数据集"><a href="#人工构造数据集" class="headerlink" title="人工构造数据集"></a>人工构造数据集</h3><p>在真实数据集中我们无法改变任务之间的相关性，所以不太方便进行研究任务相关性对多任务模型的影响。论文中人工构建了两个回归任务的数据集，然后通过两个任务的标签的Pearson相关系数来作为任务相关性的度量。在工业界中<strong>通过人工构造的数据集来验证自己的假设</strong>是个有意思的做法。</p>
+<h3 id="模型的可训练性"><a href="#模型的可训练性" class="headerlink" title="模型的可训练性"></a>模型的可训练性</h3><p>模型的<strong>可训练性，就是模型对于超参数和初始化是否足够鲁棒</strong>。作者在人工合成数据集上进行了实验，观察不同随机种子和模型初始化方法对loss的影响。这里简单介绍下两个现象：第一，Shared-Bottom models的效果方差要明显大于基于MoE的方法，说明Shared-Bottom模型有很多偏差的局部最小点；第二，如果任务相关度非常高，则OMoE和MMoE的效果近似，但是如果任务相关度很低，则OMoE的效果相对于MMoE明显下降，说明<strong>MMoE中的multi-gate的结构对于任务差异带来的冲突有一定的缓解</strong>作用。</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/3219819.3220007">Modeling Task Relationships in Multi-task Learning with Multi-gate Mixture-of-Experts</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/55752344?edition=yidianzixun&utm_source=yidianzixun&yidian_docid=0LC8kTgk">知乎：详解谷歌之多任务学习模型MMoE(KDD 2018)</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://www.cnblogs.com/xindi/p/12349940.html">MMoE论文笔记</a> <a target="_blank" rel="noopener" href="https://github.com/drawbridge/keras-mmoe">代码实现</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/FNN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1727,132 +1863,11 @@ x_i\sum_j v_{jk} x_j - v_{ik}x_i^2, &  \text{if $\theta$ is $w_{ik}$}
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E9%93%BE%E8%A1%A8-%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E8%8A%82%E7%82%B9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="没有知识的荒原">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E9%93%BE%E8%A1%A8-%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E8%8A%82%E7%82%B9/" itemprop="url">Untitled</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
-                2021-01-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="链表中倒数第k个节点"><a href="#链表中倒数第k个节点" class="headerlink" title="链表中倒数第k个节点"></a>链表中倒数第k个节点</h1><p>输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。例如，一个链表有6个节点，从头节点开始，它们的值依次是1、2、3、4、5、6。这个链表的倒数第3个节点是值为4的节点。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getKthFromEnd</span>(<span class="params">self, head: ListNode, k: <span class="built_in">int</span></span>) -&gt; ListNode:</span></span><br><span class="line">        fast = slow = head</span><br><span class="line">        <span class="keyword">while</span> k:</span><br><span class="line">            fast = fast.<span class="built_in">next</span></span><br><span class="line">            k-=<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> fast:</span><br><span class="line">            fast = fast.<span class="built_in">next</span></span><br><span class="line">            slow = slow.<span class="built_in">next</span></span><br><span class="line">        <span class="keyword">return</span> slow</span><br></pre></td></tr></table></figure>
-<h4 id="https-leetcode-cn-com-problems-lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof"><a href="#https-leetcode-cn-com-problems-lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof" class="headerlink" title="https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/">https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/</a></h4>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&lt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">&gt;</a>
+    <a class="extend prev" rel="prev" href="/">&lt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">&gt;</a>
   </nav>
 
 
@@ -1898,7 +1913,7 @@ x_i\sum_j v_{jk} x_j - v_{ik}x_i^2, &  \text{if $\theta$ is $w_{ik}$}
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-count">111</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1906,6 +1921,15 @@ x_i\sum_j v_{jk} x_j - v_{ik}x_i^2, &  \text{if $\theta$ is $w_{ik}$}
 
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
             
 
           </nav>
