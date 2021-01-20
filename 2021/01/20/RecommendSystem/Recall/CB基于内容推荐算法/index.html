@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="零钱兑换II给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。  无限背包问题，边界条件为恰巧装满，dp数组中储存方案数，除了dp[0]&#x3D;1，其他初始化为0 123456789class Solution:    def change(self, amount: int, coins: List[int]) -&gt; int:">
+<meta name="description" content="Content-based Recommendations概述Content-based Recommendations(CB)是根据用户过去喜欢的产品（本文统称为 item），为用户推荐和他过去喜欢的产品相似的产品。例如，一个推荐饭店的系统可以依据某个用户之前喜欢很多的烤肉店而为他推荐烤肉店。 CB最早主要是应用在信息检索系统当中，所以很多信息检索及信息过滤里的方法都能用于CB中。 计算过程CB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/2021/01/20/Algorithm/dp-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II/index.html">
+<meta property="og:url" content="http://example.com/2021/01/20/RecommendSystem/Recall/CB%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AE%B9%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="零钱兑换II给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。  无限背包问题，边界条件为恰巧装满，dp数组中储存方案数，除了dp[0]&#x3D;1，其他初始化为0 123456789class Solution:    def change(self, amount: int, coins: List[int]) -&gt; int:">
+<meta property="og:description" content="Content-based Recommendations概述Content-based Recommendations(CB)是根据用户过去喜欢的产品（本文统称为 item），为用户推荐和他过去喜欢的产品相似的产品。例如，一个推荐饭店的系统可以依据某个用户之前喜欢很多的烤肉店而为他推荐烤肉店。 CB最早主要是应用在信息检索系统当中，所以很多信息检索及信息过滤里的方法都能用于CB中。 计算过程CB">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-01-20T02:14:23.330Z">
-<meta property="article:modified_time" content="2021-01-18T14:19:26.063Z">
+<meta property="article:published_time" content="2021-01-20T02:32:53.891Z">
+<meta property="article:modified_time" content="2020-09-27T13:13:14.000Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2021/01/20/Algorithm/dp-零钱兑换II/"/>
+  <link rel="canonical" href="http://example.com/2021/01/20/RecommendSystem/Recall/CB基于内容推荐算法/"/>
 
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Recall/CB%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AE%B9%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -261,7 +261,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -299,10 +299,33 @@
       
 
       
-        <h2 id="零钱兑换II"><a href="#零钱兑换II" class="headerlink" title="零钱兑换II"></a>零钱兑换II</h2><p>给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。 </p>
-<p>无限背包问题，边界条件为恰巧装满，dp数组中储存方案数，除了dp[0]=1，其他初始化为0</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">change</span>(<span class="params">self, amount: <span class="built_in">int</span>, coins: List[<span class="built_in">int</span>]</span>) -&gt; int:</span></span><br><span class="line">        dp = [<span class="number">0</span>] *(amount+<span class="number">1</span>)</span><br><span class="line">        dp[<span class="number">0</span>]=<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> coin <span class="keyword">in</span> coins:</span><br><span class="line">            <span class="keyword">for</span> amo <span class="keyword">in</span> <span class="built_in">range</span>(coin,amount+<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">if</span> amo&gt;=coin:</span><br><span class="line">                    dp[amo] = dp[amo]+dp[amo-coin]</span><br><span class="line">        <span class="keyword">return</span> dp[-<span class="number">1</span>]        </span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/coin-change-2/">https://leetcode-cn.com/problems/coin-change-2/</a></p>
+        <h1 id="Content-based-Recommendations"><a href="#Content-based-Recommendations" class="headerlink" title="Content-based Recommendations"></a>Content-based Recommendations</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Content-based Recommendations(CB)是根据用户过去喜欢的<strong>产品</strong>（本文统称为 <strong>item</strong>），为用户推荐和他过去喜欢的产品相似的产品。例如，一个推荐饭店的系统可以依据某个用户之前喜欢很多的烤肉店而为他推荐烤肉店。 CB最早主要是应用在信息检索系统当中，所以很多信息检索及信息过滤里的方法都能用于CB中。</p>
+<h2 id="计算过程"><a href="#计算过程" class="headerlink" title="计算过程"></a>计算过程</h2><p>CB的过程一般包括以下三步：</p>
+<ol>
+<li><p><strong>Item Representation</strong>：为每个item抽取出一些特征（也就是item的content了）来表示此item； 真实应用中的item往往都会有一些可以描述它的属性。这些属性通常可以分为两种：结构化的（structured）属性与非结构化的（unstructured）属性。所谓结构化的属性就是这个属性的意义比较明确，其取值限定在某个范围；而非结构化的属性往往其意义不太明确，取值也没什么限制，不好直接使用。比如在交友网站上，item就是人，一个item会有结构化属性如身高、学历、籍贯等，也会有非结构化属性（如item自己写的交友宣言，博客内容等等）。</p>
+</li>
+<li><p><strong>Profile Learning</strong>：利用一个用户过去喜欢（及不喜欢）的item的特征数据，来学习出此用户的喜好特征（profile）；假设用户u已经对一些item给出了他的喜好判断，喜欢其中的一部分item，不喜欢其中的另一部分。那么，这一步要做的就是通过用户u过去的这些喜好判断，为他产生一个模型。有了这个模型，我们就可以根据此模型来判断用户u是否会喜欢一个新的item。所以，我们要解决的是一个典型的有监督分类问题，理论上机器学习里的分类算法都可以照搬进这里。</p>
+</li>
+<li><p><strong>Recommendation Generation</strong>：通过比较上一步得到的用户profile与候选item的特征，为此用户推荐一组相关性最大的item。</p>
+</li>
+</ol>
+<h2 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h2><h3 id="CB的优点"><a href="#CB的优点" class="headerlink" title="CB的优点"></a>CB的优点</h3><ol>
+<li><p>用户之间的独立性（User Independence）：既然每个用户的profile都是依据他本身对item的喜好获得的，自然就与他人的行为无关。而CF刚好相反，CF需要利用很多其他人的数据。CB的这种用户独立性带来的一个显著好处是别人不管对item如何作弊（比如利用多个账号把某个产品的排名刷上去）都不会影响到自己。</p>
+</li>
+<li><p>好的可解释性（Transparency）：如果需要向用户解释为什么推荐了这些产品给他，你只要告诉他这些产品有某某属性，这些属性跟你的品味很匹配等等。</p>
+</li>
+<li><p>新的item可以立刻得到推荐（New Item Problem）：只要一个新item加进item库，它就马上可以被推荐，被推荐的机会和老的item是一致的。而CF对于新item就很无奈，只有当此新item被某些用户喜欢过（或打过分），它才可能被推荐给其他用户。所以，如果一个纯CF的推荐系统，新加进来的item就永远不会被推荐:( 。</p>
+</li>
+</ol>
+<h3 id="CB的缺点"><a href="#CB的缺点" class="headerlink" title="CB的缺点"></a>CB的缺点</h3><ol>
+<li><p>item的特征抽取一般很难（Limited Content Analysis）：如果系统中的item是文档（如个性化阅读中），那么我们现在可以比较容易地使用信息检索里的方法来“比较精确地”抽取出item的特征。但很多情况下我们很难从item中抽取出准确刻画item的特征，比如电影推荐中item是电影，社会化网络推荐中item是人，这些item属性都不好抽。其实，几乎在所有实际情况中我们抽取的item特征都仅能代表item的一些方面，不可能代表item的所有方面。这样带来的一个问题就是可能从两个item抽取出来的特征完全相同，这种情况下CB就完全无法区分这两个item了。比如如果只能从电影里抽取出演员、导演，那么两部有相同演员和导演的电影对于CB来说就完全不可区分了。</p>
+</li>
+<li><p>无法挖掘出用户的潜在兴趣（Over-specialization）：既然CB的推荐只依赖于用户过去对某些item的喜好，它产生的推荐也都会和用户过去喜欢的item相似。如果一个人以前只看与推荐有关的文章，那CB只会给他推荐更多与推荐相关的文章，它不会知道用户可能还喜欢数码。</p>
+</li>
+<li><p>无法为新用户产生推荐（New User Problem）：新用户没有喜好历史，自然无法获得他的profile，所以也就无法为他产生推荐了。当然，这个问题CF也有。</p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>CB应该算是第一代的个性化应用中最流行的推荐算法了。但由于它本身具有某些很难解决的缺点，再加上在大多数情况下其精度都不是最好的，目前大部分的推荐系统都是以其他算法为主（如CF），而辅以CB以解决主算法在某些情况下的不精确性（如解决新item问题）。但CB的作用是不可否认的，只要具体应用中有可用的属性，那么基本都能在系统里看到CB的影子。组合CB和其他推荐算法的方法很多（我很久以后会写一篇博文详细介绍之），最常用的可能是用CB来过滤其他算法的候选集，把一些不太合适的候选（比如不要给小孩推荐偏成人的书籍）去掉。</p>
 
       
     </div>
@@ -327,7 +350,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2021/01/20/Algorithm/dp-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/" rel="next" title="">
+              <a href="/2021/01/20/RecommendSystem/Rank/YouTubeMultiTask/" rel="next" title="">
                 <i class="fa fa-chevron-left"></i> 
               </a>
             
@@ -337,7 +360,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/01/20/Algorithm/dp-%E9%9D%92%E8%9B%99%E8%BF%87%E6%B2%B3/" rel="prev" title="">
+              <a href="/2021/01/20/RecommendSystem/Recall/CF%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AD%98%E5%8D%8F%E5%90%8C%E8%BF%87%E6%BB%A4%E7%AE%97%E6%B3%95/" rel="prev" title="">
                  <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -416,7 +439,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -453,7 +476,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II"><span class="nav-number">1.</span> <span class="nav-text">零钱兑换II</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Content-based-Recommendations"><span class="nav-number">1.</span> <span class="nav-text">Content-based Recommendations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">计算过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">1.3.</span> <span class="nav-text">优缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CB%E7%9A%84%E4%BC%98%E7%82%B9"><span class="nav-number">1.3.1.</span> <span class="nav-text">CB的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CB%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">1.3.2.</span> <span class="nav-text">CB的缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>

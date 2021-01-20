@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dfs-%E5%9B%9E%E6%BA%AF-%E5%85%A8%E6%8E%92%E5%88%97/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/dfs-%E5%9B%9E%E6%BA%AF-%E5%85%A8%E6%8E%92%E5%88%97/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -260,7 +260,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -300,18 +300,16 @@
       
         
           
-            <h2 id="全排列"><a href="#全排列" class="headerlink" title="全排列"></a>全排列</h2><h3 id="数组的全排列"><a href="#数组的全排列" class="headerlink" title="数组的全排列"></a>数组的全排列</h3><p>给定一个 <strong>没有重复</strong> 数字的序列，返回其所有可能的全排列。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">permute</span>(<span class="params">self, nums: List[<span class="built_in">int</span>]</span>) -&gt; List[List[int]]:</span></span><br><span class="line">        res = []</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span>(<span class="params">path, choise</span>):</span></span><br><span class="line">            <span class="keyword">nonlocal</span> res</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> choise:</span><br><span class="line">                res.append(path)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">for</span> i,cur <span class="keyword">in</span> <span class="built_in">enumerate</span>(choise):</span><br><span class="line">                dfs(path+[cur],choise[:i]+choise[i+<span class="number">1</span>:])</span><br><span class="line">        dfs([],nums)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<p>更优解：交换固定</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">permute</span>(<span class="params">self, nums: List[<span class="built_in">int</span>]</span>) -&gt; List[List[int]]:</span></span><br><span class="line">        ans = []</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span>(<span class="params">x</span>):</span></span><br><span class="line">            <span class="keyword">if</span> x == <span class="built_in">len</span>(nums)-<span class="number">1</span>:</span><br><span class="line">                ans.append(<span class="built_in">list</span>(nums))</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(x,<span class="built_in">len</span>(nums)):</span><br><span class="line">                nums[i],nums[x] = nums[x],nums[i]</span><br><span class="line">                dfs(x+<span class="number">1</span>)</span><br><span class="line">                nums[i],nums[x] = nums[x],nums[i]</span><br><span class="line">        dfs(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/permutations/">https://leetcode-cn.com/problems/permutations/</a></p>
-<h3 id="字符串的排列"><a href="#字符串的排列" class="headerlink" title="字符串的排列"></a>字符串的排列</h3><p>输入一个字符串，打印出该字符串中字符的所有排列。</p>
-<p>你可以以任意顺序返回这个字符串数组，但里面不能有重复元素。字符串中可能有重复</p>
-<p>相比无重复的数组，需要在for循环时用一个set来去重</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">permutation</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; List[str]:</span></span><br><span class="line">        res = []</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span>(<span class="params">path, choise</span>):</span></span><br><span class="line">            <span class="keyword">nonlocal</span> res</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> choise:</span><br><span class="line">                res.append(path)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            dic = <span class="built_in">set</span>()</span><br><span class="line">            <span class="keyword">for</span> i,cur <span class="keyword">in</span> <span class="built_in">enumerate</span>(choise):</span><br><span class="line">                <span class="keyword">if</span> cur <span class="keyword">in</span> dic:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                dfs(path+cur,choise[:i]+choise[i+<span class="number">1</span>:])</span><br><span class="line">                dic.add(cur)</span><br><span class="line">        dfs(<span class="string">&#x27;&#x27;</span>,s)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof/">https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof/</a></p>
-<p>更优解：交换固定</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">permutation</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; List[str]:</span></span><br><span class="line">        c, res = <span class="built_in">list</span>(s), []</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span>(<span class="params">x</span>):</span></span><br><span class="line">            <span class="keyword">if</span> x == <span class="built_in">len</span>(c) - <span class="number">1</span>:</span><br><span class="line">                res.append(<span class="string">&#x27;&#x27;</span>.join(c)) <span class="comment"># 添加排列方案</span></span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            dic = <span class="built_in">set</span>()</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(x, <span class="built_in">len</span>(c)):</span><br><span class="line">                <span class="keyword">if</span> c[i] <span class="keyword">in</span> dic: <span class="keyword">continue</span> <span class="comment"># 重复，因此剪枝</span></span><br><span class="line">                dic.add(c[i])</span><br><span class="line">                c[i], c[x] = c[x], c[i] <span class="comment"># 交换，将 c[i] 固定在第 x 位</span></span><br><span class="line">                dfs(x + <span class="number">1</span>) <span class="comment"># 开启固定第 x + 1 位字符</span></span><br><span class="line">                c[i], c[x] = c[x], c[i] <span class="comment"># 恢复交换</span></span><br><span class="line">        dfs(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+            <h1 id="最长递增子序列"><a href="#最长递增子序列" class="headerlink" title="最长递增子序列"></a>最长递增子序列</h1><p>给你一个整数数组 nums ，找到其中最长严格递增子序列的长度。</p>
+<p>子序列是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。</p>
+<h3 id="DP"><a href="#DP" class="headerlink" title="DP"></a>DP</h3><p>动态规划数组中储存以当前位置结尾的最长递增子序列长度，伪代码<code>dp[i] = max(dp[j]+1 where j&lt;i &amp;&amp; nums[j]&lt;nums[i])</code>，复杂度$O(n^2)$。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(nums.size()==<span class="number">0</span>)&#123;<span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br><span class="line">        <span class="keyword">if</span>(nums.size()==<span class="number">1</span>)&#123;<span class="keyword">return</span> <span class="number">1</span>;&#125;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">dp</span><span class="params">(nums.size())</span></span>;</span><br><span class="line">        dp[<span class="number">0</span>]=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> all_max=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> cur_max=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;nums.size();i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;i;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (nums[i]&gt;nums[j] &amp;&amp; cur_max&lt;dp[j])&#123;</span><br><span class="line">                    cur_max = dp[j];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            dp[i]=cur_max+<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(dp[i]&gt;all_max)&#123;</span><br><span class="line">                all_max = dp[i];</span><br><span class="line">            &#125;</span><br><span class="line">            cur_max=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> all_max;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="辅助数组-二分查找"><a href="#辅助数组-二分查找" class="headerlink" title="辅助数组+二分查找"></a>辅助数组+二分查找</h3><p>其实也是dp数组，dp[i]储存的是所有长度为i+1的递增子序列中,数值最小的那个序列尾数。</p>
+<p>具体做法是，将原序列从左到右遍历拿出，插入到cell数组，覆盖掉<strong>比他大的元素中最小的那个</strong>，如果cell中都比他小，则插入到最后。</p>
+<p>另一种解答：新建数组 cell，用于保存最长上升子序列。对原序列进行遍历，将每位元素二分插入 cell 中。如果 cell 中元素都比它小，将它插到最后；否则，用它覆盖掉比它大的元素中最小的那个。总之，<strong>思想就是让 cell 中存储比较小的元素。这样，cell 未必是真实的最长上升子序列，但长度是对的</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLIS</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="function"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">cell</span><span class="params">(nums.size())</span></span>;</span><br><span class="line">        <span class="keyword">int</span> maxl=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;nums.size();i++)&#123;</span><br><span class="line">            <span class="keyword">int</span> min1=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> max1=maxl;</span><br><span class="line">            <span class="keyword">while</span> (min1&lt;max1)&#123;</span><br><span class="line">                <span class="keyword">int</span> mid = min1+(max1-min1)/<span class="number">2</span>;</span><br><span class="line">                <span class="keyword">if</span> (cell[mid]&gt;=nums[i])&#123;</span><br><span class="line">                    max1=mid;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    min1=mid+<span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            cell[min1]=nums[i];</span><br><span class="line">            <span class="keyword">if</span> (min1&gt;=maxl)&#123;</span><br><span class="line">                maxl++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">lengthOfLIS</span>(<span class="params">self, nums: List[<span class="built_in">int</span>]</span>) -&gt; int:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> nums:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">b_search</span>(<span class="params">l, target</span>):</span></span><br><span class="line">            head = <span class="number">0</span> </span><br><span class="line">            tail = <span class="built_in">len</span>(l)-<span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> head &lt; tail:</span><br><span class="line">                mid = (head+tail)//<span class="number">2</span></span><br><span class="line">                <span class="keyword">if</span> l[mid]&gt;=target:</span><br><span class="line">                    tail = mid</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    head = mid+<span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> head</span><br><span class="line">        res = [nums[<span class="number">0</span>]]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> nums[<span class="number">1</span>:]:</span><br><span class="line">            p = b_search(res,i)</span><br><span class="line">            <span class="keyword">if</span> p==<span class="built_in">len</span>(res)-<span class="number">1</span> <span class="keyword">and</span> res[p]&lt;i:</span><br><span class="line">                res.append(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res[p] = i</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(res)</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-increasing-subsequence/">https://leetcode-cn.com/problems/longest-increasing-subsequence/</a></p>
 
           
         
@@ -360,7 +358,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/bfs-%E8%AF%BE%E7%A8%8B%E8%A1%A8/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E7%B3%BB%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -379,7 +377,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/bfs-%E8%AF%BE%E7%A8%8B%E8%A1%A8/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E7%B3%BB%E5%88%97/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -391,7 +389,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -431,41 +429,32 @@
       
         
           
-            <h2 id="课程表"><a href="#课程表" class="headerlink" title="课程表"></a>课程表</h2><p>你这个学期必须选修 <code>numCourse </code>门课程，记为 <code>0</code> 到 <code>numCourse-1</code> 。</p>
-<p>在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们：[0,1]</p>
-<p>给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？</p>
-<h3 id="入度表（BFS）"><a href="#入度表（BFS）" class="headerlink" title="入度表（BFS）"></a>入度表（BFS）</h3><p>借助<strong>邻接矩阵</strong>、<strong>访问队列</strong>和<strong>入度表</strong>，访问入度为0的元素，并且在邻接矩阵中将以该元素为前置课程的元素的入度减一，并且检查是否入度为0，如果是，加入访问的队列中。直到入度为0的队列空。此时还有元素未访问过，则肯定成环。不能成功。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">canFinish</span>(<span class="params">self, numCourses: <span class="built_in">int</span>, prerequisites: List[List[<span class="built_in">int</span>]]</span>) -&gt; bool:</span></span><br><span class="line">        course = <span class="number">0</span></span><br><span class="line">        queue = []</span><br><span class="line">        dic = &#123;&#125;</span><br><span class="line">        rudu = [<span class="number">0</span>]*numCourses</span><br><span class="line">        <span class="keyword">for</span> (i,j) <span class="keyword">in</span> prerequisites:</span><br><span class="line">            <span class="keyword">if</span> j <span class="keyword">in</span> dic:</span><br><span class="line">                dic[j].append(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dic[j]=[i]</span><br><span class="line">            rudu[i] += <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i,j <span class="keyword">in</span> <span class="built_in">enumerate</span>(rudu):</span><br><span class="line">            <span class="keyword">if</span> j == <span class="number">0</span>:</span><br><span class="line">                queue.append(i)</span><br><span class="line">        <span class="keyword">while</span> queue:</span><br><span class="line">            cur = queue.pop()</span><br><span class="line">            course+=<span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> cur <span class="keyword">in</span> dic:</span><br><span class="line">                <span class="keyword">for</span> i <span class="keyword">in</span> dic[cur]:</span><br><span class="line">                    rudu[i] -=<span class="number">1</span></span><br><span class="line">                    <span class="keyword">if</span> rudu[i] == <span class="number">0</span>:</span><br><span class="line">                        queue.append(i)</span><br><span class="line">        <span class="keyword">return</span> course==numCourses</span><br></pre></td></tr></table></figure>
-<h3 id="DFS"><a href="#DFS" class="headerlink" title="DFS"></a>DFS</h3><ol>
-<li><p>借助一个标志列表 flags，用于判断每个节点 i （课程）的状态：</p>
+            <h1 id="最长公共系列"><a href="#最长公共系列" class="headerlink" title="最长公共系列"></a>最长公共系列</h1><h2 id="最长公共子序列"><a href="#最长公共子序列" class="headerlink" title="最长公共子序列"></a>最长公共子序列</h2><p> 假如S1的最后一个元素 与 S2的最后一个元素相等，那么S1和S2的LCS就等于 {S1减去最后一个元素} 与 {S2减去最后一个元素} 的 LCS  再加上 S1和S2相等的最后一个元素。假如S1的最后一个元素 与 S2的最后一个元素不等（本例子就是属于这种情况），那么S1和S2的LCS就等于 ： {S1减去最后一个元素} 与 S2 的LCS， {S2减去最后一个元素} 与 S1 的LCS 中的最大的那个序列。</p>
+<p>对于长度为m，n的字符串：构建一个$(m+1) \times (n+1)$的矩阵，第0行和第0列为0，矩阵从(1,1)开始，从左至右逐行遍历，如果第<em>当前矩阵下标</em>个字符串元素相同，则矩阵值为左上角元素值加一，否则为左和上元素较大值。矩阵(m,n)位置的值即是最长公共子序列的长度。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="built_in">string</span> text1, <span class="built_in">string</span> text2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> <span class="built_in">array</span> [text1.length()+<span class="number">1</span>][text2.length()+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=text1.length();i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;=text2.length();j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i==<span class="number">0</span> || j==<span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="built_in">array</span>[i][j]=<span class="number">0</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (text1[i<span class="number">-1</span>]==text2[j<span class="number">-1</span>])&#123;</span><br><span class="line">                        <span class="built_in">array</span>[i][j]=<span class="built_in">array</span>[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">1</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        <span class="built_in">array</span>[i][j]=max(<span class="built_in">array</span>[i][j<span class="number">-1</span>],<span class="built_in">array</span>[i<span class="number">-1</span>][j]);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">array</span>[text1.length()][text2.length()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>实际用到的只有两行 所以可以通过维护两行数组来优化空间。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-common-subsequence/">https://leetcode-cn.com/problems/longest-common-subsequence/</a></p>
+<h2 id="最长回文子序列"><a href="#最长回文子序列" class="headerlink" title="最长回文子序列"></a>最长回文子序列</h2><p>字符串颠倒，然后求最长公共子序列。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestPalindromeSubseq</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> <span class="built_in">array</span> [s.length()+<span class="number">1</span>][s.length()+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=s.length();i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;=s.length();j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (i==<span class="number">0</span> || j==<span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="built_in">array</span>[i][j]=<span class="number">0</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(s[i<span class="number">-1</span>]==s[s.length()-j])&#123;</span><br><span class="line">                        <span class="built_in">array</span>[i][j]=<span class="built_in">array</span>[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">1</span>;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        <span class="built_in">array</span>[i][j]=max(<span class="built_in">array</span>[i<span class="number">-1</span>][j],<span class="built_in">array</span>[i][j<span class="number">-1</span>]);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">array</span>[s.length()][s.length()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-palindromic-subsequence/">https://leetcode-cn.com/problems/longest-palindromic-subsequence/</a></p>
+<h2 id="最长公共子串"><a href="#最长公共子串" class="headerlink" title="最长公共子串"></a>最长公共子串</h2><p>对于长度为m，n的字符串：构建一个$(m+1) \times (n+1)$的矩阵，第0行和第0列为0，矩阵从(1,1)开始，从左至右逐行遍历，如果第<em>当前矩阵下标</em>个字符串元素相同，则矩阵值为左上角元素值加一，否则为0。每次非零更新时，记录最长长度。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">longestCommonSubsequence</span><span class="params">(<span class="built_in">string</span> text1, <span class="built_in">string</span> text2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> <span class="built_in">array</span> [text1.length()+<span class="number">1</span>][text2.length()+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> l=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=text1.length();i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;=text2.length();j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i==<span class="number">0</span> || j==<span class="number">0</span>)&#123;</span><br><span class="line">                    <span class="built_in">array</span>[i][j]=<span class="number">0</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (text1[i<span class="number">-1</span>]==text2[j<span class="number">-1</span>])&#123;</span><br><span class="line">                        <span class="built_in">array</span>[i][j]=<span class="built_in">array</span>[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">1</span>;</span><br><span class="line">                        l = max(l,<span class="built_in">array</span>[i][j])</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        <span class="built_in">array</span>[i][j]=<span class="number">0</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> l;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="最长回文子串"><a href="#最长回文子串" class="headerlink" title="最长回文子串"></a>最长回文子串</h2><p>注意不能用翻转字符串求最长公共子串的方式，会遇到的坑包括但不限于：</p>
 <ul>
-<li>未被 DFS 访问：<code>i == 0</code>；</li>
-<li>已被其他节点启动的 DFS 访问：<code>i == -1</code>；</li>
-<li>已被当前节点启动的 DFS 访问：<code>i == 1</code>。</li>
+<li>abcdfadcba 会提出来abcd；</li>
+<li>如果重新遍历矩阵来找最长，会遇到时间超出的问题。</li>
 </ul>
-</li>
-<li><p>对 <code>numCourses</code> 个节点依次执行 DFS，判断每个节点起步 DFS 是否存在环，若存在环直接返回 <code>False</code>。<br> DFS 流程；</p>
-<ol>
-<li><p>终止条件：</p>
-<ul>
-<li><p>当 <code>flag[i] == -1</code>，说明当前访问节点已被其他节点启动的 DFS 访问，无需再重复搜索，直接返回 <code>True</code>。</p>
-</li>
-<li><p>当 <code>flag[i] == 1</code>，说明在本轮 DFS 搜索中节点 i 被第 2 次访问，即 课程安排图有环 ，直接返回 <code>False</code>。</p>
-</li>
-</ul>
-</li>
-<li><p>将当前访问节点 i 对应 <code>flag[i]</code> 置 1，即标记其被本轮 DFS 访问过；</p>
-</li>
-<li><p>递归访问当前节点 i 的所有邻接节点 j，当发现环直接返回 <code>False</code>；</p>
-</li>
-<li><p>当前节点所有邻接节点已被遍历，并没有发现环，则将当前节点 <code>flag</code> 置为 <code>-1</code> 并返回 <code>True</code>。</p>
-</li>
-</ol>
-</li>
-<li><p>若整个图 DFS 结束并未发现环，返回 <code>True</code>。</p>
-</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">canFinish</span>(<span class="params">self, numCourses: <span class="built_in">int</span>, prerequisites: List[List[<span class="built_in">int</span>]]</span>) -&gt; bool:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span>(<span class="params">i, adjacency, flags</span>):</span></span><br><span class="line">            <span class="keyword">if</span> flags[i] == -<span class="number">1</span>: <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">if</span> flags[i] == <span class="number">1</span>: <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            flags[i] = <span class="number">1</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> adjacency[i]:</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> dfs(j, adjacency, flags): <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            flags[i] = -<span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">        adjacency = [[] <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(numCourses)]</span><br><span class="line">        flags = [<span class="number">0</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(numCourses)]</span><br><span class="line">        <span class="keyword">for</span> cur, pre <span class="keyword">in</span> prerequisites:</span><br><span class="line">            adjacency[pre].append(cur)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(numCourses):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> dfs(i, adjacency, flags): <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="中心扩散法"><a href="#中心扩散法" class="headerlink" title="中心扩散法"></a>中心扩散法</h3><p>从每个可能是回文串的中心扩散出去，寻找最大的那个。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">longestPalindrome</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; str:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(s)&lt;=<span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> s</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">spread</span>(<span class="params">left,right</span>):</span></span><br><span class="line">            <span class="keyword">while</span> left&gt;=<span class="number">0</span> <span class="keyword">and</span> right &lt;<span class="built_in">len</span>(s) <span class="keyword">and</span> s[right]==s[left]:</span><br><span class="line">                left -= <span class="number">1</span></span><br><span class="line">                right += <span class="number">1</span></span><br><span class="line">            <span class="keyword">return</span> right-left-<span class="number">1</span>,s[left+<span class="number">1</span>:right]</span><br><span class="line">        cnt = <span class="number">1</span></span><br><span class="line">        ans = s[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(s)-<span class="number">1</span>):</span><br><span class="line">            l,s1 = spread(i,i)</span><br><span class="line">            <span class="keyword">if</span> l&gt;cnt:</span><br><span class="line">                cnt,ans =l,s1</span><br><span class="line">            l,s1 = spread(i-<span class="number">1</span>,i)</span><br><span class="line">            <span class="keyword">if</span> l&gt;cnt:</span><br><span class="line">                cnt,ans =l,s1</span><br><span class="line"></span><br><span class="line">        l,s1 = spread(<span class="built_in">len</span>(s)-<span class="number">2</span>,<span class="built_in">len</span>(s)-<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">if</span> l&gt;cnt:</span><br><span class="line">            cnt,ans =l,s1  </span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
+<h3 id="Manacher’s-Algorithm"><a href="#Manacher’s-Algorithm" class="headerlink" title="Manacher’s Algorithm:"></a>Manacher’s Algorithm:</h3><p>1975年，Manacher发明了Manacher算法（中文名：马拉车算法），是一个可以在<strong>O(n)的复杂度</strong>中返回字符串s中<strong>最长回文子串长度</strong>的算法，十分巧妙。</p>
+<p> 首先，Manacher算法提供了一种巧妙地办法，将长度为奇数的回文串和长度为偶数的回文串一起考虑，具体做法是，在原字符串的每个相邻两个字符中间插入一个分隔符，同时在首尾也要添加一个分隔符，分隔符的要求是不在原串中出现，一般情况下可以用#号。下面举一个例子：</p>
+<p>原串：aaaba</p>
+<p>新串：#a#a#a#b#a#</p>
+<p>Manacher算法用一个辅助数组Len[i]表示以字符T[i]为中心的最长回文字串的最右字符到T[i]的长度，比如以T[i]为中心的最长回文字串是T[l,r],那么Len[i]=r-i+1。</p>
+<p>Len数组有一个性质，那就是Len[i]-1就是该回文子串在原字符串S中的长度，至于证明，首先在转换得到的字符串T中，所有的回文字串的长度都为奇数，那么对于以T[i]为中心的最长回文字串，其长度就为2*Len[i]-1,经过观察可知，T中所有的回文子串，其中分隔符的数量一定比其他字符的数量多1，也就是有Len[i]个分隔符，剩下Len[i]-1个字符来自原字符串，所以该回文串在原字符串中的长度就为Len[i]-1。有了这个性质，那么原问题就转化为求所有的Len[i]。下面介绍如何在线性时间复杂度内求出所有的Len。</p>
+<p><img src="http://guoshihao.site:8085/pic/manacher.png"></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fan1-happy/p/11166182.html">Manacher（马拉车）————O(n)回文子串</a></p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/longest-palindromic-substring/">https://leetcode-cn.com/problems/longest-palindromic-substring/</a></p>
 
           
         
@@ -514,7 +503,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/C++/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E3%80%81%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E6%9C%80%E7%9F%AD%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -533,7 +522,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/C++/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E3%80%81%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E6%9C%80%E7%9F%AD%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -545,7 +534,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -585,72 +574,10 @@
       
         
           
-            <h2 id="右值引用-amp-amp"><a href="#右值引用-amp-amp" class="headerlink" title="右值引用&amp;&amp;"></a>右值引用&amp;&amp;</h2><p>右值引用是C++11中新增加的一个很重要的特性，他主是要用来解决C++98/03中遇到的两个问题：</p>
-<ol>
-<li><p>第一个问题就是临时对象非必要的昂贵的拷贝操作</p>
-</li>
-<li><p>第二个问题是在模板函数中如何按照参数的实际类型进行转发。</p>
-</li>
-</ol>
-<h3 id="引用-amp"><a href="#引用-amp" class="headerlink" title="引用&amp;"></a>引用&amp;</h3><p>C和C++使用&amp;符号来只是变量的地址。C++给&amp;符号赋予了另一个含义，将其来声明引用。</p>
-<p>例如，要将rodents作为rats变量的别名，可以这样做：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> rats；</span><br><span class="line"><span class="keyword">int</span> &amp; rodents = rates；</span><br></pre></td></tr></table></figure>
-<p>其中，&amp;不是地址运算符，而是类型标识符的一部分。上诉引用声明允许将rats和rodents互换——它们指向相同的值和内存单元。</p>
-<p><strong>必须在声明引用时将其初始化，而不能向指针那样，先声明，再赋值。并且不能再更改。</strong></p>
-<h3 id="右值"><a href="#右值" class="headerlink" title="右值"></a>右值</h3><p>左值和右值都是针对表达式而言的，<strong>左值是指表达式结束后依然存在的持久对象，右值是指表达式结束时就不再存在的临时对象</strong>。一个区分左值与右值的便捷方法是：<strong>看能不能对表达式取地址，如果能，则为左值，否则为右值。</strong></p>
-<p>右值通常包括常值，函数的返回值，表达式的返回值。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> i = getVar();</span><br><span class="line"><span class="keyword">int</span> i = <span class="number">1.8</span>*<span class="number">2</span>+<span class="number">32.0</span>;</span><br></pre></td></tr></table></figure>
-<p>右值是一种临时的值，很难获得其地址，即是获得了右值的地址，该地址可能很快就失效了。C++11 中为了引入强大的右值引用，将右值的概念进行了进一步的划分，分为：纯右值、将亡值。</p>
-<p>**纯右值(prvalue, pure rvalue)**，纯粹的右值，要么是纯粹的字面量，例如 <code>0</code>, <code>true</code>；要么是求值结果相当于字面量或匿名临时对象，例如 <code>1.8*2+32.0</code>。非引用返回的临时变量、运算表达式产生的临时变量、原始字面量、Lambda 表达式都属于纯右值。</p>
-<p><strong>将亡值(xvalue, expiring value)**，是 C++11 为了引入右值引用而提出的概念（因此在传统 C++中，纯右值和右值是统一个概念），</strong>也就是即将被销毁、却能够被移动的值**。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; temp = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v = foo();</span><br></pre></td></tr></table></figure>
-<p>函数 <code>foo</code> 的返回值 <code>temp</code> 在内部创建然后被赋值给 <code>v</code>，然而 <code>v</code> 获得这个对象时，会将整个 temp 拷贝一份，然后把 <code>temp</code> 销毁，如果这个 <code>temp</code> 非常大，这将造成大量额外的开销。</p>
-<h3 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h3><p>需要拿到一个将亡值，就需要用到右值引用的申明：<code>T &amp;&amp;</code>，其中 <code>T</code> 是类型。右值引用的声明让这个临时值的生命周期得以延长、只要变量还活着，那么将亡值将继续存活。</p>
-<p>C++11 提供了 <code>std::move</code> 这个方法将左值参数无条件的转换为右值，有了它我们就能够方便的获得一个右值临时对象，例如：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reference</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>&amp; str)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;左值&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reference</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; str)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;右值&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>  lv1 = <span class="string">&quot;string,&quot;</span>;			 <span class="comment">// lv1 是一个左值</span></span><br><span class="line">	<span class="comment">//std::string&amp;&amp; rv2 = lv1 ;				// 非法,lv1 是一个左值</span></span><br><span class="line">	<span class="comment">// std::string&amp;&amp; r1 = s1;				// 非法, s1 在全局上下文中没有声明</span></span><br><span class="line">	reference(<span class="built_in">std</span>::move(lv1));				<span class="comment">// std::move 可以将左值转移为右值</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv1 = <span class="built_in">std</span>::move(lv1);		<span class="comment">// 合法, std::move 可以将左值转移为右值</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;rv1 = &quot;</span> &lt;&lt; rv1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,</span></span><br><span class="line"> </span><br><span class="line">	<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; lv2 = lv1 + lv1;		<span class="comment">// 合法, 常量左值引用能够延长临时变量的生命周期</span></span><br><span class="line">	<span class="comment">// lv2 += &quot;Test&quot;;						// 非法, 引用的右值无法被修改</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;lv2 = &quot;</span> &lt;&lt; lv2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,string</span></span><br><span class="line"> </span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv2 = lv1 + lv1;		    <span class="comment">// 合法，lv1 + lv1生成一个临时对象</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv2 = lv1 + lv2;			<span class="comment">// 合法, 右值引用延长临时对象的生命周期</span></span><br><span class="line">	rv2 += <span class="string">&quot;string&quot;</span>;					    <span class="comment">// 合法, 非常量引用能够修改临时变量</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;rv2 = &quot;</span> &lt;&lt; rv2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,string,string,</span></span><br><span class="line"> </span><br><span class="line">	reference(rv2);							<span class="comment">// 输出左值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>输出：<br>右值<br>rv1 = string,<br>lv2 = string,string,<br>rv2 = string,string,string,string<br>左值</p>
-</blockquote>
-<p><strong>注意</strong>：<code>rv2</code> 虽然引用了一个右值，但由于它是一个引用，所以 <code>rv2</code> 依然是一个左值。</p>
-<p>在C++11中，我们用左值去初始化一个对象或为一个已有对象赋值时，会调用<strong>拷贝构造函数或拷贝赋值运算符</strong>来拷贝资源（所谓资源，就是指new出来的东西），而当我们用一个右值（包括纯右值和将亡值）来初始化或赋值时，会调用<strong>移动构造函数或移动赋值运算符</strong>来移动资源，从而避免拷贝，提高效率。</p>
-<h2 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h2><p>C++11之前已经有复制构造函数了，相比复制构造函数，移动构造函数不是复制，而是直接转移类成员的所有权</p>
-<p>C++11引入了右值引用后，水道渠成的引入了移动构造函数,其参数类型为右值引用，看下面的例子：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">A(<span class="keyword">int</span> size) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size = size;</span><br><span class="line">    <span class="keyword">if</span>(size)data = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; ++i)data[i] = i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A(<span class="keyword">const</span> A&amp; o) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;copy constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size=o.size;</span><br><span class="line">    data = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">    <span class="built_in">memcpy</span>(data,o.data,size*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A(A &amp;&amp;o) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;move constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    data=o.data;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size=o.size;</span><br><span class="line">    o.data=<span class="literal">nullptr</span>;</span><br><span class="line">    o.size=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">~A()&#123;<span class="keyword">delete</span> []data;&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> *data = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p><strong>移动构造函数和复制构造函数比较像，它把复制构造函数的<code>&amp;</code>替换为<code>&amp;&amp;</code>了，且没有了<code>const</code>。</strong>移动构造函数与拷贝构造函数的区别是，拷贝构造的参数是<code>const A&amp; o</code>，是常量左值引用，而移动构造的参数是<code>A &amp;&amp;o</code>，是右值引用。在上面的复制构造函数中，我们把<code>o.data</code>的内容复制给<code>this-&gt;data</code>，这就是大家常说的深拷贝；而在上面的在移动构造函数中，我们没有复制<code>o.data</code>的元素，而只是把<code>o.data</code>的指针赋值给<code>this-&gt;data</code>，将这就是大家常用的浅拷贝，但是与浅拷贝不同的是，移动构造函数还把<code>o.data</code>指针置为<code>nullptr</code>，这一步很重要，如果不将别人的指针修改为空，那么临时对象析构的时候就会释放掉这个资源。这样执行移动构造函数后，**<code>this-&gt;data</code>获得了元素的所有权，而<code>o.data</code>不再拥有之前元素的所有权，<code>o.data</code>元素的所有权被移动/过继给<code>this</code>了，这就是移动构造函数的含义**。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">A <span class="title">CreateA</span><span class="params">(<span class="keyword">int</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="function">A <span class="title">a</span><span class="params">(size)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">b = CreateA(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>输出：<br>constructor<br>move constructor</p>
-</blockquote>
-<h3 id="移动语义（move-semantic）"><a href="#移动语义（move-semantic）" class="headerlink" title="移动语义（move semantic）"></a>移动语义（move semantic）</h3><p>对于一个左值，肯定是调用拷贝构造函数了，但是有些左值是局部变量，生命周期也很短，如果它非常大的话，调用拷贝构造函数会造成资源的浪费，能不能也移动而不是拷贝呢？C++11为了解决这个问题，提供了<code>std::move()</code>方法来将左值转换为右值，从而方便应用移动语义。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">A b = <span class="built_in">std</span>::move(a);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>输出：<br>constructor<br>move constructor</p>
-</blockquote>
-<p>c++11中的所有容器都实现了<code>std::move()</code>语义，<code>std::move()</code>只是转移了资源的控制权，本质上是将左值强制转化为右值使用，以用于移动拷贝或赋值，避免对<strong>含有资源的对象</strong>发生无谓的拷贝。<code>std::move()</code>对于拥有如内存、文件句柄等资源的成员的对象有效，如果是一些基本类型，如<code>int</code>和<code>char[10]</code>数组等，如果使用<code>std::move()</code>，仍会发生拷贝（因为没有对应的移动构造函数），所以说<code>std::move()</code>对含有资源的对象说更有意义。同样需要注意的是，对于自己定义的含有资源的对象，如何实现移动构造函数是自由的，你完全可以在移动构造函数中执行复制功能，但是不要这么做，而是要遵守通用的规定。</p>
-<h4 id="移动语义的一个例子-——-emplace-back"><a href="#移动语义的一个例子-——-emplace-back" class="headerlink" title="移动语义的一个例子 —— emplace_back"></a>移动语义的一个例子 —— emplace_back</h4><p>C++11中对STL容器新增了emplace_back函数，可以更高效的向STL容器插入元素。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">vec.push_back(a);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>输出：<br>constructor<br>copy constructor</p>
-</blockquote>
-<p>从输出结果看，push_back过程中除了调用一次构造函数，还额外调用了一次复制构造函数，额外调用复制构造函数甚是浪费时间，假如是A a(10000000)，复制起来可是非常耗时的！如何避免额外的复制呢？</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">vec.emplace_back(<span class="built_in">std</span>::move(a));</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>输出：<br>constructor<br>move constructor</p>
-</blockquote>
-<p>从输出结果看，此时<strong>调用了一次构造函数，和一次移动构造函数，而移动构造函数基本是不耗时的</strong>。很明显，使用emplace_back比push_back效率更高。另外，C++11中，上面的代码可以简化为：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line">vec.emplace_back(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>输出：<br>constructor</p>
-</blockquote>
-<p>从输出结果看，此时只调用了一次构造函数，连移动构造函数都省掉了，这是<strong>因为emplace_back把参数10完美转发给A的构造函数，直接构造了一个元素，</strong>而这个元素是直接存放在vector容器中的。</p>
-<h4 id="移动语义的一个例子-——-swap"><a href="#移动语义的一个例子-——-swap" class="headerlink" title="移动语义的一个例子 —— swap"></a>移动语义的一个例子 —— swap</h4><p>移动语义对<code>swap()</code>函数的影响也很大，之前实现swap可能需要三次内存拷贝，而有了移动语义后，就可以实现高性能的交换函数了。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(T&amp; a, T&amp; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">tmp</span><span class="params">(<span class="built_in">std</span>::move(a))</span></span>;</span><br><span class="line">    a = <span class="built_in">std</span>::move(b);</span><br><span class="line">    b = <span class="built_in">std</span>::move(tmp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果<code>T</code>是可移动的，那么整个操作会很高效，如果不可移动，那么就和普通的交换函数是一样的，不会发生什么错误，很安全。</p>
-<p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40539125/article/details/84107068">C++ 引用&amp; 和 右值（纯右值、将亡值）引用&amp;&amp; （1）</a></p>
-<p>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40539125/article/details/84228027">左值和右值、左值引用与右值引用、移动语句（2）</a></p>
-<p>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/zzhongcy/article/details/86747794?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1">C++11：右值引用、move, 以及使用emplace_back代替push_back</a></p>
-<p>[4] <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d19fc8447eaa">[c++11]我理解的右值引用、移动语义和完美转发</a></p>
+            <h1 id="最短编辑距离（Levenshtein-distance）"><a href="#最短编辑距离（Levenshtein-distance）" class="headerlink" title="最短编辑距离（Levenshtein distance）"></a>最短编辑距离（Levenshtein distance）</h1><p>一个字符串编辑（删除，插入，替换）几次，能转换成另一个字符串</p>
+<p>对于长度为m，n的字符串：构建一个$(m+1) \times (n+1)$的矩阵，矩阵上每个位置的意义是当前位置两个字符串需要编辑几次才能完全相同。矩阵从(1,1)开始，从左至右逐行遍历，矩阵当前值可以由上方插入得到，可以由左方删除得到，可以由左上方替换得到，取三者最小值。矩阵(m,n)位置的值即是最长公共子序列的长度。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(<span class="built_in">string</span> word1, <span class="built_in">string</span> word2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> dp [word1.length()+<span class="number">1</span>][word2.length()+<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;=word1.length(); i++)&#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;=word2.length(); j++)&#123;</span><br><span class="line">                <span class="keyword">if</span> (i==<span class="number">0</span>)&#123;</span><br><span class="line">                    dp[i][j]=j;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (j==<span class="number">0</span>)&#123;</span><br><span class="line">                    dp[i][j]=i;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> temp;</span><br><span class="line">                    <span class="keyword">if</span> (word1[i<span class="number">-1</span>]==word2[j<span class="number">-1</span>])&#123;</span><br><span class="line">                        temp=<span class="number">0</span>;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        temp=<span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    dp[i][j]=min(min(dp[i][j<span class="number">-1</span>]+<span class="number">1</span>,dp[i<span class="number">-1</span>][j]+<span class="number">1</span>),dp[i<span class="number">-1</span>][j<span class="number">-1</span>]+temp);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[word1.length()][word2.length()];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/edit-distance/">https://leetcode-cn.com/problems/edit-distance/</a></p>
 
           
         
@@ -699,7 +626,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/C++/using/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -718,7 +645,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/C++/using/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E6%9C%80%E5%B0%8F%E8%B7%AF%E5%BE%84%E5%92%8C/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -730,7 +657,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -770,24 +697,754 @@
       
         
           
-            <h2 id="using代替typedef"><a href="#using代替typedef" class="headerlink" title="using代替typedef"></a><code>using</code>代替<code>typedef</code></h2><p>在C++中可以重定义一个类型，被重定义的类型并不是一个新的类型，仅仅只是原有的类型取了一个新的名字，因此，重定义前后的类型不能重载。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="keyword">uint_t</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">uint_t</span>)</span></span>;  <span class="comment">// error: redefinition</span></span><br></pre></td></tr></table></figure>
-<p><code>typedef</code>的限制是不能重定义一个模板。例如我们需要一个固定以 <code>std::string</code> 为 <code>key</code> 的 <code>map</code>，它可以映射到 <code>int </code>或另一个<code> std::string</code>。然而这个简单的需求仅通过 <code>typedef </code>却很难办到。因此在C++98/03中不得不这样写：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Val&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">str_map</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, Val&gt; type;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">str_map&lt;<span class="keyword">int</span>&gt;::type map1;</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
-<p>一个虽然简单但却略显烦琐的<code>str_map</code>外敷类是必要的。这明显让我们在复用某些泛型代码时非常难受。</p>
-<p>现在，在 C++11 中终于出现了可以重定义一个模板的语法。请看下面的示例：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Val&gt;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">str_map_t</span> = <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, Val&gt;;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">str_map_t</span>&lt;<span class="keyword">int</span>&gt; map1;</span><br></pre></td></tr></table></figure>
-<p>这里使用新的<code>using</code>别名语法定义了<code>std::map</code>的模板别名<code>str_map_t</code>。比起前面使用外敷模板加<code>typedef</code>构建的<code>str_map</code>，它完全就像是一个新的<code>map</code>类模板，因此简洁了很多。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 重定义unsigned int</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="keyword">uint_t</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">uint_t</span> = <span class="keyword">unsigned</span> <span class="keyword">int</span>;</span><br><span class="line"><span class="comment">// 重定义std::map</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">int</span>&gt; <span class="keyword">map_int_t</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">map_int_t</span> = <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">int</span>&gt;;</span><br></pre></td></tr></table></figure>
-<p>实际上，<code>using</code>的别名语法覆盖了<code>typedef</code>的全部功能。先来看看对普通类型的重定义示例，将这两种语法对比一下：可以看到，在重定义普通类型上，两种使用方法的效果是等价的，唯一不同的是定义语法。<code>typedef</code>的定义方法和变量的声明类似：像声明一个变量一样，声明一个重定义类型，之后在声明之前加上<code>typedef</code>即可。这种写法凸显了 C/C++ 中的语法一致性，但有时却会增加代码的阅读难度。比如重定义一个函数指针时：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*<span class="keyword">func_t</span>)</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">func_t</span> = <span class="keyword">void</span> (*)(<span class="keyword">int</span>, <span class="keyword">int</span>);</span><br></pre></td></tr></table></figure>
-<p>using 重定义的 func_t 是一个模板，但它既不是类模板也不是函数模板（函数模板实例化后是一个函数），而是一种新的模板形式：模板别名（alias template）。</p>
-<h2 id="using声明和using指示"><a href="#using声明和using指示" class="headerlink" title="using声明和using指示"></a>using声明和using指示</h2><h3 id="using声明"><a href="#using声明" class="headerlink" title="using声明"></a>using声明</h3><p><strong>一个using声明一次只引入一个命名空间成员。</strong>using声明中引入的名字遵循常规作用域规则：从using声明点开始，直到包含该using声明的作用域的末尾，名字都是可见的。外部作用域中定义的同名实体被屏蔽。简写名字只能在声明它的作用域及其嵌套作用域中使用，一旦该作用域结束了，就必须使用完全限定名。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;x;<span class="comment">//wrong</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;x;<span class="comment">//right</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;x;<span class="comment">//right</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="using指示"><a href="#using指示" class="headerlink" title="using指示"></a>using指示</h3><p>using指示同using声明一样，可以使我们能够使用命名空间的简写形式，简写名字从using指示点开始，直到出现using指示的作用域的末尾。但不同的是using声明可以选择性的部分可见，但<strong>using指示使得特定命名空间名的所有可见</strong>。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> blip</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> bi = <span class="number">10</span>,bj = <span class="number">20</span>,bk = <span class="number">30</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> bj = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> blip;</span><br><span class="line">    ++bi;<span class="comment">//right</span></span><br><span class="line">    ++bj;<span class="comment">//wrong , “bj”:不明确的符号</span></span><br><span class="line">    ++::bj;<span class="comment">//right,bj=1;此处双冒号是全局作用域符号</span></span><br><span class="line">    ++blip::bj;<span class="comment">//right,bj=21;</span></span><br><span class="line">    <span class="keyword">int</span> bk = <span class="number">97</span>;</span><br><span class="line">    ++bk;<span class="comment">//right,bk=98</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>[1] <a href="">C++11使用using定义别名（替代typedef）</a></p>
-<p>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/mlyjqx/article/details/74783811">C++using声明和using指示</a></p>
+            <h1 id="最小路径和"><a href="#最小路径和" class="headerlink" title="最小路径和"></a>最小路径和</h1><p>给定一个包含非负整数的 <code>*m* x *n*</code> 网格 <code>grid</code> ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。</p>
+<p><strong>说明：</strong>每次只能向下或者向右移动一步。</p>
+<p>思路：DP数组中放当前节点的最小和，只能从上或者右过来，注意边界条件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minPathSum</span>(<span class="params">self, grid: List[List[<span class="built_in">int</span>]]</span>) -&gt; int:</span></span><br><span class="line">        dp = [[<span class="number">0</span>]*(<span class="built_in">len</span>(grid[<span class="number">0</span>])+<span class="number">1</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid)+<span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(dp)):</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">1</span>:</span><br><span class="line">                dp[i][<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[i][<span class="number">0</span>] = <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(dp[<span class="number">0</span>])):</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">                dp[<span class="number">0</span>][i] = <span class="number">0</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                dp[<span class="number">0</span>][i] = <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(grid)+<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(grid[<span class="number">0</span>])+<span class="number">1</span>):</span><br><span class="line">                dp[i][j] = <span class="built_in">min</span>(dp[i-<span class="number">1</span>][j],dp[i][j-<span class="number">1</span>])+grid[i-<span class="number">1</span>][j-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> dp[-<span class="number">1</span>][-<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/minimum-path-sum/">https://leetcode-cn.com/problems/minimum-path-sum/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E6%9C%80%E5%A4%A7%E6%AD%A3%E6%96%B9%E5%BD%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E6%9C%80%E5%A4%A7%E6%AD%A3%E6%96%B9%E5%BD%A2/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="最大正方形"><a href="#最大正方形" class="headerlink" title="最大正方形"></a>最大正方形</h1><p>动态规划思想，二维dp数组的位置记录以当前位置为顶点的最大正方形边长。</p>
+<p><code>dp[i][j] = min(dp[i][j-1],dp[i-1][j],dp[i-1][j-1])+1</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maximalSquare</span>(<span class="params">self, matrix: List[List[<span class="built_in">str</span>]]</span>) -&gt; int:</span></span><br><span class="line">        row = <span class="built_in">len</span>(matrix)</span><br><span class="line">        column = <span class="built_in">len</span>(matrix[<span class="number">0</span>])</span><br><span class="line">        dp = [[<span class="number">0</span>]*column <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(row)]</span><br><span class="line">        maxlen = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(row):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(column):</span><br><span class="line">                <span class="keyword">if</span> i==<span class="number">0</span> <span class="keyword">or</span> j==<span class="number">0</span>:</span><br><span class="line">                    <span class="keyword">if</span> matrix[i][j]==<span class="string">&quot;1&quot;</span>:</span><br><span class="line">                        dp[i][j]=<span class="number">1</span></span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        dp[i][j]=<span class="number">0</span></span><br><span class="line">                    <span class="keyword">if</span> dp[i][j]==<span class="number">1</span>:</span><br><span class="line">                        maxlen=<span class="built_in">max</span>(maxlen,<span class="number">1</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">if</span> matrix[i][j]==<span class="string">&quot;1&quot;</span>:</span><br><span class="line">                        dp[i][j] = <span class="built_in">min</span>(dp[i][j-<span class="number">1</span>],dp[i-<span class="number">1</span>][j],dp[i-<span class="number">1</span>][j-<span class="number">1</span>])+<span class="number">1</span></span><br><span class="line">                        maxlen = <span class="built_in">max</span>(maxlen,dp[i][j])</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        dp[i][j]=<span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> maxlen*maxlen</span><br></pre></td></tr></table></figure>
+<p>优化：DP优化，由于我们只用了在前面的动态规划解法中，计算$ i^{th}$行（row）的 dp 方法中，我们只使用了上一个元素和第$ (i-1)^{th}$行，因此我们不需要二维 dp 矩阵，因为一维 dp 足以满足此要求。</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/maximal-square/">https://leetcode-cn.com/problems/maximal-square/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="斐波那契数列"><a href="#斐波那契数列" class="headerlink" title="斐波那契数列"></a>斐波那契数列</h1><p>写一个函数，输入 <code>n</code> ，求斐波那契（Fibonacci）数列的第 <code>n</code> 项。</p>
+<p><strong>不要用递归。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fib</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; int:</span></span><br><span class="line">        <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">elif</span> n ==<span class="number">1</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">        n0 = <span class="number">0</span></span><br><span class="line">        n1 = <span class="number">1</span></span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> n&gt;=<span class="number">2</span>:</span><br><span class="line">            res = (n0+n1)%(<span class="number">10</span>**<span class="number">9</span>+<span class="number">7</span>)</span><br><span class="line">            n0 = n1</span><br><span class="line">            n1 = res</span><br><span class="line">            n-=<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/fei-bo-na-qi-shu-lie-lcof/">https://leetcode-cn.com/problems/fei-bo-na-qi-shu-lie-lcof/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E6%8E%B7%E9%AA%B0%E5%AD%90%E7%9A%84N%E7%A7%8D%E6%96%B9%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E6%8E%B7%E9%AA%B0%E5%AD%90%E7%9A%84N%E7%A7%8D%E6%96%B9%E6%B3%95/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="掷骰子的N种方法"><a href="#掷骰子的N种方法" class="headerlink" title="掷骰子的N种方法"></a>掷骰子的N种方法</h1><p>这里有 d 个一样的骰子，每个骰子上都有 f 个面，分别标号为 1, 2, …, f。</p>
+<p>我们约定：掷骰子的得到总点数为各骰子面朝上的数字的总和。</p>
+<p>如果需要掷出的总点数为 target，请你计算出有多少种不同的组合情况（所有的组合情况总共有 f^d 种），模$10^9 + 7$后返回。</p>
+<h3 id="DP"><a href="#DP" class="headerlink" title="DP"></a>DP</h3><p>一般来说组合问题，如果是要求所有可能的方案都是用<strong>递归</strong>，但是如果要求方案总数就是要用<strong>动态规划</strong>。</p>
+<p>dp数组中存储的是(当前要投掷第几个筛子, 当前投掷过的所有筛子的总和)。一般来说，是<code>dp[i][j] = sum(dp[i - 1][j - k:j])</code>（没有做特殊判断）。这道题需要多留意边界判断，有效的边界判断不仅可以避免数组越界还可以减少搜索空间。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">numRollsToTarget</span>(<span class="params">self, d: <span class="built_in">int</span>, f: <span class="built_in">int</span>, target: <span class="built_in">int</span></span>) -&gt; int:</span></span><br><span class="line">        <span class="keyword">if</span> d == <span class="number">0</span> <span class="keyword">or</span> d * f &lt; target <span class="keyword">or</span> d * <span class="number">1</span> &gt; target:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        dp = [[<span class="number">0</span>] * target <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(d)]</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">min</span>(f, target)):</span><br><span class="line">            dp[<span class="number">0</span>][j] = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, d):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">min</span>(target, (i + <span class="number">1</span>) * f)):</span><br><span class="line">                <span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, f + <span class="number">1</span>):</span><br><span class="line">                    <span class="keyword">if</span> j - k &lt; <span class="number">0</span>:</span><br><span class="line">                        <span class="keyword">continue</span></span><br><span class="line">                    dp[i][j] += dp[i - <span class="number">1</span>][j - k]</span><br><span class="line">        <span class="keyword">return</span> dp[-<span class="number">1</span>][-<span class="number">1</span>] % (<span class="number">10</span> ** <span class="number">9</span> + <span class="number">7</span>)</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-dice-rolls-with-target-sum/">https://leetcode-cn.com/problems/number-of-dice-rolls-with-target-sum/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E6%89%93%E5%AE%B6%E5%8A%AB%E8%88%8D/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="打家劫舍"><a href="#打家劫舍" class="headerlink" title="打家劫舍"></a>打家劫舍</h1><p>你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。</p>
+<p>给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rob</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (nums.size()==<span class="number">0</span>) &#123;<span class="keyword">return</span> <span class="number">0</span>;&#125;</span><br><span class="line">        <span class="keyword">if</span> (nums.size()==<span class="number">1</span>) &#123;<span class="keyword">return</span> nums[<span class="number">0</span>];&#125;</span><br><span class="line">        <span class="keyword">int</span> dp [nums.size()];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;nums.size(); i++)&#123;</span><br><span class="line">            <span class="keyword">if</span> (i==<span class="number">0</span>)&#123;</span><br><span class="line">                dp[i]=nums[i];</span><br><span class="line">            &#125;<span class="keyword">else</span> <span class="keyword">if</span> (i==<span class="number">1</span>) &#123;</span><br><span class="line">                dp[i]=max(dp[i<span class="number">-1</span>],nums[i]);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                dp[i]=max(dp[i<span class="number">-2</span>]+nums[i],dp[i<span class="number">-1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[nums.size()<span class="number">-1</span>];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/house-robber/">https://leetcode-cn.com/problems/house-robber/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E5%A0%86%E7%AE%B1%E5%AD%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E5%A0%86%E7%AE%B1%E5%AD%90/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="堆箱子"><a href="#堆箱子" class="headerlink" title="堆箱子"></a>堆箱子</h1><p>堆箱子。给你一堆n个箱子，箱子宽 wi、深 di、高 hi。箱子不能翻转，将箱子堆起来时，下面箱子的宽度、高度和深度必须大于上面的箱子。实现一种方法，搭出最高的一堆箱子。箱堆的高度为每个箱子高度的总和。</p>
+<p>输入使用数组[wi, di, hi]表示每个箱子。</p>
+<p><strong>思路：</strong>和最长递增子序列、俄罗斯套娃信封问题、马戏团人塔是一类问题。最长递增子序列有两种解法，时间复杂度分别为$O(n^2)$和$O(nlogn)$，由于要求箱子高度最大而不是个数最多，所以只能采用$O(n^2)$的解法。</p>
+<p>首先将box按照某一个维度排序，<strong>最终的结果必然是这个序列的子序列</strong>（因为最终的结果是三个维度都递增的，排序后的box一个维度递增）。然后就是用DP。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pileBox</span>(<span class="params">self, box: List[List[<span class="built_in">int</span>]]</span>) -&gt; int:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> box:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        box.sort(key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line">        dp = [<span class="number">0</span>] * <span class="built_in">len</span>(box)</span><br><span class="line">        dp[<span class="number">0</span>] = box[<span class="number">0</span>][<span class="number">2</span>]</span><br><span class="line">        rec = box[<span class="number">0</span>][<span class="number">2</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(box)):</span><br><span class="line">            max_i = <span class="number">0</span></span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i):</span><br><span class="line">                <span class="keyword">if</span> box[i][<span class="number">0</span>] &gt; box[j][<span class="number">0</span>] <span class="keyword">and</span> box[i][<span class="number">1</span>] &gt; box[j][<span class="number">1</span>] <span class="keyword">and</span> box[i][<span class="number">2</span>] &gt; box[j][<span class="number">2</span>]:</span><br><span class="line">                    max_i = <span class="built_in">max</span>(max_i,dp[j])</span><br><span class="line">            dp[i] = max_i + box[i][<span class="number">2</span>]</span><br><span class="line">            rec =<span class="built_in">max</span>(rec,dp[i])</span><br><span class="line">        print(box)</span><br><span class="line">        print(dp)</span><br><span class="line">        <span class="keyword">return</span> rec</span><br></pre></td></tr></table></figure>
+<h4 id="https-leetcode-cn-com-problems-pile-box-lcci"><a href="#https-leetcode-cn-com-problems-pile-box-lcci" class="headerlink" title="https://leetcode-cn.com/problems/pile-box-lcci/"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/pile-box-lcci/">https://leetcode-cn.com/problems/pile-box-lcci/</a></h4>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/20/Algorithm/dp-%E5%88%86%E5%89%B2%E7%AD%89%E5%92%8C%E5%AD%90%E9%9B%86/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="分割等和子集"><a href="#分割等和子集" class="headerlink" title="分割等和子集"></a>分割等和子集</h1><p>给定一个<strong>只包含正整数</strong>的<strong>非空</strong>数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。</p>
+<p>0-1背包问题：储存bool值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">canPartition</span>(<span class="params">self, nums: List[<span class="built_in">int</span>]</span>) -&gt; bool:</span></span><br><span class="line">        sum_ = <span class="built_in">sum</span>(nums)/<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">sum</span>(nums) % <span class="number">2</span>!=<span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        dp = [<span class="literal">False</span>] * (<span class="built_in">int</span>(sum_)+<span class="number">1</span>)</span><br><span class="line">        dp [<span class="number">0</span>] = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">int</span>(sum_),-<span class="number">1</span>,-<span class="number">1</span>):</span><br><span class="line">                dp[j] = dp[j-nums[i]] <span class="keyword">or</span> dp[j] <span class="keyword">if</span> j-nums[i]&gt;=<span class="number">0</span> <span class="keyword">else</span> dp[j]</span><br><span class="line">        <span class="keyword">return</span> dp[-<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/partition-equal-subset-sum/">https://leetcode-cn.com/problems/partition-equal-subset-sum/</a></p>
 
           
         
@@ -827,7 +1484,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/9/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span>
+    <a class="extend prev" rel="prev" href="/page/9/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/11/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -873,7 +1530,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

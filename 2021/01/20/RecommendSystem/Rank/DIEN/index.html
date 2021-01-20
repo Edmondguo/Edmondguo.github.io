@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Deep Interest Evolution Network for Click-Through Rate Prediction概述在大多数非搜索电商场景下，用户并不会实时表达目前的兴趣偏好。因此通过设计模型来捕获用户的动态变化的兴趣，是提升CTR预估效果的关键。阿里之前的DIN模型将用户的历史行为来表示用户的兴趣，并强调了用户兴趣的多样性和动态变化性，因此通过attention-based m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2021/01/20/RecommendSystem/Rank/DIEN/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Deep Interest Evolution Network for Click-Through Rate Prediction概述在大多数非搜索电商场景下，用户并不会实时表达目前的兴趣偏好。因此通过设计模型来捕获用户的动态变化的兴趣，是提升CTR预估效果的关键。阿里之前的DIN模型将用户的历史行为来表示用户的兴趣，并强调了用户兴趣的多样性和动态变化性，因此通过attention-based m">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DIN2.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DIEN0.jpg">
+<meta property="article:published_time" content="2021-01-20T02:32:53.813Z">
+<meta property="article:modified_time" content="2020-10-26T13:59:04.000Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://guoshihao.site:8085/pic/DIN2.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/20/RecommendSystem/Rank/DIEN/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/DIEN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction"><a href="#Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction" class="headerlink" title="Deep Interest Evolution Network for Click-Through Rate Prediction"></a>Deep Interest Evolution Network for Click-Through Rate Prediction</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在大多数非搜索电商场景下，用户并不会实时表达目前的兴趣偏好。因此通过设计模型来捕获用户的动态变化的兴趣，是提升CTR预估效果的关键。阿里之前的DIN模型将用户的历史行为来表示用户的兴趣，并强调了用户兴趣的多样性和动态变化性，因此通过attention-based model来捕获和目标物品相关的兴趣。虽然DIN模型将用户的历史行为来表示兴趣，但存在两个缺点：</p>
+<ol>
+<li>用户的兴趣是不断进化的，而DIN抽取的用户兴趣之间是独立无关联的，没有捕获到兴趣的动态进化性</li>
+<li>通过用户的显式的行为来表达用户隐含的兴趣，这一准确性无法得到保证。</li>
+</ol>
+<p>基于以上两点，阿里提出了深度兴趣演化网络DIEN来CTR预估的性能。DIEN模型的主要贡献点在于：</p>
+<ol>
+<li>模型关注电商系统中兴趣演化的过程，并提出了新的网络结果来建模兴趣进化的过程，这个模型能够更精确的表达用户兴趣，同时带来更高的CTR预估准确率。</li>
+<li>设计了兴趣抽取层，并通过计算一个辅助loss，来提升兴趣表达的准确性。</li>
+<li>设计了兴趣进化层，来更加准确的表达用户兴趣的动态变化性。</li>
+</ol>
+<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><p>首先对比DIN，DIN的网络结构如下：</p>
+<p><img src="http://guoshihao.site:8085/pic/DIN2.jpg"></p>
+<p>DIEN的网络模型结构如下：</p>
+<p><img src="http://guoshihao.site:8085/pic/DIEN0.jpg"></p>
+<p>可以看到，DIN和DIEN的最底层都是Embedding Layer，User profile， target AD和context feature的处理方式是一致的。不同的是，DIEN将user behavior组织成了序列数据的形式，并把简单的使用外积完成的activation unit变成了一个attention-based GRU网络。</p>
+<h3 id="兴趣抽取层Interest-Extractor-Layer"><a href="#兴趣抽取层Interest-Extractor-Layer" class="headerlink" title="兴趣抽取层Interest Extractor Layer"></a>兴趣抽取层Interest Extractor Layer</h3><p><strong>基于深度学习的文本分类，同样面临着如何将一段话中的多个词向量压缩成一个向量来表示这段话的问题。常用的方法，就是将多个词向量喂入RNN，最后一个时刻RNN的输出向量就代表了多个词向量的“合并”结果</strong>。显然，DIEN则借鉴了这一思路，并且改造了GRU的构造，利用attention score来控制门。</p>
+<p>兴趣抽取层Interest Extractor Layer的主要目标是从embedding数据中提取出interest。但一个用户在某一时间的interest不仅与当前的behavior有关，也与之前的behavior相关，所以作者们使用GRU单元来提取interest。<br>$$<br>u_t=\sigma(W^ui_t+U^uh_{t-1}+b^u)<br>$$</p>
+<p>$$<br>r_t=\sigma(W^ri_t+U^rh_{t-1}+b^r)<br>$$</p>
+<p>$$<br>\tilde{h_t}=tanh(W^hi_t+r_t\circ{}U^hh_{t-1}+b^h)<br>$$</p>
+<p>$$<br>h_t=(1-u_t)\circ{}h_{t-1}+u_t\circ{}\tilde{h_t}<br>$$</p>
+<p>这里我们可以认为$h(T)$是提取出的用户兴趣，但是这个地方兴趣是否表示的合理呢？文中别出心裁的增加了一个auxiliary loss，来提升兴趣表达的准确性。这里，作者设计了一个二分类模型来计算兴趣抽取的准确性，我们将用户下一时刻真实的行为$e(T+1)$作为正例，负采样得到的行为作为负例$e(T+1)’$，分别与抽取出的兴趣$h(T)$结合输入到设计的辅助网络中，得到预测结果，并通过logloss计算一个辅助的损失。带权重地加入最后的loss中。</p>
+<h3 id="兴趣进化层Interest-Evolution-Layer"><a href="#兴趣进化层Interest-Evolution-Layer" class="headerlink" title="兴趣进化层Interest Evolution Layer"></a>兴趣进化层Interest Evolution Layer</h3><p>兴趣进化层Interest Evolution Layer的主要目标是刻画用户兴趣的进化过程。举个简单的例子：</p>
+<p>以用户对衣服的interest为例，随着季节和时尚风潮的不断变化，用户的interest也会不断变化。这种变化会直接影响用户的点击决策。建模用户兴趣的进化过程有两方面的好处：</p>
+<ol>
+<li>追踪用户的interest可以使我们学习final interest的表达时包含更多的历史信息。</li>
+<li>可以根据interest的变化趋势更好地进行CTR预测。</li>
+</ol>
+<p>而interest在变化过程中遵循如下规律：</p>
+<ol>
+<li><strong>interest drift</strong>：用户在某一段时间的interest会有一定的集中性。比如用户可能在一段时间内不断买书，在另一段时间内不断买衣服。</li>
+<li><strong>interest individual</strong>：一种interest有自己的发展趋势，不同种类的interest之间很少相互影响，例如买书和买衣服的interest基本互不相关。</li>
+</ol>
+<p>为了利用这两个时序特征，我们需要再增加一层GRU的变种，并加上attention机制以找到与target AD相关的interest。</p>
+<p>attention的计算方式如下：<br>$$<br>a_t=\frac{e^{h_tW_{e_a}}}{\sum^T_{j=1}e^{h_jW_{e_a}}}<br>$$<br>而Attention和GRU结合起来的机制有很多，文中介绍了一下三种：</p>
+<h4 id="GRU-with-attentional-input-AIGRU"><a href="#GRU-with-attentional-input-AIGRU" class="headerlink" title="GRU with attentional input (AIGRU)"></a>GRU with attentional input (AIGRU)</h4><p>这种方式将attention直接作用于输入，无需修改GRU的结构：<br>$$<br>i_t’=h_t*a_t<br>$$</p>
+<h4 id="Attention-based-GRU-AGRU"><a href="#Attention-based-GRU-AGRU" class="headerlink" title="Attention based GRU(AGRU)"></a>Attention based GRU(AGRU)</h4><p>这种方式需要修改GRU的结构，此时hidden state的输出变为：<br>$$<br>h_t’=(1-a_t)<em>h_{t-1}’+a_t</em>\bar{h_t}’<br>$$</p>
+<h4 id="GRU-with-attentional-update-gate-AUGRU"><a href="#GRU-with-attentional-update-gate-AUGRU" class="headerlink" title="GRU with attentional update gate (AUGRU)"></a>GRU with attentional update gate (AUGRU)</h4><p>这种方式需要修改GRU的结构，此时hidden state的输出变为：<br>$$<br>\tilde{u_t}’=a_t*u_t’<br>$$</p>
+<p>$$<br>h_t’=(1-\tilde{u_t}’)\circ{}h_{t-1}’+\tilde{u_t}’\circ{}\bar{h_t}’<br>$$</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1809.03672">Deep Interest Evolution Network for Click-Through Rate Prediction</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6742d10b89a8">推荐系统遇上深度学习(二十四)–深度兴趣进化网络DIEN原理及实战！</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/DeepFM/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/DIN/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction"><span class="nav-number">1.</span> <span class="nav-text">Deep Interest Evolution Network for Click-Through Rate Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B4%E8%B6%A3%E6%8A%BD%E5%8F%96%E5%B1%82Interest-Extractor-Layer"><span class="nav-number">1.2.1.</span> <span class="nav-text">兴趣抽取层Interest Extractor Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B4%E8%B6%A3%E8%BF%9B%E5%8C%96%E5%B1%82Interest-Evolution-Layer"><span class="nav-number">1.2.2.</span> <span class="nav-text">兴趣进化层Interest Evolution Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GRU-with-attentional-input-AIGRU"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">GRU with attentional input (AIGRU)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Attention-based-GRU-AGRU"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Attention based GRU(AGRU)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GRU-with-attentional-update-gate-AUGRU"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">GRU with attentional update gate (AUGRU)</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

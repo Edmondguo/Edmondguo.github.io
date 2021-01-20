@@ -86,8 +86,8 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="寻找两个正序数组的中位给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的中位数。 进阶：你能设计一个时间复杂度为 O(log (m+n)) 的算法解决此问题吗？ 思路：二分法，先实现找两个数组的第k小的数，可以比较两个数列第k&#x2F;&#x2F;2的数的大小，小的那个数列的那k&#x2F;&#x2F;2个数必然比k小。这样就排除了k&#x2F;&#x2F;2个数。然后在继续进行，直到两个数列其">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-01-20T02:14:23.354Z">
-<meta property="article:modified_time" content="2021-01-15T06:54:33.000Z">
+<meta property="article:published_time" content="2021-01-20T02:32:53.377Z">
+<meta property="article:modified_time" content="2021-01-20T02:20:39.195Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -261,7 +261,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -299,7 +299,7 @@
       
 
       
-        <h2 id="寻找两个正序数组的中位"><a href="#寻找两个正序数组的中位" class="headerlink" title="寻找两个正序数组的中位"></a>寻找两个正序数组的中位</h2><p>给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的中位数。</p>
+        <h1 id="寻找两个正序数组的中位"><a href="#寻找两个正序数组的中位" class="headerlink" title="寻找两个正序数组的中位"></a>寻找两个正序数组的中位</h1><p>给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的中位数。</p>
 <p>进阶：你能设计一个时间复杂度为 O(log (m+n)) 的算法解决此问题吗？</p>
 <p><strong>思路：</strong>二分法，先实现找两个数组的第k小的数，可以比较两个数列第k//2的数的大小，<strong>小的那个数列的那k//2个数必然比k小</strong>。这样就排除了k//2个数。然后在继续进行，直到两个数列其中一个为空，或者k==1。</p>
 <p>需要注意可能数列比k//2小的情况。一种处理方式当出现这种情况时，两边都截断短数列的长度，不过这种情况可能导致时间复杂度退化成$O(m+n)$，比如[5],[1,2,3,4,5]这种情况。</p>
@@ -420,7 +420,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -457,7 +457,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E4%B8%A4%E4%B8%AA%E6%AD%A3%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%AD%E4%BD%8D"><span class="nav-number">1.</span> <span class="nav-text">寻找两个正序数组的中位</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BB%E6%89%BE%E4%B8%A4%E4%B8%AA%E6%AD%A3%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%AD%E4%BD%8D"><span class="nav-number">1.</span> <span class="nav-text">寻找两个正序数组的中位</span></a></li></ol></div>
             
 
           </div>

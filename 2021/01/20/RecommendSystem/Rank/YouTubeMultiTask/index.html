@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Recommending what video to watch next: a multitask ranking system概述摘要这篇论文提出一个视频推荐领域的大规模的多目标排序系统，该系统主要面临几个挑战：1）多个竞争关系的目标；2）用户反馈的选择偏见（selective bias）。 本文探究了大量软-参数共享技术，例如MMoE，来有效的优化多目标排序。除此之外，本文还采用wide&amp;a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2021/01/20/RecommendSystem/Rank/YouTubeMultiTask/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Recommending what video to watch next: a multitask ranking system概述摘要这篇论文提出一个视频推荐领域的大规模的多目标排序系统，该系统主要面临几个挑战：1）多个竞争关系的目标；2）用户反馈的选择偏见（selective bias）。 本文探究了大量软-参数共享技术，例如MMoE，来有效的优化多目标排序。除此之外，本文还采用wide&amp;a">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/YouTubeMultitask0.png">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/YouTubeMultitask1.png">
+<meta property="article:published_time" content="2021-01-20T02:32:53.878Z">
+<meta property="article:modified_time" content="2020-11-18T08:26:13.000Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://guoshihao.site:8085/pic/YouTubeMultitask0.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/20/RecommendSystem/Rank/YouTubeMultiTask/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/YouTubeMultiTask/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Recommending-what-video-to-watch-next-a-multitask-ranking-system"><a href="#Recommending-what-video-to-watch-next-a-multitask-ranking-system" class="headerlink" title="Recommending what video to watch next: a multitask ranking system"></a>Recommending what video to watch next: a multitask ranking system</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>这篇论文提出一个视频推荐领域的大规模的多目标排序系统，该系统主要面临几个挑战：1）多个竞争关系的目标；2）用户反馈的选择偏见（selective bias）。 本文探究了大量软-参数共享技术，例如MMoE，来有效的优化多目标排序。除此之外，本文还采用wide&amp;deep框架来缓和选择偏见问题。并且在youtube线上环境验证了方案的效果。</p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>本文描述了一个用户视频推荐的大规模排序服务。具体场景是：给定一个用户播放的视频，生成下一个他可能会播放和喜欢的视频。 典型的推荐系统包含两个阶段：召回（recall），排序(rank)。本文的重点聚焦在排序阶段：对召回阶段输出的数百个内容，应用复杂的模型进行排序，选出其中最有可能被用户喜欢的。</p>
+<p>设计与实现一个大规模的线上推荐系统会面临一下挑战：</p>
+<ul>
+<li>经常面临不同，甚至冲突的多个目标</li>
+<li>经常碰到隐式偏见，例如用户倾向于点击排序靠前的视频，而不是最好的。如果训练数据处理的时候不考虑到这些因素，会陷入feedback loop effect。</li>
+</ul>
+<p>本文的贡献：</p>
+<ul>
+<li>提出一个基于deep&amp;wide框架的多任务学习框架</li>
+<li>deep部分是一个MMoE多任务学习框架</li>
+<li>wide部分引入一个浅层网络，来降低selection bias(这篇论文用的是position bias)</li>
+</ul>
+<p>作者首先把目标分为两类：</p>
+<ul>
+<li>参与性 点击、播放等隐式行为</li>
+<li>满足性 点赞、打分等显示行为</li>
+</ul>
+<p>这些目标可能正相关，也可能负相关，正好适合应用MMoE框架来解决。</p>
+<p>为了对selection bias进行建模，引入了一个浅层的模型。该模型输入是一个能刻画selection bias的因子，例如排序的位置，输出一个标量作为主模型输出的偏移量。简而言之，该模型把用户对视频的喜好拆分成两部分：无偏效用（MMoE学习），bias（浅层网络学习）</p>
+<h2 id="相关工作"><a href="#相关工作" class="headerlink" title="相关工作"></a>相关工作</h2><p>推荐问题可以理解为：给定一个查询、上下文、候选集，返回一个高可用性的小列表。在这一节，我们会分三部分来讨论：1）工业推荐系统的样例分析；2）多目标排序系统；3）理解训练数据的偏倚问题。</p>
+<h3 id="工业级推荐系统"><a href="#工业级推荐系统" class="headerlink" title="工业级推荐系统"></a>工业级推荐系统</h3><p>想要设计、开发一个强大机器学习模型加持的成功的排序系统，我们需要大量的训练数据，在大多数现有的推荐系统中，训练数据都依赖用户的行为日志。推荐系统想获得用户的显式反馈，例如电影评分等，但是由于用户成本很高，所以显示反馈往往很稀疏。因此，目前推荐系统的训练大多数依赖用户的隐式反馈，例如点击、播放等等。<br>推荐系统一般分为两个阶段：</p>
+<ol>
+<li>召回：从海量视频中筛选出部分用户感兴趣的视频，为了提高多样性召回一般使用多路。通常包括：利用共现关系（关联规则），协同过滤，随机游走，基于内容，混合方法。</li>
+<li>排序：一般采用LearningToRank方法，包括point-wise, pair-wise, list-wise。线上排序服务重点需要考虑效率问题，所以本文选用基于深度神经网络的point-wise方法，因为可扩展性强。</li>
+</ol>
+<h3 id="推荐系统中的多目标学习"><a href="#推荐系统中的多目标学习" class="headerlink" title="推荐系统中的多目标学习"></a>推荐系统中的多目标学习</h3><p>在推荐系统中，用户的行为多种多样，例如：点击、点赞、下单等。 单个用户行为并不能准确反映用户对Item的好恶，例如一个用户播放某个视频，但是最后给了一个低分。并且这些行为之间不是相互独立的，可能会结合在一起决定用户对视频的偏好。所以，我们要结合这些行为分数在一起来评价用户的对某个视频的偏好。<br>目前不少推荐系统都有考虑到多目标。例如大多数推荐系统在召回阶段都会考虑到多目标，因此应用多种算法来做召回。 还有一些针对特定特征做了多目标排序，例如针对文本特征做了排序，针对图像特征做了一个排序。这些往系统的可扩展性比较差，一来没有利用不同特征之间的关系，二来一旦特征空间比较复杂，整个排序的参数规模会很大。</p>
+<h3 id="位置偏倚"><a href="#位置偏倚" class="headerlink" title="位置偏倚"></a>位置偏倚</h3><p>用户隐式反馈受位置偏倚影响很大，这个在搜索和推荐领域早就有人证明了这点。因此，也有了一些工作希望移除位置偏倚的影响。比较常用的做法是把位置作为一个参数带入模型训练和预测过程。例如把位置作为条件概率的前键值，对$p(click|position,item)$进行建模；在预测阶段，计算$p(click|position=1, item)$移除位置的影响。也有一些工作，学习一个全局的$bias$因子来对结果进行正则化，缺点是这个$bias$做不到个性化。而且，在真实的推荐系统中，用户的兴趣偏好和视频的流行度每天都在变化，因此利用全局的$bias$很难取得好效果。</p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>综上所述，推荐领域的排序面临以下几个问题：</p>
+<ul>
+<li>隐式反馈不能代表用户真实兴趣</li>
+<li>需要考虑多目标</li>
+<li>特征很复杂，覆盖很多垂直领域的特征</li>
+<li>位置偏倚</li>
+<li>大规模应用场景要求模型算法的可扩展性</li>
+</ul>
+<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><p><img src="http://guoshihao.site:8085/pic/YouTubeMultitask0.png"></p>
+<h3 id="排序目标"><a href="#排序目标" class="headerlink" title="排序目标"></a>排序目标</h3><p>本文使用用户的行为种类作为多目标分类的依据。把用户的行为分为参与性和满足性两类。其中参与性拆分成两个目标：一个二分类（是否点击），一个回归（时长）；满足性也可以拆分成两个目标：二分类（是否点赞）、回归（评分）。相应的损失函数分别为：交叉熵损失和平方损失。</p>
+<p>一个输入样本，模型会输出多个目标的得分。一个权重计算公式结合多个得分计算出最终的分数。这个权重是参数调节出来的，并不是模型学习的。</p>
+<h3 id="MMoE建模"><a href="#MMoE建模" class="headerlink" title="MMoE建模"></a>MMoE建模</h3><p>多目标排序模型通常的结构都是底层共享一个shared-bottom结构。然而，如果这些底层共享比较硬，对于相互关系不密切，甚至矛盾的多目标建模，最终的效果会收到损害。因此，youtube在2018年提出了MMoE结构，bottom层为多个expert模块组合而成，每个任务的组合系统不同，因此参数共享比较soft。</p>
+<p><img src="http://guoshihao.site:8085/pic/YouTubeMultitask1.png"></p>
+<p>该模型结构并不完全等同于MMoE，因为在推荐领域特征规模很大，为了降低复杂度，在MoE层和输入之间插入一个shared bottom层来对特征进行降维。这种方法其实很常见，例如可以对底层的embedding matrix进行卷积操作，降低矩阵的大小。</p>
+<p>shared bottom层上面，就是MoE层，以及边缘的gate。每个MoE层只是一层MLP+ReLU。给定输入$x$，MoE层的输出为$f_i(x),(i=1,…,n)$是n个expert network（expert network可认为是一个神经网络）。每个任务$k$的tower的输入为MoE的混合(Mixture), 记为$f^k(x)=\sum^n_{i=1}g^k(x)<em>if_i(x)$，每个任务有一个独立的$g^k(x)$，即有一个独立的gating network。每个$g^k(x)=softmax(W_{gk}x+b</em>{gk}),W_{gk}\in\mathbb{R}^{n \times d},b_{gk}\in\mathbb{R}^{n \times 1}$。Expert的数量可以很多，但是每个task最终采纳的可能只有权重最大的$TopK$个。</p>
+<h3 id="建模并移除position和selective-bias"><a href="#建模并移除position和selective-bias" class="headerlink" title="建模并移除position和selective bias"></a>建模并移除position和selective bias</h3><p>隐式反馈的位置偏倚，以及其他类型的选择性偏倚在推荐和广告系统中广泛存在，因为隐式反馈是来自于本系统的上一次推荐，这就是feedback loop。例如在推荐系统中，我们想基于用户目前正在观看的视频，预测他下一个观看的视频，用户往往倾向于点击观看列表最上面的视频，这和他的兴趣偏好之类因素无关。我们的目标就是在排序模型中移除这种位置偏倚，来提高模型的质量，中断feedback loop。</p>
+<p>postion和设备特征一起，通过一个浅层网络输出的logit会和task specific tower的logit结合在一起，预测最终的输出。在训练阶段，只有部分样本会加入位置信息，这样是为了防止模型过拟合位置信息。在预测阶段，不考虑位置特征，或者位置特征取一样。模型结构大约如图所示：</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>实验表明：</p>
+<ul>
+<li>某些expert的作用比其他expert大；</li>
+<li>一些task分配给Expert的权重较为均匀，另一些则更极端一些。极端情况的出现会导致gating网络不稳定，一般引入dropout来降低影响。</li>
+</ul>
+<p>一些在其他领域取得不错效果的模型，如CNN, multi-head attention在CTR预估领域并不能取得很好的效果。原因可能是包括：特征多模态，推荐用到的特征模态比较复杂；扩展性和多目标冲突；噪音和数据稀疏性。</p>
+<p>出于效率考虑，网络结构不易太复杂太深。</p>
+<p>训练数据还存在其他bias。</p>
+<p>复杂模型线下，和线上效果评估可能差别较大。</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/3298689.3346997">Recommending what video to watch next: a multitask ranking system</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/fanzitao/article/details/104525843/">多任务学习论文导读：Recommending What Video to Watch Next-A Multitask Ranking System</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/Wide&Deep/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Recall/CB%E5%9F%BA%E4%BA%8E%E5%86%85%E5%AE%B9%E6%8E%A8%E8%8D%90%E7%AE%97%E6%B3%95/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Recommending-what-video-to-watch-next-a-multitask-ranking-system"><span class="nav-number">1.</span> <span class="nav-text">Recommending what video to watch next: a multitask ranking system</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.1.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">简介</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.2.</span> <span class="nav-text">相关工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%B8%9A%E7%BA%A7%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.2.1.</span> <span class="nav-text">工业级推荐系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E5%A4%9A%E7%9B%AE%E6%A0%87%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.2.2.</span> <span class="nav-text">推荐系统中的多目标学习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%8D%E7%BD%AE%E5%81%8F%E5%80%9A"><span class="nav-number">1.2.3.</span> <span class="nav-text">位置偏倚</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.2.4.</span> <span class="nav-text">问题描述</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E7%9B%AE%E6%A0%87"><span class="nav-number">1.3.1.</span> <span class="nav-text">排序目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MMoE%E5%BB%BA%E6%A8%A1"><span class="nav-number">1.3.2.</span> <span class="nav-text">MMoE建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E6%A8%A1%E5%B9%B6%E7%A7%BB%E9%99%A4position%E5%92%8Cselective-bias"><span class="nav-number">1.3.3.</span> <span class="nav-text">建模并移除position和selective bias</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.4.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

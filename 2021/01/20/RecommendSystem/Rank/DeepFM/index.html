@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="DeepFM: A Factorization-Machine based Neural Network for CTR Prediction概述由于DeepFM算法有效的结合了因子分解机与神经网络在特征学习中的优点：同时提取到低阶组合特征与高阶组合特征，所以越来越被广泛使用。在DeepFM中，FM算法负责对一阶特征以及由一阶特征两两组合而成的二阶特征进行特征的提取；DNN算法负责对由输入的一阶特">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2021/01/20/RecommendSystem/Rank/DeepFM/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="DeepFM: A Factorization-Machine based Neural Network for CTR Prediction概述由于DeepFM算法有效的结合了因子分解机与神经网络在特征学习中的优点：同时提取到低阶组合特征与高阶组合特征，所以越来越被广泛使用。在DeepFM中，FM算法负责对一阶特征以及由一阶特征两两组合而成的二阶特征进行特征的提取；DNN算法负责对由输入的一阶特">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DeepFM0.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DeepFM1.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DeepFM2.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DeepFM3.jpg">
+<meta property="article:published_time" content="2021-01-20T02:32:53.807Z">
+<meta property="article:modified_time" content="2021-01-14T07:53:28.000Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://guoshihao.site:8085/pic/DeepFM0.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/20/RecommendSystem/Rank/DeepFM/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/DeepFM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="DeepFM-A-Factorization-Machine-based-Neural-Network-for-CTR-Prediction"><a href="#DeepFM-A-Factorization-Machine-based-Neural-Network-for-CTR-Prediction" class="headerlink" title="DeepFM: A Factorization-Machine based Neural Network for CTR Prediction"></a>DeepFM: A Factorization-Machine based Neural Network for CTR Prediction</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>由于DeepFM算法有效的结合了因子分解机与神经网络在特征学习中的优点：同时提取到低阶组合特征与高阶组合特征，所以越来越被广泛使用。在DeepFM中，FM算法负责对一阶特征以及由一阶特征两两组合而成的二阶特征进行特征的提取；DNN算法负责对由输入的一阶特征进行全连接等操作形成的高阶特征进行特征的提取。</p>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p>整个模型大体分为两部分：FM和DNN。简单叙述一下模型的流程：借助FNN的思想，利用FM进行embedding，之后的wide和deep模型共享embedding之后的结果。DNN的输入完全和FNN相同（这里不用预训练，直接把embedding层看作一层的NN），而通过一定方式组合后，模型在wide上完全模拟出了FM的效果，最后将DNN和FM的结果组合后激活输出。<br>$$<br>\hat{y} = sigmoid(y_{FM}+y_{DNN})<br>$$<br><img src="http://guoshihao.site:8085/pic/DeepFM0.jpg"></p>
+<h3 id="FM部分"><a href="#FM部分" class="headerlink" title="FM部分"></a>FM部分</h3><p>FM部分即因子分解机，不仅包含了一阶特征的线性交互，还通过对特征隐向量的内积的方法对特征进行二阶的交叉。</p>
+<p>当采用神经网络将Sparse Features通过线性变换映射成Dense Embeddings时，由于特征采用One-hot编码形式，可以简单地推导出通过线性变换的映射和FM公式中的隐向量推导方式使完全等价的。<br>$$<br>y_{FM} = \sum_i w_i x_i + \sum_i \sum_{j \lt i} &lt;V_i,V_j&gt;x_i x_j<br>$$<br><img src="http://guoshihao.site:8085/pic/DeepFM1.jpg"></p>
+<h3 id="DNN部分"><a href="#DNN部分" class="headerlink" title="DNN部分"></a>DNN部分</h3><p>DNN部分依旧采用了全连接的深度神经网络方式，用来学习高阶的特征交互信息。只是在最后激活函数输出时，会叠加FM和DNN的结果。和FNN不同，FM作为模型架构的一部分，和DNN一起参与训练，以端到端的模式共同训练整个网络。</p>
+<p><img src="http://guoshihao.site:8085/pic/DeepFM2.jpg"></p>
+<h2 id="FNN-PNN-Wide-amp-Deep"><a href="#FNN-PNN-Wide-amp-Deep" class="headerlink" title="FNN,PNN,Wide&amp;Deep"></a>FNN,PNN,Wide&amp;Deep</h2><p>FNN：FM预训练策略存在两个局限性：(1)FM对嵌入参数的影响过大；(2)培训前阶段带来的开销降低了效率。此外，FNN只捕捉高阶特征交互。相比之下，DeepFM不需要预先训练，可以学习高阶和低阶特征交互。</p>
+<p>PNN：为了捕获高阶特征交互，PNN在嵌入层和第一隐藏层之间加一个Product Layer。为了提高计算效率，提出了内积和外积的近似计算方法：(1)通过消除部分神经元来近似计算内积；2)通过将m个k维特征向量压缩为一个k维向量来近似计算外部积。但是，由于外积的近似计算丢失了大量的信息，使得计算结果不稳定，因此外积的可靠性比内积差。虽然内积更可靠，但由于内积层的输出连接到第一隐层的所有神经元，因此计算复杂度较高。与PNN不同的是，DeepFM中二阶交叉层的输出只连接到最终的输出层(一个神经元)。这样有利于捕捉低阶特征交互作用。</p>
+<p>Wide&amp;Deep：Wide&amp;Deep可以同时捕捉模拟低阶和高阶特征交互。对于“Wide”部分的输入(例如在应用推荐中，被推荐的app ☓ 用户下载的app的交叉特征)，需要专业的特征工程。相比之下，DeepFM不需要这样的专业知识来处理输入，直接从输入的原始特征中学习。Wide&amp;Deep模型的一个扩展与DeepFM类似，但是DeepFM模型共享FM和DNN部分的特征embedding。特征embedding的共享策略通过低阶和高阶的特征交互作用(反向传播)影响特征的表达，从而更精确地模拟了特征的表达。</p>
+<p><img src="http://guoshihao.site:8085/pic/DeepFM3.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>DeepFM与其他基于DNN的推荐系统模型相比，不需要预先训练与专业的特征工程，并且可以捕捉低阶和高阶特征交互。</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1703.04247">DeepFM: A Factorization-Machine based Neural Network for CTR Prediction</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/zynash2/article/details/79348540">论文精读-DeepFM</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/C++/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E3%80%81%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/DIEN/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DeepFM-A-Factorization-Machine-based-Neural-Network-for-CTR-Prediction"><span class="nav-number">1.</span> <span class="nav-text">DeepFM: A Factorization-Machine based Neural Network for CTR Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">模型结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FM%E9%83%A8%E5%88%86"><span class="nav-number">1.2.1.</span> <span class="nav-text">FM部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNN%E9%83%A8%E5%88%86"><span class="nav-number">1.2.2.</span> <span class="nav-text">DNN部分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FNN-PNN-Wide-amp-Deep"><span class="nav-number">1.3.</span> <span class="nav-text">FNN,PNN,Wide&amp;Deep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

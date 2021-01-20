@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Deep Interest Network for Click-Through Rate Prediction概述Deep Interest Network（DIN）是阿里妈妈精准定向检索及基础算法团队在2017年6月提出的。其针对电子商务领域（e-commerce industry）的CTR预估，重点在于充分利用&#x2F;挖掘用户历史行为数据中的信息。 DIN通过引入attention机制，针对不同的广">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2021/01/20/RecommendSystem/Rank/DIN/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Deep Interest Network for Click-Through Rate Prediction概述Deep Interest Network（DIN）是阿里妈妈精准定向检索及基础算法团队在2017年6月提出的。其针对电子商务领域（e-commerce industry）的CTR预估，重点在于充分利用&#x2F;挖掘用户历史行为数据中的信息。 DIN通过引入attention机制，针对不同的广">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DIN0.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DIN1.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DIN2.jpg">
+<meta property="article:published_time" content="2021-01-20T02:32:53.819Z">
+<meta property="article:modified_time" content="2020-12-07T08:57:21.000Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://guoshihao.site:8085/pic/DIN0.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/20/RecommendSystem/Rank/DIN/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/DIN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Deep-Interest-Network-for-Click-Through-Rate-Prediction"><a href="#Deep-Interest-Network-for-Click-Through-Rate-Prediction" class="headerlink" title="Deep Interest Network for Click-Through Rate Prediction"></a>Deep Interest Network for Click-Through Rate Prediction</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Deep Interest Network（DIN）是阿里妈妈精准定向检索及基础算法团队在2017年6月提出的。其针对电子商务领域（e-commerce industry）的CTR预估，重点在于充分利用/挖掘用户历史行为数据中的信息。</p>
+<p>DIN通过引入attention机制，针对不同的广告构造不同的用户抽象表示，从而实现了在数据维度一定的情况下，更精准地捕捉用户当前的兴趣。</p>
+<p>DIN的核心思想是 ：用户的兴趣是多元化的（<strong>diversity</strong>），并且对于特定的广告，用户不同的兴趣会产生不同的影响（<strong>local activation</strong>）。</p>
+<p><strong>Diversity：</strong>用户在访问电商网站时会对多种商品都感兴趣。也就是用户的兴趣非常的广泛。比如一个年轻的母亲，从她的历史行为中，我们可以看到她的兴趣非常广泛：羊毛衫、手提袋、耳环、童装、运动装等等。</p>
+<p><strong>Local Activation：</strong>用户是否会点击推荐给他的商品，仅仅取决于历史行为数据中的一小部分，而不是全部。历史行为中部分数据主导是否会点击候选广告。比如一个爱游泳的人，他之前购买过travel book、ice cream、potato chips、swimming cap。当前给他推荐的商品（或者说是广告Ad）是goggle（护目镜）。那么他是否会点击这次广告，跟他之前是否购买过薯片、书籍、冰激凌一丁点关系也没有！而是与他之前购买过游泳帽有关系。也就是说在这一次CTR预估中，部分历史数据（swimming cap）起了决定作用，而其他的基本没有作用。</p>
+<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><h3 id="base-model"><a href="#base-model" class="headerlink" title="base model"></a>base model</h3><h4 id="base-model结构"><a href="#base-model结构" class="headerlink" title="base model结构"></a>base model结构</h4><p>DNN模型大多遵从 <strong>Embedding + MLP</strong>这一基础网络架构，即将原始高维的不同的离散特征映射为固定长度的低维embedding向量，并将embedding向量作为多个全连接层的输入，拟合高阶的非线性关系，最后通过Sigmoid等手段将输出值归一到0~1，表示点击概率。相比于传统的LR、GBDT、FM等模型，这类DNN的模型能减少大量的人工构造特征过程，并且能学习特征之间的非线性关系。通常的流程是Sparse Features -&gt; Embedding Vector -&gt; pooling layer -&gt; MLPs -&gt; Sigmoid -&gt; Output。下图是base model的模型结构：</p>
+<p><img src="http://guoshihao.site:8085/pic/DIN0.jpg"></p>
+<p>红蓝粉三色节点分别表示商品 ID（Goods ID）, 店铺 ID（Shop ID）, 类目 ID（Cate ID）三种稀疏特征, 其他的输入特征, 使用白色节点表示，比如左边的用户特征, 比如用户 ID; 还有右边的上下文特征, 比如广告位之类的特征。 注意 Goods 1 ~ Goods N 用来描述用户的历史行为。候选广告 Candidate Ad 本身也是商品, 也具有 Goods / Shop / Cate ID 三种特征。</p>
+<ul>
+<li><p>第一模块：特征表示。</p>
+<ul>
+<li><p>可将特征大致分为四类：user profile、user behavior、ad 以及 context 部分。</p>
+</li>
+<li><p>将广告设为目标。</p>
+</li>
+<li><p>每一类特征包含多个field，用户信息包含性别、年龄等等；用户行为包含用户访问过的物品编号；广告包含广告id，商店id等；上下文包含设计类型id，时间等等。</p>
+</li>
+<li><p>有的特征可以被编码成one-hot表示，例如女性可以被编码成[0,1]。有的特征可以进行 multi-hot 编码，与 one-hot 编码不同，multi-hot 编码中，一个向量可能存在多个 1。</p>
+</li>
+<li><p>在CTR序列模型中，值得注意的是每个字段都包含一个行为列表，每个行为对应一个one-hot向量。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://guoshihao.site:8085/pic/DIN1.jpg"></p>
+<ul>
+<li><p>第二模块：嵌入层。</p>
+<ul>
+<li>学习特征的低维向量表示，将维数较大的稀疏特征矩阵转换成低维稠密特征矩阵。</li>
+<li>每一个field都有一个独立的 embedding matrix。</li>
+<li>值得注意的是，由于每个用户的历史行为数据各不相同，因此 e 的列数是不确定的。相应地也就不能直接与其他field的嵌入向量首尾相接 作为MLP层的输入。</li>
+</ul>
+</li>
+<li><p>第三模块：pooling层。</p>
+<ul>
+<li>由于不同的用户有不同个数的行为数据，导致embedding矩阵的向量大小不一致，而全连接层只能处理固定维度的数据，因此利用Pooling Layer得到一个固定长度的向量。</li>
+<li>本层对 embedding 进行sum pooling，即将一个类别的embedding向量输入进池化操作，转化为一个固定长度的向量，解决维度不定的问题。</li>
+</ul>
+</li>
+<li><p>第四模块：链接层。</p>
+<ul>
+<li>经过embedding layer和pooling layer后，原始稀疏特征被转换成多个固定长度的用户兴趣的抽象表示向量。</li>
+<li>然后利用concat layer聚合抽象表示向量，输出该用户兴趣的唯一抽象表示向量；作为 MLP 层的输入 。</li>
+</ul>
+</li>
+<li><p>第五模块：MLP 层，将concat layer输出的抽象表示向量作为MLP的输入，自动学习数据之间的高阶交叉特征。</p>
+</li>
+<li><p>损失函数 ：基于深度学习的CTR模型广泛使用的损失函数是 负对数似然函数（the negative log-likelihood function）Loglos，使用标签作为目标项来监督整体的预测。</p>
+</li>
+</ul>
+<h4 id="base-model局限性"><a href="#base-model局限性" class="headerlink" title="base model局限性"></a>base model局限性</h4><ul>
+<li>表示用户的兴趣多样性有限制（这是最大的瓶颈） 。在对用户历史行为数据进行处理时, 每个用户的历史点击个数是不相等的, 包含了许多兴趣信息，如何对用户多种多样的兴趣建模？我们要把它们编码成一个固定长的向量（这个向量就是用户表示，是用户兴趣的代表），需要做pooling （sum or average）, 会损失信息。比如：<ul>
+<li>K维向量，最多只能表达K个独立的兴趣，而用户的兴趣可能不止K；</li>
+<li>K的大小会对计算量产生明显影响，一般用大的K效果会更好，即扩展向量的维度，但这样会增加学习的参数和在有限的数据中有过拟合的风险；</li>
+</ul>
+</li>
+<li>没有考虑用户与广告之间的关系。在电子商务领域中，用户的历史行为数据（User Behavior Data）中包含大量的用户兴趣信息，之前的研究并没有针对Behavior data<strong>特殊的结构（Diversity + Local Activation）</strong>进行建模。比如 对于同一个用户, 如果候选广告 （Candidate Ad） 发生了变化, 用户的兴趣却依然是同一个向量来表达, 显然这限制了模型的表达能力, 毕竟用户的兴趣是丰富的/变化的。</li>
+<li>忽略隐式特征的挖掘和表示。DNN模型直接将用户的行为视作用户的兴趣。行为是兴趣的载体，能反映兴趣，但若直接用行为表示兴趣则略有不妥。因为，行为是序列化产生的，如果像大部分现有的模型那样直接采用行为即兴趣的做法，会忽略行为之间的依赖关系。此外，当前时刻的兴趣往往直接导致了下一行为的发生。</li>
+<li>忽略兴趣的变化。如之前所讲，用户的兴趣是不断变化的。例如用户对衣服的喜好，会随季节、时尚风潮以及个人品味的变化而变化，呈现一种连续的变迁趋势。但在淘宝平台中，用户的兴趣是丰富多样的，且每个兴趣的演变基本互不影响。此外，影响最终行为的仅仅是与目标商品相关的兴趣。</li>
+<li>不必将某个用户所有的兴趣【用户的历史购买记录】全部压缩到向量中，因为只有用户部分的兴趣会影响当前行为（对候选广告点击或不点击）。例如，一位女游泳运动员会点击推荐的护目镜，这主要是由于购买了泳衣而不是上周购物清单中的鞋子。</li>
+</ul>
+<h3 id="DIN"><a href="#DIN" class="headerlink" title="DIN"></a>DIN</h3><p>针对DNN模型的问题，阿里提出了DIN模型。其核心思想：用户的兴趣是多元化的（<strong>diversity</strong>），并且对于特定的广告，用户不同的兴趣会产生不同的影响（<strong>local activation</strong>）。DIN同时对Diversity和Local Activation进行建模。</p>
+<p>DIN 不会通过使用同一向量来表达所有用户的不同兴趣，而是通过考虑<strong>历史行为的相关性</strong>来自适应地计算用户兴趣的表示向量（对于给定的广告）。 <strong>该表示向量随不同广告而变化</strong>。DIN 通过考虑「给定的候选广告」和「用户的历史行为」的相关性，来计算用户兴趣的表示向量。具体来说就是通过引入局部激活单元，通过软搜索历史行为的相关部分来关注相关的用户兴趣，并采用加权和来获得有关候选广告的用户兴趣的表示。与候选广告相关性较高的行为会获得较高的激活权重，并支配着用户兴趣。该表示向量在不同广告上有所不同，大大提高了模型的表达能力。</p>
+<h4 id="DIN模型结构"><a href="#DIN模型结构" class="headerlink" title="DIN模型结构"></a>DIN模型结构</h4><p><img src="http://guoshihao.site:8085/pic/DIN2.jpg"></p>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><h3 id="特征分类"><a href="#特征分类" class="headerlink" title="特征分类"></a>特征分类</h3><p>同样可将特征大致分为四类：user profile、user behavior、ad 以及 context 部分。有一些特征域是单值特征，不同的特征值之间是互斥的，例如性别只可能属于男或者女，可以转化为one-hot表示；有一些特征域是多值离散特征，例如用户行为特征，用户可能点击过多个商品，构成一个商品点击序列，只能用multi-hot编码表示。与 one-hot 编码不同，multi-hot 编码中，一个向量可能存在多个 1。</p>
+<h3 id="特征处理"><a href="#特征处理" class="headerlink" title="特征处理"></a>特征处理</h3><p>DNN 并<strong>没有进行特征组合/交叉特征</strong>。而是通过DNN去学习特征间的交互信息。对于单值特征处理比较简单，对于多值特征的处理稍微麻烦些。多值特征导致了每个用户的样本长度都是不同的。如何解决这个问题？通过 <code>Embedding -&gt; Pooling + Attention</code>。</p>
+<h2 id="embedding"><a href="#embedding" class="headerlink" title="embedding"></a>embedding</h2><ul>
+<li>深度学习在推荐系统中的应用，比如各种NN，各种FM 都是以embedding为基础的；</li>
+<li>高维、稀疏的categorical/id类特征是推荐系统中的一等公民；</li>
+<li>在Embedding层中，每一个特征域都对应着一个Embedding矩阵；</li>
+<li>embedding的作用是将原来高维、稀疏的categorical/id类特征的“精确匹配”，变为向量之间的“模糊查找”，从而提高了可扩展性；</li>
+<li>推荐系统中的Embedding与NLP中的Embedding也有不同。<ul>
+<li>NLP中，一句话的一个位置上只有一个词，所以Embedding往往变成了：从Embedding矩阵抽取与词对应的行上的行向量；</li>
+<li>推荐系统中，一个Field下往往有多个Feature，Embedding是将多个Feature Embedding合并成一个向量，即所谓的<strong>Pooling</strong>。比如某个App Field下的Feature有”微信:0.9，微博:0.5，淘宝:0.3”，所以得到<code>Embedding = 0.9 * 微信向量 + 0.5 * 微博向量 + 0.3 * 淘宝向量</code>；</li>
+</ul>
+</li>
+</ul>
+<h2 id="pooling"><a href="#pooling" class="headerlink" title="pooling"></a>pooling</h2><p>Pooling的作用是把embedding向量转化为一个固定长度的向量，解决维度不定的问题。用户有多个兴趣爱好，这导致两个问题：</p>
+<ul>
+<li>表达用户兴趣时，用户的<strong>历史行为往往涉及多个categorical/id特征</strong>，比如点击过的多个商品、看过的多个视频、输入过的多个搜索词，这就涉及了多个good_id，shop_id。</li>
+<li>不同的用户有不同数量的历史行为，即multi-hot行为特征的向量会导致所产生的embedding向量列表的长度不同，而全连接需要固定长度的输入。</li>
+</ul>
+<p>为了降低纬度并使得商品店铺间的算术运算有意义，我们先对id特征进行Embedding嵌入。那么如何对用户多种多样的兴趣建模？我们把这些id特征embedding之后的多个低维向量（embedding向量列表），“合并”成一个向量，作为用户兴趣的表示。因为全连接需要固定长度的输入，所以我们需要“合并”成一个固定长度向量，这样才能喂入DNN。这个“合并”就是所谓<strong>Pooling</strong>。</p>
+<p>围绕着这个Pooling过程，各家有各家的高招：</p>
+<ul>
+<li><p>Youtube DNN这篇论文中，Youtube的做法最简单、直观，就是将用户看过的视频embedding向量、搜索过的关键词embedding向量，做一个<strong>简单的平均</strong>。</p>
+</li>
+<li><p>Neural Factorization Machine中，将n个(n=特征数)k维向量压缩成一个k维向量，取名为bi-interaction pooling。既完成pooling，也实现了特征间的二阶交叉。</p>
+</li>
+<li><p>DIN用各embedding向量的加权平均实现了pooling，而”权重”由attention机制计算得到。</p>
+</li>
+<li><p><strong>基于深度学习的文本分类，同样面临着如何将一段话中的多个词向量压缩成一个向量来表示这段话的问题。常用的方法，就是将多个词向量喂入RNN，最后一个时刻RNN的输出向量就代表了多个词向量的“合并”结果</strong>。显然，DIEN则借鉴了这一思路，并且改造了GRU的构造，利用attention score来控制门。</p>
+</li>
+</ul>
+<p>回到阿里的展示广告系统，如架构图所示，每个商品有3个特征域，包括商品自身，商品类别，商品所属的商铺。对于每个商品来说，3个特征embedding拼接之后才是商品的表示向量。对商品序列做pooling，架构图中采用的是求和的方式，pooling之后得到用户行为序列的表示向量。然后再和其他的特征embedding做拼接，作为MLP的输入。MLP输入端的整个embedding向量，除了candidate的embedding部分，其余的embedding部分可以视为用户的表示向量。仔细的研究下Base Model中Pooling Layer就会发现，Pooling操作损失了很多信息。所以DIN 使用 Pooling（weighted sum）对Diversity建模，因为直接sum体现不出差异多样性，加权可以。即DIN用各embedding向量的加权平均实现了pooling，而”权重”由attention机制计算得到。</p>
+<h2 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h2><p>Attention机制简单的理解就是，针对不同的广告，用户历史行为与该广告的权重是不同的。假设用户有ABC三个历史行为，对于广告D，那么ABC的权重可能是0.8、0.1、0.1；对于广告E，那么ABC的权重可能是0.3、0.6、0.1。这里的权重，就是Attention机制即架构图中的Activation Unit所需要学习的。DIN模型其实就是在DNN基础上加了attention。通过Attention来实现Pooling，使用户兴趣的向量表示，根据候选物料的不同而不同，实现<strong>用户兴趣的“千物千面”</strong>。</p>
+<p>模型的目标：基于用户历史行为，充分挖掘用户兴趣和候选广告之间的关系。用户是否点击某个广告往往是基于他之前的部分兴趣，这是应用Attention机制的基础。因为无论是用户兴趣行为，还是候选广告都会被映射到<strong>Embedding空间</strong>中。所以他们两者的关系，是在Embedding空间中学习的。</p>
+<p>注意力机制顾名思义，就是模型在预测的时候，对用户不同行为的注意力是不一样的，“相关”的行为历史看重一些，“不相关”的历史甚至可以忽略。即对于不同的特征有不同的权重，这样某些特征就会主导这一次的预测，就好像模型对某些特征pay attention。 Local Activation学习候选广告和用户历史行为的关系，并给出候选广告和各个历史行为的相关性程度 （即权重参数），再对历史行为序列进行加权求和，最终得到用户兴趣的特征表达。也就是说用户针对不同的广告表现出不同的兴趣表示，即使历史兴趣行为相同，但是各个行为的权重不同。</p>
+<p>DIN 在pooling的时候，与candidate相关的商品权重大一些，与candidate不相关的商品权重小一些，<strong>这就是一种Attention的思想</strong>。将candidate与点击序列中的每个商品发生交互来计算attention分数。具体计算输入包括商品和candidate的embedding向量，以及两者的外积。对于不同的candidate，得到的用户表示向量也不同，具有更大的灵活性。DIN中，对于候选广告， 根据local activation unit计算出的用户兴趣向量为：<br>$$<br>v_u(A)=f(v_A,e_1,e_2,…,e_H)=\sum^H_{j=1}a(e_j,v_A)e_j=\sum^H_{j=1}w_je_j<br>$$<br>其中${e_1,e_2,…,e_H}$是用户$U$的长度$H$的历史行为序列的embedding向量，$v_A$是广告$A$的embedding向量，$a(·)$是前馈神经网络，输入时广告、历史行为的embedding和他们的外积，输出权重。</p>
+<p>在这种计算方式下，最终的用户$U$的兴趣向量会根据不同的广告$A$而变化。这就是 “<strong>用户兴趣的千物千面</strong>”。</p>
+<h3 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h3><p>一般来说，做attention的时候，需要对所有的分数通过softmax做归一化，这样做有两个好处，一是保证权重非负，二是保证权重之和为1。但是在DIN的论文中强调，不对点击序列的attention分数做归一化，直接将分数与对应商品的embedding向量做加权和，目的在于保留用户的兴趣强度。例如，用户的点击序列中90%是衣服，10%是电子产品，有一件T恤和一部手机需要预测CTR，那么T恤会激活大部分的用户行为，使得根据T恤计算出来的用户行为向量在数值上更大。</p>
+<h2 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h2><p>AUC表示正样本得分比负样本得分高的概率。在CTR实际应用场景中，CTR预测常被用于对每个用户候选广告的排序。但是不同用户之间存在差异：有些用户天生就是点击率高。以往的评价指标对样本不区分用户地进行AUC的计算。论文采用的GAUC实现了用户级别的AUC计算，<strong>在单个用户AUC的基础上，按照点击次数或展示次数进行加权平均，消除了用户偏差对模型的影响</strong>，更准确的描述了模型的表现效果。<br>$$<br>GAUC=\frac{\sum_{i=1}^nw_i<em>AUC_i}{\sum_{i=1}^nw_i}=\frac{\sum_{i=1}^nimpression_i</em>AUC_i}{\sum_{i=1}^nimpression_i}<br>$$</p>
+<p>我们首先要肯定的是，AUC是要分用户看的，我们的模型的预测结果，只要能够保证对每个用户来说，他想要的结果排在前面就好了。假设有两个用户A和B，每个用户都有10个商品，10个商品中有5个是正样本，我们分别用TA，TB，FA，FB来表示两个用户的正样本和负样本。也就是说，20个商品中有10个是正样本。假设模型预测的结果大小排序依次为TA，FA，TB，FB。如果把两个用户的结果混起来看，AUC并不是很高，因为有5个正样本排在了后面，但是分开看的话，每个用户的正样本都排在了负样本之前，AUC应该是1。显然，分开看更容易体现模型的效果，这样消除了用户本身的差异。</p>
+<p>但是上文中所说的差异是在用户点击数即样本数相同的情况下说的。还有一种差异是用户的展示次数或者点击数，如果一个用户有1个正样本，10个负样本，另一个用户有5个正样本，50个负样本，这种差异同样需要消除。那么GAUC的计算，不仅将每个用户的AUC分开计算，同时根据用户的展示数或者点击数来对每个用户的AUC进行加权处理。进一步消除了用户偏差对模型的影响。通过实验证明，GAUC确实是一个更加合理的评价指标。</p>
+<h2 id="Adaptive-Regularization"><a href="#Adaptive-Regularization" class="headerlink" title="Adaptive Regularization"></a>Adaptive Regularization</h2><p>由于深度模型比较复杂，输入又非常稀疏，导致参数非常多，非常容易过拟合。CTR中输入稀疏而且维度高，已有的L1 L2 Dropout防止过拟合的办法，论文中尝试后效果都不是很好。用户数据符合长尾定律（long-tail law），也就是说很多的feature id只出现了几次，而一小部分feature id出现很多次。这在训练过程中增加了很多噪声，并且加重了过拟合。对于这个问题一个简单的处理办法就是：人工的去掉出现次数比较少的feature id。缺点是：损失的信息不好评估；阈值的设定非常的粗糙。</p>
+<p><strong>DIN给出的解决方案是：</strong>针对feature id出现的频率，来自适应的调整他们正则化的强度；对于出现频率高的，给与较小的正则化强度；对于出现频率低的，给予较大的正则化强度。</p>
+<p>对L2正则化的改进，在进行SGD优化的时候，每个mini-batch都只会输入部分训练数据，反向传播只针对部分非零特征参数进行训练，添加上L2之后，需要对整个网络的参数包括所有特征的embedding向量进行训练，这个计算量非常大且不可接受。论文中提出，在每个mini-batch中只对该batch的特征embedding参数进行L2正则化。</p>
+<h2 id="Dice激活函数"><a href="#Dice激活函数" class="headerlink" title="Dice激活函数"></a>Dice激活函数</h2><p>Dice激活函数的全称是Data Dependent Activation Function，形式如下：<br>$$<br>y_i=a_i(1-p_i)y_i+p_iy_i<br>$$</p>
+<p>$$<br>p_i=\frac{1}{1+e^{-\frac{y_i-E[y_i]}{\sqrt{Var[y_i]+\epsilon}}}}<br>$$</p>
+<p>其中期望和方差的计算如下：<br>$$<br>E[y_i]_{t+1}’=E[y_i]_t’+\alpha E[y_i]_{t+1}<br>$$</p>
+<p>$$<br>Var[y_i]_{t+1}’=Var[y_i]_t’+\alpha Var[y_i]_{t+1}<br>$$</p>
+<h2 id="DIN的创新"><a href="#DIN的创新" class="headerlink" title="DIN的创新"></a>DIN的创新</h2><ul>
+<li><p><strong>针对Diversity：</strong> 针对用户广泛的兴趣，DIN用<em>an interest distribution</em>去表示，即用 Pooling（weighted sum）对Diversity建模（对用户多种多样的兴趣建模）。</p>
+</li>
+<li><p><strong>针对Local Activation</strong>：</p>
+<ul>
+<li>DNN 直接求sum或average损失了很多信息。所以 DIN 稍加改进，利用attention机制实现 Local Activation，从用户历史行为中动态学习用户兴趣的embedding向量，针对不同的广告构造不同的用户抽象表示，从而实现了在数据维度一定的情况下，更精准地捕捉用户当前的兴趣。</li>
+</ul>
+</li>
+<li><p>对用户历史行为进行了不同的加权处理，针对不同的广告，不同的 behavior id 赋予不同的权重，这个权重是由当前behavior id和候选广告共同决定的，这就是Attention机制。即针对当前候选Ad，去局部的激活（<em>Local Activate</em>）相关的历史兴趣信息。</p>
+<ul>
+<li>与当前候选Ad相关性越高的历史行为，会获得越高的attention score，从而会主导这一次预测。</li>
+</ul>
+</li>
+<li><p>CTR中<strong>特征稀疏而且维度高</strong>，通常利用L1、L2、Dropout等手段防止过拟合。由于传统L2正则计算的是全部参数，CTR预估场景的模型参数往往数以亿计。DIN提出<strong>Adaptive regularizaion</strong>来防止过拟合，效果显著。在每次小批量迭代中，给与不同频次的特征不同的正则权重；</p>
+</li>
+<li><p>由于传统的<strong>激活函数</strong>，如Relu在输入小于0时输出为0，将导致许多网络节点的迭代速度变慢。PRelu虽然加快了迭代速度，但是其分割点默认为0，实际上分割点应该由数据决定。因此，DIN提出了一种数据动态自适应激活函数Dice。</p>
+</li>
+</ul>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.06978">Deep Interest Network for Click-Through Rate Prediction</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://www.cnblogs.com/rossiXYZ/p/13796470.html">[论文阅读]阿里DIN深度兴趣网络之总体解读</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/livan1234/article/details/85159658">推荐系统遇上深度学习(十九)–探秘阿里之深度兴趣网络(DIN)浅析及实现</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/DIEN/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/DNNforYouTube/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-Interest-Network-for-Click-Through-Rate-Prediction"><span class="nav-number">1.</span> <span class="nav-text">Deep Interest Network for Click-Through Rate Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#base-model"><span class="nav-number">1.2.1.</span> <span class="nav-text">base model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#base-model%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">base model结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#base-model%E5%B1%80%E9%99%90%E6%80%A7"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">base model局限性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DIN"><span class="nav-number">1.2.2.</span> <span class="nav-text">DIN</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DIN%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">DIN模型结构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%BE%81"><span class="nav-number">1.3.</span> <span class="nav-text">特征</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%88%86%E7%B1%BB"><span class="nav-number">1.3.1.</span> <span class="nav-text">特征分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%A4%84%E7%90%86"><span class="nav-number">1.3.2.</span> <span class="nav-text">特征处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#embedding"><span class="nav-number">1.4.</span> <span class="nav-text">embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pooling"><span class="nav-number">1.5.</span> <span class="nav-text">pooling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Attention"><span class="nav-number">1.6.</span> <span class="nav-text">Attention</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%92%E4%B8%80%E5%8C%96"><span class="nav-number">1.6.1.</span> <span class="nav-text">归一化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87"><span class="nav-number">1.7.</span> <span class="nav-text">评价指标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adaptive-Regularization"><span class="nav-number">1.8.</span> <span class="nav-text">Adaptive Regularization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Dice%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0"><span class="nav-number">1.9.</span> <span class="nav-text">Dice激活函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DIN%E7%9A%84%E5%88%9B%E6%96%B0"><span class="nav-number">1.10.</span> <span class="nav-text">DIN的创新</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

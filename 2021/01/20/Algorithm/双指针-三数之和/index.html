@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c &#x3D; 0 ？请你找出所有满足条件且不重复的三元组。 注意：答案中不可以包含重复的三元组。 思路：排序+双指针。难点在于如何去除重复解。 去除重复解主要从两个角度：1. 第一层循环的主元素如果重复出现直接跳过；2. 满足三数之和&#x3D;0时，双指针同时回缩，如果此时左右指针指向的元素没有变化">
+<meta name="description" content="三数之和给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c &#x3D; 0 ？请你找出所有满足条件且不重复的三元组。 注意：答案中不可以包含重复的三元组。 思路：排序+双指针。难点在于如何去除重复解。 去除重复解主要从两个角度：1. 第一层循环的主元素如果重复出现直接跳过；2. 满足三数之和&#x3D;0时，双指针同时回缩，如果此时左右指针指向的元素">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
 <meta property="og:url" content="http://example.com/2021/01/20/Algorithm/%E5%8F%8C%E6%8C%87%E9%92%88-%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c &#x3D; 0 ？请你找出所有满足条件且不重复的三元组。 注意：答案中不可以包含重复的三元组。 思路：排序+双指针。难点在于如何去除重复解。 去除重复解主要从两个角度：1. 第一层循环的主元素如果重复出现直接跳过；2. 满足三数之和&#x3D;0时，双指针同时回缩，如果此时左右指针指向的元素没有变化">
+<meta property="og:description" content="三数之和给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c &#x3D; 0 ？请你找出所有满足条件且不重复的三元组。 注意：答案中不可以包含重复的三元组。 思路：排序+双指针。难点在于如何去除重复解。 去除重复解主要从两个角度：1. 第一层循环的主元素如果重复出现直接跳过；2. 满足三数之和&#x3D;0时，双指针同时回缩，如果此时左右指针指向的元素">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-01-20T02:14:23.482Z">
-<meta property="article:modified_time" content="2021-01-12T15:23:31.702Z">
+<meta property="article:published_time" content="2021-01-20T02:32:53.504Z">
+<meta property="article:modified_time" content="2021-01-20T02:23:39.622Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -261,7 +261,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -299,7 +299,7 @@
       
 
       
-        <p>给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。</p>
+        <h1 id="三数之和"><a href="#三数之和" class="headerlink" title="三数之和"></a>三数之和</h1><p>给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。</p>
 <p>注意：<strong>答案中不可以包含重复的三元组</strong>。</p>
 <p>思路：排序+双指针。难点在于如何去除重复解。</p>
 <p>去除重复解主要从两个角度：1. 第一层循环的主元素如果重复出现直接跳过；2. 满足三数之和=0时，双指针同时回缩，如果此时左右指针指向的元素没有变化，则跳过。<strong>注意先判断左右指针再判断是否相同</strong></p>
@@ -393,8 +393,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -409,7 +418,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -436,6 +445,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C"><span class="nav-number">1.</span> <span class="nav-text">三数之和</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Sampling-bias-corrected neural modeling for large corpus item recommendations概述工业界现有的推荐系统都需要从一个超大规模的候选集中拉取item进行打分排序。解决数据稀疏和指数级候选集分布的一种通常做法是从item的内容特征中学习出item的稠密表示。这里很自然地就想到了工业界大名鼎鼎且应用广泛的双塔神经网络结构，其中的一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2021/01/20/RecommendSystem/Recall/SBCNM/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Sampling-bias-corrected neural modeling for large corpus item recommendations概述工业界现有的推荐系统都需要从一个超大规模的候选集中拉取item进行打分排序。解决数据稀疏和指数级候选集分布的一种通常做法是从item的内容特征中学习出item的稠密表示。这里很自然地就想到了工业界大名鼎鼎且应用广泛的双塔神经网络结构，其中的一">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/SBCNM0.jpg">
+<meta property="article:published_time" content="2021-01-20T02:32:53.909Z">
+<meta property="article:modified_time" content="2021-01-11T02:30:33.000Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://guoshihao.site:8085/pic/SBCNM0.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/20/RecommendSystem/Recall/SBCNM/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Recall/SBCNM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Sampling-bias-corrected-neural-modeling-for-large-corpus-item-recommendations"><a href="#Sampling-bias-corrected-neural-modeling-for-large-corpus-item-recommendations" class="headerlink" title="Sampling-bias-corrected neural modeling for large corpus item recommendations"></a>Sampling-bias-corrected neural modeling for large corpus item recommendations</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>工业界现有的推荐系统都需要从一个超大规模的候选集中拉取item进行打分排序。解决数据稀疏和指数级候选集分布的一种通常做法是从item的内容特征中学习出item的稠密表示。<strong>这里很自然地就想到了工业界大名鼎鼎且应用广泛的双塔神经网络结构</strong>，其中的一塔就是从丰富的item内容特征中学习到item的表示。</p>
+<p>工业界目前训练双塔结构一般是通过随机mini-batch的方式来优化损失函数。这种训练方式存在的<strong>一个显著问题就是in-batch loss会因为随机采样偏差而导致模型效果不好</strong>，尤其是当样本分布出现明显倾斜的时候。<strong>我们提出了一种全新的算法，可以从流式数据中预估item的频率</strong>。通过理论分析和实验，新算法有能力在不知道候选集全部的词典情况下做出无偏差的估计并且可以自适应候选集分布的变化。在Youtube线上的实验也证明了该算法的有效性。</p>
+<h2 id="算法原理"><a href="#算法原理" class="headerlink" title="算法原理"></a>算法原理</h2><p>利用双塔模型构架推荐系统，Queries特征向量，item特征向量，目标是给定一个query，检索到一系列item子集用于后续排序推荐任务。</p>
+<p>首先建立两个参数embedding函数：$u:X \times R^d \rightarrow R^k,v:Y \times R^d \rightarrow R^k$，把query和候选item映射到k维向量空间，模型的输出为二者的embedding内积，即$s(x,y)=&lt;u(x,\theta),v(y,\theta)&gt;$，我们的目标是根据训练集来学习embedding，$r_i$为反馈，如用户花在一个视频上的时间等。</p>
+<h3 id="In-batch-loss-function"><a href="#In-batch-loss-function" class="headerlink" title="In-batch loss function"></a>In-batch loss function</h3><p>直觉上，检索问题可以看作是一个多分类问题，给定query X，从M个item中得到y的概率可以利用softmax函数计算：<br>$$<br>P(y|x,\theta)=\frac{e^{s(x,y)}}{\sum_{j\in[M]}e^{s(x,y_i)}}<br>$$<br>考虑到反馈$r_i$，加权对数似然损失函数为：<br>$$<br>L_T(\theta)=-\frac{1}{T}\sum_{i\in|T|}r_ilog(P(y_i|x_i.\theta))<br>$$<br>当M非常大时，我们通常可以利用负采样算法进行计算。然而对于流数据，我们考虑在同一个batch中采样负样本，batch-softmax函数为：<br>$$<br>P_B(y|x,\theta)=\frac{e^{s(x,y)}}{\sum_{j\in[B]}e^{s(x,y_i)}}<br>$$</p>
+<p>在每个batch中，由于存在幂律分布现象，即如果在每个batch中随机采样负样本，会使热门商品更容易被采样到，在损失函数中就“过度”惩罚了这些热门商品，因此考虑用频率对采样进行修正，即：<br>$$<br>s^c(x_i,y_i)=s(x_i,y_i)-log(p_j)<br>$$<br>其中$p_j$是是在每个batch中随机采样到item j的概率。</p>
+<p><strong>由于向量经过L2正则，距离应该是小于1的数，这里的-logp是否会完全主导得分？</strong></p>
+<p>综上，最终损失函数为<br>$$<br>L_B(\theta)=-\frac{1}{B}\sum_{i\in|B|}r_ilog(P_B^c(y_i|x_i.\theta))<br>$$</p>
+<p>$$<br>P_B^c(y|x,\theta)=\frac{e^{s^c(x,y)}}{\sum_{j\in[B]}e^{s^c(x,y_i)}}<br>$$</p>
+<h4 id="工程Tricks"><a href="#工程Tricks" class="headerlink" title="工程Tricks"></a>工程Tricks</h4><ul>
+<li>最近邻搜索：当embedding映射函数u和v学习好后，预测包含两步：1)计算query的向量 2)从事先训练好的函数v中找到最邻近的item。考虑到耗时问题，此处利用hash技术采用近邻搜索等方法进行处理</li>
+<li>L2正则化：双塔最后一层输出做L2正则化，有助于提升模型性能和训练的稳定性，即$u(x,\theta)\leftarrow u(x,\theta)/||u(x,\theta)||,v(y,\theta)\leftarrow v(y,\theta)/||v(y,\theta)||$，对于内积的结果，除以一个固定的超参，使得softmax的效果更加明显，即$s(x,y)=&lt;u(x,\theta),v(y,\theta)&gt;/\tau$。</li>
+</ul>
+<h3 id="Streaming-Frequency-Estimation"><a href="#Streaming-Frequency-Estimation" class="headerlink" title="Streaming Frequency Estimation"></a>Streaming Frequency Estimation</h3><p>此方法用于估计在流数据中，每个batch下item出现的概率$p_j$。如果一个item每50步出现一次，那么该item出现的概率p=1/50=0.02。按照这样的想法，针对流数据，利用哈希序列来记录采样id(暂时不考虑hash collision的问题)。</p>
+<p>定义两个大小为H的数组A，B，哈希函数h可以把每个item映射为[H]内的整数。</p>
+<ul>
+<li>A[h(y)]表示item y上次被采样到的时刻</li>
+<li>B[h(y)]表示每多少步item y可以被采样一次</li>
+</ul>
+<p><strong>结论：</strong>当第t步y被采样到时，利用迭代可更新A，B：<br>$$<br>B[h(y)]=(1-\alpha)B[h(y)]+\alpha(t-A[h(y)])<br>$$<br>$$<br>A[h(y)]=t<br>$$</p>
+<p>证明略，详见[3]。</p>
+<p>利用上述的<strong>In-batch loss function</strong>与<strong>Streaming Frequency Estimation</strong>可建立双塔模型：</p>
+<h3 id="算法一：训练算法"><a href="#算法一：训练算法" class="headerlink" title="算法一：训练算法"></a>算法一：训练算法</h3><p><strong>输入</strong>：参数embedding函数$u(·,\theta),v(·,\theta)$，学习率$\gamma$</p>
+<ol>
+<li>迭代</li>
+<li>​    从数据流中采样数据表示${(x_i,y_i,r_i)}^B_{i=1}$</li>
+<li>​    利用频率估计算法计算每个item $y_i$的概率$p_i$</li>
+<li>​    计算损失函数$L_B(\theta)=-\frac{1}{B}\sum_{i\in|B|}r_ilog(P_B^c(y_i|x_i.\theta))$</li>
+<li>​    更新参数$\theta=\theta-\gamma \nabla L_B(\theta)$</li>
+</ol>
+<h3 id="算法二：频率估计算法"><a href="#算法二：频率估计算法" class="headerlink" title="算法二：频率估计算法"></a>算法二：频率估计算法</h3><p><strong>输入</strong>：学习率$\alpha$大小为$H$的数组$A,B$，哈希函数$h$</p>
+<ol>
+<li>对于每一步$t=1,2,…$：</li>
+<li>​    对于每一个item y：</li>
+<li>​        $B[h(y)]=(1-\alpha)B[h(y)]+\alpha(t-A[h(y)])$</li>
+<li>​        $A[h(y)]=t$</li>
+<li>对于每个item y，采样概率为$1/B[h(y)]$</li>
+</ol>
+<h3 id="算法三：改进的多元数值-频率估计算法"><a href="#算法三：改进的多元数值-频率估计算法" class="headerlink" title="算法三：改进的多元数值-频率估计算法"></a>算法三：改进的多元数值-频率估计算法</h3><p><strong>输入</strong>：学习率$\alpha$大小为$H$的数组${A}^m_{i=1},{B}^m_{i=1}$，哈希函数${h}^m_{i=1}$</p>
+<ol>
+<li>对于每一步$t=1,2,…$：</li>
+<li>​    对于每一个item y：</li>
+<li>​        $B_i[h(y)]=(1-\alpha)B_i[h(y)]+\alpha(t-A_i[h(y)])$</li>
+<li>​        $A_i[h(y)]=t$</li>
+<li>对于每个item y，采样概率为$1/B_i[h(y)]$</li>
+</ol>
+<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><p>利用双塔模型进行训练，模型结构如下图所示：</p>
+<p><img src="http://guoshihao.site:8085/pic/SBCNM0.jpg"></p>
+<h3 id="训练样本"><a href="#训练样本" class="headerlink" title="训练样本"></a>训练样本</h3><p>被点击了的视频样本作为正样本（<strong>输入只有正样本</strong>），另外，我们构建了奖励$r_i$来反应用户不同程度的反馈，例如$r_i=0$代表观看了点击视频很短的时间，$r_i=1$代表了完整观看了点击的视频，这个奖赏被用于损失函数中的样本权重。</p>
+<h3 id="特征工程"><a href="#特征工程" class="headerlink" title="特征工程"></a>特征工程</h3><p>视频特征包括离散特征和连续特征。离散特征如Video Id和Channel Id。多值离散特征加权pooling。为了处理超出词典范围的实体，将实体随机赋给一组固定的哈希桶。在YouTube中哈希桶对于模型捕捉可用的新实体非常重要，尤其是在下节所述的序列训练中。</p>
+<p>用户特征采用用户观看历史来捕获用户的兴趣。embedding后pooling，不考虑顺序。</p>
+<p>视频特征和用户特征相同类的特征<strong>共享embedding</strong>。</p>
+<h2 id="序列训练"><a href="#序列训练" class="headerlink" title="序列训练"></a>序列训练</h2><p>YouTube每天生成新的训练数据，训练数据根据天来组织。模型训练按以下方式使用此顺序结构。训练器从最旧的训练数据到最新的训练数据按序列使用数据。一旦训练器得到了最新的训练数据后，便会等待第二天训练数据的到达。通过这种方式，模型能跟上最新的数据分布变化。训练数据实际上是以流的方式被消耗的。通过算法2（或算法3）预测item频率，在线更新能使模型适应新的频率分布。</p>
+<h2 id="索引和模型预估"><a href="#索引和模型预估" class="headerlink" title="索引和模型预估"></a>索引和模型预估</h2><p>索引pipe分为三个阶段：候选集生成，embedding预测和embedding索引。</p>
+<p>上述序列式训练生成的双塔模型会定期地保存成为SavedModel并与线上的预测模型保持同步。对于索引库里的所有候选item，可以使用双塔模型的候选集侧的塔生成item的embedding；然后再通过基于树或者量化hash的方式来建立索引。</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://research.google/pubs/pub48840/">Sampling-bias-corrected neural modeling for large corpus item recommendations</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/88255834">知乎：Google工业风最新论文, Youtube提出双塔结构流式模型进行大规模推荐</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/137538147">知乎：【推荐系统经典论文(九)】谷歌双塔模型</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/177f49effd50">论文笔记 | RecSys2019 | Sampling-Bias-Corrected Neural Modeling for Large Corpus Item Recommendations</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Recall/EBR/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sampling-bias-corrected-neural-modeling-for-large-corpus-item-recommendations"><span class="nav-number">1.</span> <span class="nav-text">Sampling-bias-corrected neural modeling for large corpus item recommendations</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#In-batch-loss-function"><span class="nav-number">1.2.1.</span> <span class="nav-text">In-batch loss function</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A5%E7%A8%8BTricks"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">工程Tricks</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Streaming-Frequency-Estimation"><span class="nav-number">1.2.2.</span> <span class="nav-text">Streaming Frequency Estimation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%B8%80%EF%BC%9A%E8%AE%AD%E7%BB%83%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.3.</span> <span class="nav-text">算法一：训练算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%BA%8C%EF%BC%9A%E9%A2%91%E7%8E%87%E4%BC%B0%E8%AE%A1%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.4.</span> <span class="nav-text">算法二：频率估计算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%E4%B8%89%EF%BC%9A%E6%94%B9%E8%BF%9B%E7%9A%84%E5%A4%9A%E5%85%83%E6%95%B0%E5%80%BC-%E9%A2%91%E7%8E%87%E4%BC%B0%E8%AE%A1%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.5.</span> <span class="nav-text">算法三：改进的多元数值-频率估计算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">模型架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E6%A0%B7%E6%9C%AC"><span class="nav-number">1.3.1.</span> <span class="nav-text">训练样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B"><span class="nav-number">1.3.2.</span> <span class="nav-text">特征工程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E8%AE%AD%E7%BB%83"><span class="nav-number">1.4.</span> <span class="nav-text">序列训练</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%92%8C%E6%A8%A1%E5%9E%8B%E9%A2%84%E4%BC%B0"><span class="nav-number">1.5.</span> <span class="nav-text">索引和模型预估</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

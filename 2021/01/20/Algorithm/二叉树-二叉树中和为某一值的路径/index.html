@@ -86,8 +86,8 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="二叉树中和为某一值的路径输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。 递归123456789101112131415class Solution:    def pathSum(self, root: TreeNode, sum: int) -&gt; List[List[int]]:        res &#x3D;">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-01-20T02:14:23.402Z">
-<meta property="article:modified_time" content="2021-01-04T08:34:00.000Z">
+<meta property="article:published_time" content="2021-01-20T02:32:53.425Z">
+<meta property="article:modified_time" content="2021-01-20T02:20:06.255Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -261,7 +261,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -299,7 +299,7 @@
       
 
       
-        <h2 id="二叉树中和为某一值的路径"><a href="#二叉树中和为某一值的路径" class="headerlink" title="二叉树中和为某一值的路径"></a>二叉树中和为某一值的路径</h2><p>输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。</p>
+        <h1 id="二叉树中和为某一值的路径"><a href="#二叉树中和为某一值的路径" class="headerlink" title="二叉树中和为某一值的路径"></a>二叉树中和为某一值的路径</h1><p>输入一棵二叉树和一个整数，打印出二叉树中节点值的和为输入整数的所有路径。从树的根节点开始往下一直到叶节点所经过的节点形成一条路径。</p>
 <h3 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pathSum</span>(<span class="params">self, root: TreeNode, <span class="built_in">sum</span>: <span class="built_in">int</span></span>) -&gt; List[List[int]]:</span></span><br><span class="line">        res = []</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span>(<span class="params">node,cur_sum,path</span>):</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> node.left <span class="keyword">and</span> <span class="keyword">not</span> node.right:</span><br><span class="line">                <span class="keyword">if</span> cur_sum+node.val == <span class="built_in">sum</span>:</span><br><span class="line">                    res.append(path+[node.val])</span><br><span class="line">            <span class="keyword">else</span>: </span><br><span class="line">                <span class="keyword">if</span> node.left:</span><br><span class="line">                    dfs(node.left,cur_sum+node.val,path+[node.val])</span><br><span class="line">                <span class="keyword">if</span> node.right:</span><br><span class="line">                    dfs(node.right,cur_sum+node.val,path+[node.val])</span><br><span class="line">        <span class="keyword">if</span> root:</span><br><span class="line">            dfs(root,<span class="number">0</span>,[])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
 <h3 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h3><p>采用先序遍历的框架，在栈中保存节点、当前累加和、路径</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pathSum</span>(<span class="params">self, root: TreeNode, <span class="built_in">sum</span>: <span class="built_in">int</span></span>) -&gt; List[List[int]]:</span></span><br><span class="line">        res = []</span><br><span class="line">        stack = collections.deque()</span><br><span class="line">        <span class="keyword">if</span> root:</span><br><span class="line">            stack.append((root,<span class="number">0</span>,[]))</span><br><span class="line">        <span class="keyword">while</span> stack:</span><br><span class="line">            node,cur_sum,path = stack.pop()</span><br><span class="line">            <span class="keyword">if</span> cur_sum+node.val==<span class="built_in">sum</span> <span class="keyword">and</span> <span class="keyword">not</span> node.left <span class="keyword">and</span> <span class="keyword">not</span> node.right:</span><br><span class="line">                res.append(path+[node.val])</span><br><span class="line">            <span class="keyword">if</span> node.right:</span><br><span class="line">                stack.append((node.right,cur_sum+node.val,path+[node.val]))</span><br><span class="line">            <span class="keyword">if</span> node.left:</span><br><span class="line">                stack.append((node.left,cur_sum+node.val,path+[node.val]))</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
@@ -417,7 +417,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -454,7 +454,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84"><span class="nav-number">1.</span> <span class="nav-text">二叉树中和为某一值的路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92"><span class="nav-number">1.1.</span> <span class="nav-text">递归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3"><span class="nav-number">1.2.</span> <span class="nav-text">迭代</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E4%B8%AD%E5%92%8C%E4%B8%BA%E6%9F%90%E4%B8%80%E5%80%BC%E7%9A%84%E8%B7%AF%E5%BE%84"><span class="nav-number">1.</span> <span class="nav-text">二叉树中和为某一值的路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%92%E5%BD%92"><span class="nav-number">1.0.1.</span> <span class="nav-text">递归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3"><span class="nav-number">1.0.2.</span> <span class="nav-text">迭代</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

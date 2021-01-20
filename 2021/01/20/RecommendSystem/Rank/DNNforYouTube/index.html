@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Deep Neural Network for YouTube Recommendation前言在推荐系统领域，特别是YouTube的所在视频推荐领域，主要面临三个挑战：  规模大：用户和视频的数量都很大，只能适应小规模数据集的算法就不考虑了。 更新快：youtube视频更新频率很高，每秒有小时级别的视频上传，需要在新发布视频和已有存量视频间进行balance。更新快（实时性）的另一方面的体现是用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2021/01/20/RecommendSystem/Rank/DNNforYouTube/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Deep Neural Network for YouTube Recommendation前言在推荐系统领域，特别是YouTube的所在视频推荐领域，主要面临三个挑战：  规模大：用户和视频的数量都很大，只能适应小规模数据集的算法就不考虑了。 更新快：youtube视频更新频率很高，每秒有小时级别的视频上传，需要在新发布视频和已有存量视频间进行balance。更新快（实时性）的另一方面的体现是用">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DNNforYouTube0.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DNNforYouTube1.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DNNforYouTube2.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DNNforYouTube4.jpg">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/DNNforYouTube5.png">
+<meta property="article:published_time" content="2021-01-20T02:32:53.825Z">
+<meta property="article:modified_time" content="2021-01-10T04:01:26.911Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://guoshihao.site:8085/pic/DNNforYouTube0.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/20/RecommendSystem/Rank/DNNforYouTube/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/DNNforYouTube/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Deep-Neural-Network-for-YouTube-Recommendation"><a href="#Deep-Neural-Network-for-YouTube-Recommendation" class="headerlink" title="Deep Neural Network for YouTube Recommendation"></a>Deep Neural Network for YouTube Recommendation</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在推荐系统领域，特别是YouTube的所在视频推荐领域，主要面临三个挑战：</p>
+<ul>
+<li><strong>规模大</strong>：用户和视频的数量都很大，只能适应小规模数据集的算法就不考虑了。</li>
+<li><strong>更新快</strong>：youtube视频更新频率很高，每秒有小时级别的视频上传，需要在新发布视频和已有存量视频间进行balance。更新快（实时性）的另一方面的体现是用户实时行为切换很快，模型需要很好的追踪用户的实时行为。</li>
+<li><strong>噪音</strong>：噪音主要体现在用户的历史行为往往是稀疏的并且是不完整的，并且没有一个明确的ground truth的满意度signal，我们面对的都是noisy implicit feedback signals。噪音另一个方面就是视频本身很多数据都是非结构化的。这两点对算法的鲁棒性提出了很高的挑战。</li>
+</ul>
+<p>之所以要在推荐系统中应用DNN解决问题，一个重要原因是google内部在机器学习问题上的通用solution的趋势正转移到Deep learning，系统实际部署在基于tensorflow的Google Brain上。</p>
+<h2 id="系统概览"><a href="#系统概览" class="headerlink" title="系统概览"></a>系统概览</h2><p>整个推荐系统分为Candidate Generation和Ranking两个阶段。Candidate Generation阶段通过i2i/u2i/u2u/user profile等方式“粗糙”的召回候选商品，Candidate Generation阶段视频的数量是百级别了；Ranking阶段对Candidate Generation后的视频采用更精细的特征计算user-item之间的排序分，作为最终输出推荐结果的依据。</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube0.jpg"></p>
+<h2 id="Candidate-Generation"><a href="#Candidate-Generation" class="headerlink" title="Candidate Generation"></a>Candidate Generation</h2><h3 id="问题建模"><a href="#问题建模" class="headerlink" title="问题建模"></a>问题建模</h3><p>我们把推荐问题建模成一个“超大规模多分类”问题。即在时刻$t$，为用户$U$（上下文信息$C$）在视频库$V$中精准的预测出视频$i$的类别（每个具体的视频视为一个类别，$i$即为一个类别），用数学公式表达如下：<br>$$<br>P(w_t=i|U,C)=\frac{e^{v_iu}}{\sum_{j\in{}V}{e^{v_ju}}}<br>$$<br>很显然上式为一个softmax多分类器的形式。向量$u\in{}\mathbb{R}^N$代表&lt;user, context&gt;信息的高维embedding，而向量$v_j\in{}\mathbb{R}^N$代表视频$j$的高维embedding。</p>
+<p>为了有效地训练这样一个有数百万类的模型，实际训练采用的是服从背景分布的<strong>Negative Sample</strong>，然后通过<strong>重要性加权</strong>来矫正这个抽样，类似于word2vec的Skip-Gram方法，采用交叉熵损失函数。文章也才用过分层Softmax的方法，但是精度不如Negative Sample。在serving阶段，则采用的<strong>基于点积空间的最近邻搜索算法</strong>，abtest结果对于最近邻算法的选择不敏感。</p>
+<p>知乎理解：有一条样本，label=item_18，如果分类总共有100个，训练到这条样本的时候，由于最后是softmax，模型更新参数使item_18的softmax输出偏向1，剩余99个item的softmax输出偏向0。负采样指的是当总分类达到十万，正常softmax需要使得剩余99999个item的softmax输出偏向0，这样更新量很大，所以采用sample softmax，在更新这次样本时指定全集只有5001，屏蔽了剩余的94999个item，即负采样数目=5000，这样这次更新只会使得当前item输出偏向1，剩余5000个item的softmax输出偏向0。这个和word2vec的negative sampling是一样的。</p>
+<h3 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h3><p>整个模型架构是包含三个隐层的DNN结构。输入是用户浏览历史、搜索历史、人口统计学信息和其余上下文信息concat成的输入向量；输出分线上和离线训练两个部分。</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube1.jpg"></p>
+<h3 id="主要特征"><a href="#主要特征" class="headerlink" title="主要特征"></a>主要特征</h3><p><strong>用户浏览历史</strong>：</p>
+<p>受CBOW模型启发，每个视频都表示为一个高维embedding，并将其输入神经网络当中。用户的观看历史记录有一个变长的稀疏视频ID序列表示，映射到稠密的向量表示，最终通过加权平均得到固定维度的watch vector。</p>
+<p><strong>历史搜索query</strong>：</p>
+<p>把历史搜索的query分词后的token的embedding向量进行加权平均，能够反映用户的整体搜索历史状态。</p>
+<p><strong>人口统计学信息</strong>：</p>
+<p>性别、年龄、地域等</p>
+<p><strong>其他上下文信息</strong>：</p>
+<p>设备、登录状态等</p>
+<p><strong>“Example Age” （样本时间）特征</strong>：</p>
+<p>视频网络的时效性是很重要的，每秒YouTube上都有大量新视频被上传，而对用户来讲，哪怕牺牲相关性代价，用户还是更倾向于更新的视频。当然我们不会单纯的因为一个视频新就直接推荐给用户。</p>
+<p>因为机器学习系统在训练阶段都是利用过去的行为预估未来，因此通常对过去的行为有个隐式的bias。视频网站视频的分布是高度非静态（non-stationary）的，但我们的推荐系统产生的视频集合在视频的分布，基本上反映的是几周的训练时间段的平均的观看喜好的视频。因此我们把样本的 “age” 作为一个feature加入模型训练中。从下图可以很清楚的看出，加入“example age” feature后和经验分布更为match。</p>
+<p><strong>知乎理解：</strong>Example Age其实是训练区间的最后一刻减去日志log产生的时间，在eval里置为0。其实我既试过paper的normalize方法（平方开方），也试过离散化后加embedding，结果发现离散化加embedding效果更好。这个特征的用处按我理解可以这样描述：比如某个视频点击集中在7天前（比如7天前点击率10%），训练前这个时间点点击率比较低（训练前10分钟点击率3%），模型学出来之后预测的时候把Example Age置为0去预测，预测出这个视频点击率就会更接近3%。同理如果某视频以前不火，训练前突然火了，预测的时候Example Age置为0就可以预测到更高的点击率。如果不带Example Age，模型学出来的该视频点击率更接近于这个训练区间下这个视频平均点击率。</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube2.jpg"></p>
+<h3 id="标签和样本选择"><a href="#标签和样本选择" class="headerlink" title="标签和样本选择"></a>标签和样本选择</h3><p>在有监督学习问题中，最重要的选择是label了，因为label决定了你做什么，决定了你的上限，而feature和model都是在逼近label。对于标签和样本选择我们的几个设计如下：</p>
+<ul>
+<li><strong>使用更广的数据源</strong>：不仅仅使用推荐场景的数据进行训练，其他场景比如搜索等的数据也要用到，这样也能为推荐场景提供一些explore。</li>
+<li><strong>为每个用户生成固定数量训练样本</strong>：我们在实际中发现的一个practical lessons，如果为每个用户固定样本数量上限，平等的对待每个用户，避免loss被少数active用户domanate，能明显提升线上效果。</li>
+<li><strong>抛弃序列信息</strong>：我们在实现时尝试的是去掉序列信息，对过去观看视频/历史搜索query的embedding向量进行加权平均。这点其实违反直觉，YouTube的落地是预测下一个观看的视频，如果用户刚刚搜索了一个关键词，将其作为主页推荐效果会很差，抛弃序列信息来表示搜索查询，可以让模型不再知道搜索标签的来源。</li>
+<li><strong>不对称的共同浏览（asymmetric co-watch）问题</strong>：所谓asymmetric co-watch值的是用户在浏览视频时候，往往都是序列式的，开始看一些比较流行的，逐渐找到细分的视频。下图所示图(a)是hled-out方式，利用<strong>上下文信息</strong>预估中间的一个视频；图(b)是predicting next watch的方式，则是利用<strong>上文信息</strong>，预估下一次浏览的视频。我们发现图(b)的方式在线上A/B test中表现更佳。而实际上，传统的协同过滤类的算法，都是隐含的采用图(a)的held-out方式，忽略了不对称的浏览模式。</li>
+</ul>
+<h3 id="不同网络深度和特征的实验"><a href="#不同网络深度和特征的实验" class="headerlink" title="不同网络深度和特征的实验"></a>不同网络深度和特征的实验</h3><p>简单介绍下我们的网络构建过程，采用的经典的“tower”模式搭建网络，所有的视频和search token都embedded到256维的向量中，开始input层直接全连接到256维的softmax层，依次增加网络深度。</p>
+<p>• Depth 0: 简单线性层 256</p>
+<p>• Depth 1: 256 ReLU</p>
+<p>• Depth 2: 512 ReLU → 256 ReLU</p>
+<p>• Depth 3: 1024 ReLU → 512 ReLU → 256 ReLU</p>
+<p>• Depth 4: 2048 ReLU → 1024 ReLU → 512 ReLU → 256 ReLU</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube4.jpg"></p>
+<p>可以很明显看出，增加了观看历史之外的特征很明显的提升了预测得准确率；从网络深度看，随着网络深度加大，预测准确率在提升，但继续增加第四层网络已经收益不大了。</p>
+<h2 id="Ranking"><a href="#Ranking" class="headerlink" title="Ranking"></a>Ranking</h2><p>Ranking阶段的最重要任务就是精准的预估用户对视频的喜好程度。不同于Candidate Generation阶段面临的是百万级的候选视频集，Ranking阶段面对的只是百级别的商品集，因此我们可以使用更多更精细的feature来刻画视频（item）以及用户与视频（user-item）的关系。比如用户可能很喜欢某个视频，但如果list页的用的“缩略图”选择不当，用户也许不会点击，等等。此外，Candidate Generation阶段的来源往往很多，没法直接比较。Ranking阶段另一个关键的作用是能够把不同来源的数据进行有效的ensemble。在目标的设定方面，单纯CTR指标是有迷惑性的，有些靠关键词吸引用户高点击的视频未必能够被播放。因此设定的目标基本与<strong>期望的观看时长</strong>相关，具体的目标调整则根据线上的A/B进行调整。</p>
+<h3 id="模型架构-1"><a href="#模型架构-1" class="headerlink" title="模型架构"></a>模型架构</h3><p>Ranking模型的架构和Candidate Generation相似，在最后一层有区别。</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube5.png"></p>
+<h3 id="特征表达"><a href="#特征表达" class="headerlink" title="特征表达"></a>特征表达</h3><p><strong>Feature Engineering：</strong></p>
+<p>尽管深度学习在图像、语音和NLP等场景都能实现end-to-end的训练，没有了人工特征工程工作。然而在搜索和推荐场景，我们的很难把原始数据直接作为DNN的输入，特征工程仍然很重要。而特征工程中最难的是如何建模用户时序行为（<strong>temporal sequence of user actions</strong>），并且关联这些行为和要rank的item。</p>
+<p>我们发现<strong>最重要的Signal是描述用户与商品本身或相似商品之间交互的Signal</strong>，这与Facebook在14年提出LR+GBDT模型的paper中得到的结论是一致的。比如我们要度量用户对视频的喜欢，可以考虑用户与视频所在频道间的关系：</p>
+<ul>
+<li><strong>数量特征</strong>：浏览该频道的次数？</li>
+<li><strong>时间特征</strong>：比如最近一次浏览该频道距离现在的时间？</li>
+</ul>
+<p>这两个连续特征的最大好处是具备非常强的泛化能力。另外除了这两个偏正向的特征，用户对于视频所在频道的一些PV但不点击的行为，即<strong>负反馈Signal同样非常重要</strong>。另外，我们还发现，把Matching阶段的信息传播到Ranking阶段同样能很好的提升效果，比如推荐来源和所在来源的分数。</p>
+<p><strong>Embedding Categorical Features</strong>：</p>
+<p>DNN更适合处理连续特征，因此稀疏的特别是高基数空间的离散特征需要embedding到稠密的向量中。每个维度（比如query/user_id）都有独立的embedding空间，一般来说空间的维度基本与log(去重后值得数量)相当。实际并非为所有的id进行embedding，比如视频id，只需要按照点击排序，选择top N视频进行embedding，其余置为0向量。而对于像“过去点击的视频”这种multivalent特征，与Matching阶段的处理相同，进行加权平均即可。</p>
+<p>另外一个值得注意的是，同维度不同feature采用的相同ID的embedding是共享的（比如“过去浏览的视频id” “seed视频id”），这样可以大大加速训练，但显然输入层仍要分别填充。</p>
+<p><strong>Normalizing Continuous Features</strong>：</p>
+<p>众所周知，NN对输入特征的尺度和分布都是非常敏感的，实际上基本上除了Tree-Based的模型（比如GBDT/RF），机器学习的大多算法都如此。我们发现归一化方法对收敛很关键，推荐一种排序分位归一到[0,1]区间的方法，即$\widetilde{x}=\int^x_{-\infty}df$，累计分位点。除此之外，我们还把归一化后的$\widetilde{x},\sqrt{\widetilde{x}},\widetilde{x}^2$作为网络输入，以期能使网络能够更容易得到特征的次线性（sub-linear）和（super-linear）超线性函数。</p>
+<h3 id="建模期望观看时长"><a href="#建模期望观看时长" class="headerlink" title="建模期望观看时长"></a>建模期望观看时长</h3><p>我们的目标是预测<strong>期望观看时长</strong>。有点击的为正样本，有PV无点击的为负样本，正样本需要根据观看时长进行加权。因此，我们训练阶段网络最后一层用的是 weighted logistic regression。</p>
+<p>回想LR的推导，$Odds=\frac{p}{1-p}$，LR是用线性变化拟合Odds的对数，即$ln(Odds)=\theta^Tx$</p>
+<p>正样本的权重为观看时长$T_i$，负样本权重为1。Weighted LR的特点是，正样本权重的加入会让正样本发生的几率变成原来的$T_i$倍，由于p很小，也就是说样本$i$的$Odds$变成了下面的式子：<br>$$<br>Odds(i)=\frac{T_ip}{1-T_ip}\approx T_ip=E(T_i)<br>$$<br>因此在线上serving的inference阶段，我们采用$e^{\theta^Tx}$作为预估分数，即使用Odds作为分数，就是近似的估计期望观看时长。</p>
+<h3 id="不同隐层的实验"><a href="#不同隐层的实验" class="headerlink" title="不同隐层的实验"></a>不同隐层的实验</h3><p>下图的table是离线利用hold-out一天数据在不同NN网络结构下的结果。如果用户对模型预估高分的反而没有观看，我们认为是预测错误的观看时长。weighted, per-user loss就是预测错误观看时长占总观看时长的比例。</p>
+<p>我们对网络结构中隐层的宽度和深度方面都做了测试，从下图结果看增加隐层网络宽度和深度都能提升模型效果。而对于1024–&gt;512–&gt;256这个网络，测试的不包含归一化后根号和方式的版本，loss增加了0.2%。而如果把weighted LR替换成LR，效果下降达到4.1%。</p>
+<table>
+<thead>
+<tr>
+<th>Hidden layers</th>
+<th>weighted,per-user loss</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>None</td>
+<td>41.6%</td>
+</tr>
+<tr>
+<td>256 ReLU</td>
+<td>36.9%</td>
+</tr>
+<tr>
+<td>512 ReLU</td>
+<td>36.7%</td>
+</tr>
+<tr>
+<td>1024 ReLU</td>
+<td>35.8%</td>
+</tr>
+<tr>
+<td>512 ReLU$\rightarrow$256 ReLU</td>
+<td>35.2%</td>
+</tr>
+<tr>
+<td>1024 ReLU$\rightarrow$512 ReLU</td>
+<td>34.7%</td>
+</tr>
+<tr>
+<td>1024 ReLU$\rightarrow$512 ReLU$\rightarrow$256 ReLU</td>
+<td>34.6%</td>
+</tr>
+</tbody></table>
+<p>[1] <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/2959100.2959190">Deep Neural Networks for YouTube Recommendations</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25343518">知乎：Deep Neural Network for YouTube Recommendation论文精读</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/52504407">知乎：YouTube深度学习推荐系统的十大工程问题</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="http://www.shataowei.com/2018/06/26/%E5%85%B3%E4%BA%8EDeep-Neural-Networks-for-YouTube-Recommendations%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83%E5%92%8C%E5%AE%9E%E7%8E%B0/">关于’Deep Neural Networks for YouTube Recommendations’的一些思考和实现</a></p>
+<p>[5] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/61827629">揭开YouTube深度推荐系统模型Serving之谜</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/DIN/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/ESMM/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-Neural-Network-for-YouTube-Recommendation"><span class="nav-number">1.</span> <span class="nav-text">Deep Neural Network for YouTube Recommendation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%A7%88"><span class="nav-number">1.2.</span> <span class="nav-text">系统概览</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Candidate-Generation"><span class="nav-number">1.3.</span> <span class="nav-text">Candidate Generation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%BB%BA%E6%A8%A1"><span class="nav-number">1.3.1.</span> <span class="nav-text">问题建模</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="nav-number">1.3.2.</span> <span class="nav-text">模型架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E5%BE%81"><span class="nav-number">1.3.3.</span> <span class="nav-text">主要特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E5%92%8C%E6%A0%B7%E6%9C%AC%E9%80%89%E6%8B%A9"><span class="nav-number">1.3.4.</span> <span class="nav-text">标签和样本选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%BD%91%E7%BB%9C%E6%B7%B1%E5%BA%A6%E5%92%8C%E7%89%B9%E5%BE%81%E7%9A%84%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.3.5.</span> <span class="nav-text">不同网络深度和特征的实验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ranking"><span class="nav-number">1.4.</span> <span class="nav-text">Ranking</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">模型架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81%E8%A1%A8%E8%BE%BE"><span class="nav-number">1.4.2.</span> <span class="nav-text">特征表达</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E6%A8%A1%E6%9C%9F%E6%9C%9B%E8%A7%82%E7%9C%8B%E6%97%B6%E9%95%BF"><span class="nav-number">1.4.3.</span> <span class="nav-text">建模期望观看时长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E9%9A%90%E5%B1%82%E7%9A%84%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.4.4.</span> <span class="nav-text">不同隐层的实验</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

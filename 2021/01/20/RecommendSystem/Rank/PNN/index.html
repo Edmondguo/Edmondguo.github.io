@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Product-based Neural Networks for User Response Prediction概述通过PNN来学习类别特征的Embedding表示，Product层用来捕获层间类别的交互模式，用更深的全连接层来进一步提取高阶交互特征。 文章指出FNN的弊端：  FM限制了Embedding的质量；  “add”操作不足以提取出多个field的交互特征；Product laye">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2021/01/20/RecommendSystem/Rank/PNN/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Product-based Neural Networks for User Response Prediction概述通过PNN来学习类别特征的Embedding表示，Product层用来捕获层间类别的交互模式，用更深的全连接层来进一步提取高阶交互特征。 文章指出FNN的弊端：  FM限制了Embedding的质量；  “add”操作不足以提取出多个field的交互特征；Product laye">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://guoshihao.site:8085/pic/PNN.png">
+<meta property="article:published_time" content="2021-01-20T02:32:53.855Z">
+<meta property="article:modified_time" content="2020-10-28T14:37:51.000Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://guoshihao.site:8085/pic/PNN.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/20/RecommendSystem/Rank/PNN/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/PNN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Product-based-Neural-Networks-for-User-Response-Prediction"><a href="#Product-based-Neural-Networks-for-User-Response-Prediction" class="headerlink" title="Product-based Neural Networks for User Response Prediction"></a>Product-based Neural Networks for User Response Prediction</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>通过PNN来学习类别特征的Embedding表示，<strong>Product</strong>层用来捕获层间类别的交互模式，用更深的全连接层来进一步提取高阶交互特征。</p>
+<p>文章指出<strong>FNN</strong>的弊端：</p>
+<ol>
+<li><p>FM限制了Embedding的质量；</p>
+</li>
+<li><p>“add”操作不足以提取出多个field的交互特征；Product layer部分的思想是认为特征之间的关系是and“且”的一种关系，而非add”加”的关系。</p>
+</li>
+</ol>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p>PNN模型结合了FM和DNN，其框架图如下所示。</p>
+<p><img src="http://guoshihao.site:8085/pic/PNN.png"></p>
+<p>可以看出模型也是实现CTR预估任务，输入数据是对特征进行one-hot编码之后特征，然后经过一个embedding层，将输入特征映射到相同长度的特征得到上图中的embedding层，接下来就是Product Layer了。Product layer主要有两部分，一部分是线性部分z，另一部分是非线性组合部分p。得到这一部分的特征之后，就进行常规的深度学习部分了，经过两个隐藏层，然后直接输入CTR结果。本文的重点是Product Layer部分。</p>
+<h3 id="Porduct-Layer"><a href="#Porduct-Layer" class="headerlink" title="Porduct Layer"></a>Porduct Layer</h3><p>Product layer部分的思想是认为特征之间的关系是and“且”的一种关系，而非add”加”的关系。以往的方法中特征之间都是$$w_{i}x_{i}+w_{j}x_{j}$$的组合方式，这种组合方式过于简单而且是不能凸显出特征之间紧密关系。</p>
+<p>再看上图，product layer部分包含两部分，第一部分是z，第二部分是p。虽然这一层的特征都是圆圈来表示，但是意义却大不相同。</p>
+<p>z部分是线性部分，相当与把Embedding层的向量concat成一个向量即可。所以z中的每一个圆圈代表的是一个向量（每一个field特征的embedding表示）。<br>$$<br>z=concat([emb_1,emb_2..,emb_n],axis=1)<br>$$<br>p部分是交叉部分，有两种表示分别是内积和外积。内积用IPNN表示，外积用OPNN表示。</p>
+<h4 id="IPNN-Inner-Product-based-Neural-Network"><a href="#IPNN-Inner-Product-based-Neural-Network" class="headerlink" title="IPNN(Inner Product-based Neural Network)"></a>IPNN(Inner Product-based Neural Network)</h4><p>IPNN就是实现两个向量的点乘，得到的是一个数，此时p部分的每个圆圈表示一个数。思路就是将所有field的embedding表示两两相乘，可以得到一个长为$$field_size*(field_size-1)/2$$的向量，然后和z部分的向量拼接起来，送入MLP。</p>
+<h4 id="OPNN-Outer-Product-based-Neural-Network"><a href="#OPNN-Outer-Product-based-Neural-Network" class="headerlink" title="OPNN(Outer Product-based Neural Network)"></a>OPNN(Outer Product-based Neural Network)</h4><p>OPNN就是实现两个向量的外积，得到一个矩阵，此时p部分的每个圆圈表示一个矩阵。为了实现矩阵与向量的拼接，作者引入了一个可学习的矩阵$$W$$。进行如下的表达式运算：<br>$$<br>u^Tv*W=u\times{}W\times{}v^T<br>$$<br>其中$$u,v$$均为$$[1，embedding_size]$$的向量，$$W$$为$$[embedding_size,embedding_size]$$的矩阵。</p>
+<p>思路就是通过向量的外积运算得到$$field_size*(field_size-1)/2$$个维度为$$[embedding_size,embedding_size]$$的矩阵，然后这些矩阵分别和$$W$$做矩阵内积相加得到$$field_size*(field_size-1)/2$$个数，</p>
+<p>所以不管是IPNN和OPNN，送入隐藏层的特征长度为线性部分z的长度加非线性部分p的长度$$field_size<em>embedding_size+field_size</em>(field_size-1)/2$$，最终就是常规的MLP输出要预测的指标。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>和FNN相比，PNN多了一个<strong>product层</strong>，和FM相比，PNN多了MLP层，并且输出不是简单的叠加，而是通过更复杂的Product Layer；在训练部分，可以单独训练FNN或者FM部分作为初始化，然后BP算法应用整个网络，那么至少效果不会差于FNN和FM；</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1611.00144">Product-based Neural Networks for User Response Prediction</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/MMoE/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/20/RecommendSystem/Rank/todo-BST/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Product-based-Neural-Networks-for-User-Response-Prediction"><span class="nav-number">1.</span> <span class="nav-text">Product-based Neural Networks for User Response Prediction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.</span> <span class="nav-text">模型结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Porduct-Layer"><span class="nav-number">1.2.1.</span> <span class="nav-text">Porduct Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IPNN-Inner-Product-based-Neural-Network"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">IPNN(Inner Product-based Neural Network)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OPNN-Outer-Product-based-Neural-Network"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">OPNN(Outer Product-based Neural Network)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">1.3.</span> <span class="nav-text">小结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

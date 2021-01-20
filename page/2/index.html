@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E8%BE%85%E5%8A%A9%E9%98%9F%E5%88%97-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/FNN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E8%BE%85%E5%8A%A9%E9%98%9F%E5%88%97-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/RecommendSystem/Rank/FNN/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -260,7 +260,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -300,11 +300,25 @@
       
         
           
-            <h2 id="滑动窗口的最大值"><a href="#滑动窗口的最大值" class="headerlink" title="滑动窗口的最大值"></a>滑动窗口的最大值</h2><p>给定一个数组 <code>nums</code> 和滑动窗口的大小 <code>k</code>，请找出所有滑动窗口里的最大值。</p>
-<p><strong>思路</strong>：由于每次滑动窗口，左边都可能弹出滑动窗口的最大值，所以类似min函数的栈一样，维护了一个存储非严格降序的<strong>双端队列</strong>。里面只存储可能成为最大值的数字的index，所以每次向右滑动时，都要将右端小于它的统统移除，以维持非严格降序的特性。当队首元素index和当前元素插值大于k-1时，要移除队首元素。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxSlidingWindow</span>(<span class="params">self, nums: List[<span class="built_in">int</span>], k: <span class="built_in">int</span></span>) -&gt; List[int]:</span></span><br><span class="line">        queue = []</span><br><span class="line">        res = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(nums)):</span><br><span class="line">            <span class="keyword">while</span> queue <span class="keyword">and</span> nums[i]&gt;nums[queue[-<span class="number">1</span>]]:</span><br><span class="line">                queue.pop()</span><br><span class="line">            queue.append(i)</span><br><span class="line">            <span class="keyword">while</span> i-queue[<span class="number">0</span>]&gt;k-<span class="number">1</span>:</span><br><span class="line">                queue.pop(<span class="number">0</span>)</span><br><span class="line">            <span class="keyword">if</span> i&gt;=k-<span class="number">1</span>:</span><br><span class="line">                res.append(nums[queue[<span class="number">0</span>]])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/">https://leetcode-cn.com/problems/hua-dong-chuang-kou-de-zui-da-zhi-lcof/</a></p>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/sliding-window-maximum/">https://leetcode-cn.com/problems/sliding-window-maximum/</a></p>
+            <h1 id="Factorization-machine-supported-Neural-Networks"><a href="#Factorization-machine-supported-Neural-Networks" class="headerlink" title="Factorization-machine supported Neural Networks"></a>Factorization-machine supported Neural Networks</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>FNN是FM因子分解机与DNN神经网络两种模型的结合。在推荐系统场景下，网络的输入是原始特征，由于存在大量的稀疏离散特征，维度通常在百万级以上。FNN借鉴了FM的思想，将同一种特征进行embedding，获得连续的特征表达形式，把降维后的隐向量拼接，送入DNN进行训练。</p>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p>FNN的思想比较简单，直接在FM输出的隐向量拼接后接入若干全连接层。利用DNN对特征进行隐式交叉，可以减轻特征工程的工作，同时也能够将计算时间复杂度控制在一个合理的范围内。</p>
+<p>需要注意的是，FM的隐向量是通过预训练得到的，在训练过程中并不会随着更新。</p>
+<p><img src="http://guoshihao.site:8085/pic/fnn.png"></p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>引入DNN对特征进行更高阶组合，减少特征工程，能在一定程度上增强FM的学习能力。这种尝试为后续深度推荐模型的发展提供了新的思路。</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li><p>两阶段训练模式，在应用过程中不方便，且模型能力受限于FM表征能力的上限。</p>
+</li>
+<li><p>FNN专注于高阶组合特征，但是却没有将低阶特征纳入模型。</p>
+</li>
+<li><p>FM中进行特征组合，使用的是<strong>隐向量点积</strong>。将FM得到的隐向量移植到DNN中接入全连接层，全连接本质是将输入向量的所有元素进行<strong>加权求和</strong>，且不会对特征Field进行区分，也就是说FNN中高阶特征组合使用的是全部隐向量元素相加的方式。说到底，在理解特征组合的层面上FNN与FM是存在Gap的，而这一点也正是PNN对其进行改进的动力。</p>
+</li>
+<li><p>在神经网络的调参过程中，参数学习率是很重要的。况且FNN中底层参数是通过FM预训练而来，如果在进行反向传播更新参数的时候学习率过大，很容易将FM得到的信息抹去。</p>
+</li>
+</ul>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1601.02376">Deep Learning over Multi-field Categorical Data: A Case Study on User Response Prediction</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/41628359">知乎：Factorisation-machine supported Neural Networks</a></p>
 
           
         
@@ -353,7 +367,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E8%BE%85%E5%8A%A9%E6%A0%88-%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/FM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -372,7 +386,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E8%BE%85%E5%8A%A9%E6%A0%88-%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/RecommendSystem/Rank/FM/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -384,7 +398,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -424,13 +438,25 @@
       
         
           
-            <h2 id="有效的括号"><a href="#有效的括号" class="headerlink" title="有效的括号"></a>有效的括号</h2><p>给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串，判断字符串是否有效。</p>
-<p>有效字符串需满足：</p>
-<p>左括号必须用相同类型的右括号闭合。</p>
-<p>左括号必须以正确的顺序闭合。</p>
-<p>注意空字符串可被认为是有效字符串。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">isValid</span>(<span class="params">self, s: <span class="built_in">str</span></span>) -&gt; bool:</span></span><br><span class="line">        stack = []</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">check</span>(<span class="params">i,j</span>):</span></span><br><span class="line">            <span class="keyword">if</span> i==<span class="string">&#x27;[&#x27;</span> <span class="keyword">and</span> j==<span class="string">&#x27;]&#x27;</span> <span class="keyword">or</span> i==<span class="string">&#x27;(&#x27;</span> <span class="keyword">and</span> j==<span class="string">&#x27;)&#x27;</span> <span class="keyword">or</span>  i==<span class="string">&#x27;&#123;&#x27;</span> <span class="keyword">and</span> j==<span class="string">&#x27;&#125;&#x27;</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">            <span class="keyword">if</span> i <span class="keyword">in</span> <span class="string">&#x27;&#123;[(&#x27;</span>:</span><br><span class="line">                stack.append(i)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> stack:</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">                <span class="keyword">elif</span> check(stack[-<span class="number">1</span>],i):</span><br><span class="line">                    stack.pop()</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> stack:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/valid-parentheses/">https://leetcode-cn.com/problems/valid-parentheses/</a></p>
+            <h1 id="Factorization-Machine"><a href="#Factorization-Machine" class="headerlink" title="Factorization Machine"></a>Factorization Machine</h1><h2 id="FM因子分解机"><a href="#FM因子分解机" class="headerlink" title="FM因子分解机"></a>FM因子分解机</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>机器学习中的建模问题可以归纳为从数据中学习一个函数 $f: R^n \rightarrow T$，他将实值的特征向量$x \in R^n$映射到一个特定的集合中。例如，对于回归问题，集合$T$就是实数集$R$；对于二分类问题，集合$T$可以是${+1, -1}$。对于监督学习，通常有一标注的训练样本集合$D = {(x^{(1)},y^{(1)}),…, (x^{(n)},y^{(n)})}$。</p>
+<p>线性函数最简单的模型，对于回归问题，假设这个函数可以用参数$w$来刻画：<br>$$<br>\phi(x) = w_0 + \sum_i w_i x_i<br>$$<br>对于二分类问题，需要做对数几率变换，即逻辑回归(Logistics Regression)。<br>$$<br>y = \frac{1}{1 + e^{-\phi(x)}}<br>$$<br>线性模型的缺点是无法学到模型特征之间的交互，而这在推荐和CTR预估中是比较关键的。例如，CTR预估中常将用户id和广告id One_hot 编码后作为特征向量的一部分。为了学习特征间的交叉，SVM通过多项式核函数来实现特征的交叉，实际上和多项式模型是一样的，这里以二阶多项式模型为例<br>$$<br>\phi(x) = w_0 + \sum_i w_i x_i + \sum_i \sum_{j \lt i} w_{ij} x_i x_j \\<br>        = w_0 + \mathbf{w_1}^T \mathbf{x} + \mathbf{x}^T \mathbf{W_2} \mathbf{x}<br>$$<br>多项式模型的问题在于二阶项的参数过多，设特征维数为$n$，那么二阶项的参数数目为 $n(n+1)/2$。 对于广告点击率预估问题，由于存在大量id特征，导致模型参数样本量 的量级多得多。这导致只有极少数的二阶组合模式才能在样本中找到， 而绝大多数模式在样本中找不到，因而模型无法学出对应的权重。例如，对于某个$w_{ij}$，样本中找不到$x_i=1,x_j=1$（这里假定所有的特征都是离散的特征，只取0和1两个值）这种样本，那么$w_{ij}$的梯度恒为0，从而导致参数学习失败。</p>
+<p>因子分解机FM的做法是要求二阶项系数矩阵是低秩的，能够分解为低秩矩阵的乘积。<br>$$<br>\mathbf{W_2} = \mathbf{V}^T \mathbf{V}, V \in \mathbb{R}^{k \times n} \\<br>w_{ij} = \mathbf{v_i}^T \mathbf{v_j} , \mathbf{v_i} \in \mathbb{R}^{k} \\<br>\mathbf{V} = [\mathbf{v_1}, …, \mathbf{v_n}]<br>$$<br>这样一来，就将参数个数减少到 $kn$，可以设置较少的$k$值（一般设置在100以内，$k&lt;&lt;n$），极大地减少模型参数，增强模型泛化能力，这跟矩阵分解的方法是一样的。向量$\mathbf{v_i}$可以解释为第$i$个特征对应的隐因子或隐向量。 以user和item的推荐问题为例，如果该特征是user_id，可以解释为用户向量，如果是item_id，可以解释为物品向量。</p>
+<h3 id="计算复杂度"><a href="#计算复杂度" class="headerlink" title="计算复杂度"></a>计算复杂度</h3><p>因为引入和二阶项，如果直接计算，时间复杂度将是$O(\bar{n}^2)$，$\bar{n}$是特征非零的特征数目， 可以通过简单的数学技巧将时间复杂度减少到线性时间复杂度。基于一个基本的观察，齐二次交叉项之和可以表达为平方和之差<br>$$<br>\sum_i \sum_{j \lt i} z_i z_j = \frac{1}{2} \left( \left(\sum_i z_i \right)^2 - \sum_i z_i^2 \right)<br>$$<br>上式左边计算复杂度为$O({n}^2)$，而右边是$O(n)$。根据上式，可以将原表达式中二次项化简为<br>$$<br>\sum_i \sum_{j \lt i} w_{ij} x_i x_j = \sum_i \sum_{j \lt i} \sum_k v_{ik} v_{jk} x_i x_j \\<br>= \frac{1}{2} \sum_k  \left( \left(\sum_i v_{ik} x_i \right)^2 - \sum_i v_{ik}x_i^2 \right)<br>$$<br>上式左边计算复杂度为$O(\bar{n})$。<strong>所以FM可以在线性时间对新样本作出预测。</strong></p>
+<p>基于梯度的优化都需要计算目标函数对参数的梯度，对FM而言，目标函数对参数的梯度可以利用链式求导法则分解为目标函数对$\phi$的梯度和$\frac{\partial \phi}{\partial \theta}$的乘积。前者依赖于具体任务，后者可以简单的求得<br>$$<br>% <![CDATA[
+\frac{\partial \phi}{\partial \theta} =
+\begin{cases}
+1, &  \text{if $\theta$ is $w_0$} \\
+x_i, &  \text{if $\theta$ is $w_i$} \\
+x_i\sum_j v_{jk} x_j - v_{ik}x_i^2, &  \text{if $\theta$ is $w_{ik}$}
+\end{cases} %]]><br>$$</p>
+<h2 id="FFM场因子分解机"><a href="#FFM场因子分解机" class="headerlink" title="FFM场因子分解机"></a>FFM场因子分解机</h2><h3 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h3><p>在实际预测任务中，特征往往包含多种id，如果不同id组合时采用不同的隐向量，那么这就是 FFM(Field Factorization Machine) 模型。它将特征按照事先的规则分为多个场(Field)，特征$xi$属于某个特定的场$f$。每个特征将被映射为多个隐向量$\mathbf{v}<em>{i1},…,\mathbf{v}</em>{if}$，每个隐向量对应一个场。当两个特征$x_i,x_j$组合时，用对方对应的场对应的隐向量做内积！<br>$$<br>w_{ij} = \mathbf{v}_{i,f_j}^T\mathbf{v}_{j,f_i}<br>$$<br>$fi,fj$分别是特征$xi,xj$对应的场编号。FFM 由于引入了场，使得每两组特征交叉的隐向量都是独立的，可以取得更好的组合效果，但是使得计算复杂度无法通过优化变成线性时间复杂度，每个样本预测的时间复杂度为 $O(\bar{n}^2 k)$，不过FFM的k值通常远小于FM的k值。</p>
+<h2 id="FM与MFCF（矩阵分解协同过滤）"><a href="#FM与MFCF（矩阵分解协同过滤）" class="headerlink" title="FM与MFCF（矩阵分解协同过滤）"></a>FM与MFCF（矩阵分解协同过滤）</h2><p><img src="http://guoshihao.site:8085/pic/mfcf.png"></p>
+<p>基于矩阵分解的协同过滤属于基于模型的协同过滤，是推荐系统中常用的一种推荐方案，从历史数据中收集user对item的评分，可以是显式的打分，也可以是用户的隐式反馈计算的得分。由于user和item数量非常多，有过打分的user和item对通常是十分稀少的，基于矩阵分解的协同过滤是来预测那些没有过行为的user对item的打分，实际上是一个评分预测问题。矩阵分解的方法假设user对item的打分$\hat{r}<em>{ui}$由下式决定<br>$$<br>\hat{r}</em>{ui} = q_i^T p_u + b_i + b_u + \mu<br>$$<br>其中$qi$是第i个item对相应的隐向量，$pu$是第u个user对应的隐向量，$bi$代表item的偏置，用于解释商品本身的热门和冷门，$bu$代表user的偏置，用于解释用户本身的打分偏好（例如有些人喜欢打低分），$μ$是常数。即将评分矩阵分解为user矩阵和item矩阵的乘积加上线性项和常数项，而这两个矩阵是低秩的！这些参数通过对最小化经验误差得到。<br>$$<br>\min_{p,q,b} \sum_{(u,i) \in K} (r_{ui} - \hat{r}_{ui})^2 + \lambda(||p_u||^2 + ||q_i||^2 + b_u^2 + b_i^2)<br>$$<br>以user对item评分预测问题为例，基于矩阵分解的协同过滤可以看做FM的一个特殊例子，对于每一个样本，FM可以看做特征只有user_id和item_id的one hot编码后的向量连接而成的向量。从FM和MFCF公式来看，MFCF的用户向量$pu$和item向量$qi$可以看做FM中的隐向量，用户和item的bias向量$bu,bi$就是FM中的一次项系数，常数$\mu$也和FM中的常数$w_0$相对应，可以看到，<strong>MFCF就是FM的一个特例</strong>。另外，FM可以采用更多的特征，学习更多的组合模式，这是单个矩阵分解的模型所做不到的。因此，FM比矩阵分解的方法更具普遍性。</p>
+<h2 id="FM与神经网络"><a href="#FM与神经网络" class="headerlink" title="FM与神经网络"></a>FM与神经网络</h2><p><img src="http://guoshihao.site:8085/pic/FMMLP.jpg"></p>
+<p><img src="http://guoshihao.site:8085/pic/fmmlp2.png"></p>
+<p>FM可以看成一个三层的神经网络。FM的二次项，可以看做神经网络embedding后，然后每两个slot的隐向量做内积，然后与乘以对应的权重后的FM一次项相加，得到最终预测值。</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://tracholar.github.io/machine-learning/2017/03/10/factorization-machine.html#ffm">因子机深入解析</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MjM5ODkzMzMwMQ==&mid=2650419793&idx=2&sn=50541c9e82190092175d03c292911cb7&chksm=becdb40b89ba3d1d0f35559926befc4fe5bacf6fada807a1b4ccf402a873d0e3c5ac65bc25d2&mpshare=1&scene=1&srcid=0113LFgMi7Jia5Ij9NRYbaEj&sharer_sharetime=1610501845379&sharer_shareid=8e5cd5a31fec74d3f98130f2997e99a8#rd">FM：推荐算法中的瑞士军刀</a></p>
 
           
         
@@ -479,7 +505,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E8%BE%85%E5%8A%A9%E6%A0%88-%E5%8C%85%E5%90%ABmin%E5%87%BD%E6%95%B0%E7%9A%84%E6%A0%88/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/ESMM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -498,7 +524,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E8%BE%85%E5%8A%A9%E6%A0%88-%E5%8C%85%E5%90%ABmin%E5%87%BD%E6%95%B0%E7%9A%84%E6%A0%88/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/RecommendSystem/Rank/ESMM/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -510,7 +536,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -550,9 +576,34 @@
       
         
           
-            <h2 id="包含min函数的栈"><a href="#包含min函数的栈" class="headerlink" title="包含min函数的栈"></a>包含min函数的栈</h2><p>构造一个辅助栈，储存所有<strong>非严格降序</strong>的元素，注意栈空的时候的一些边际情况。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MinStack</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        initialize your data structure here.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        self.stack = []</span><br><span class="line">        self.mini = []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">push</span>(<span class="params">self, x: <span class="built_in">int</span></span>) -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        self.stack.append(x)</span><br><span class="line">        <span class="keyword">if</span> self.mini:</span><br><span class="line">            top = self.mini[-<span class="number">1</span>]</span><br><span class="line">            <span class="keyword">if</span> x&lt;=top:</span><br><span class="line">                self.mini.append(x)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.mini.append(x)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pop</span>(<span class="params">self</span>) -&gt; <span class="keyword">None</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.stack <span class="keyword">and</span> self.mini:</span><br><span class="line">            <span class="keyword">if</span> self.stack[-<span class="number">1</span>] == self.mini[-<span class="number">1</span>]:</span><br><span class="line">                self.mini.pop()</span><br><span class="line">            <span class="keyword">return</span> self.stack.pop()</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">top</span>(<span class="params">self</span>) -&gt; int:</span></span><br><span class="line">        <span class="keyword">return</span> self.stack[-<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">min</span>(<span class="params">self</span>) -&gt; int:</span></span><br><span class="line">        <span class="keyword">if</span> self.mini:</span><br><span class="line">            <span class="keyword">return</span> self.mini[-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Your MinStack object will be instantiated and called as such:</span></span><br><span class="line"><span class="comment"># obj = MinStack()</span></span><br><span class="line"><span class="comment"># obj.push(x)</span></span><br><span class="line"><span class="comment"># obj.pop()</span></span><br><span class="line"><span class="comment"># param_3 = obj.top()</span></span><br><span class="line"><span class="comment"># param_4 = obj.min(</span></span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/">https://leetcode-cn.com/problems/bao-han-minhan-shu-de-zhan-lcof/</a></p>
+            <h1 id="Entire-Space-Multi-Task-Model"><a href="#Entire-Space-Multi-Task-Model" class="headerlink" title="Entire Space Multi-Task Model"></a>Entire Space Multi-Task Model</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在诸如信息检索、推荐系统、在线广告投放系统等工业级的应用中准确预估转化率（post-click conversion rate，CVR）是至关重要的。例如，在电商平台的推荐系统中，最大化场景商品交易总额（GMV）是平台的重要目标之一，而GMV可以拆解为流量×点击率×转化率×客单价，可见转化率是优化目标的重要因子；从用户体验的角度来说准确预估的转换率被用来平衡用户的点击偏好与购买偏好。</p>
+<p>阿里妈妈算法团队最近发表了一篇关于CVR预估的论文《Entire Space Multi-Task Model: An Eﬀective Approach for Estimating Post-Click Conversion Rate》，提出了一种新颖的CVR预估模型，称之为“完整空间多任务模型”（Entire Space Multi-Task Model，ESMM），下文简称为ESMM模型。ESMM模型创新地利用<strong>用户行为序列数据</strong>，在完整的样本数据空间同时学习点击率和转化率（post-view clickthrough&amp;conversion rate，CTCVR），解决了传统CVR预估模型难以克服的样本选择偏差（sample selection bias）和训练数据过于稀疏（data sparsity ）的问题。</p>
+<p>电商推荐情景下，用户行为遵循一定的顺序决策模式：$impression\rightarrow{}click\rightarrow{}conversion$。CVR模型旨在预估用户在观察到曝光商品进而点击到商品详情页之后购买此商品的概率，即$pCVR = p(conversion|click,impression)$。</p>
+<p>假设样本数据集$S={(x_i,y_i\rightarrow{}z_i)}|_{i=1}^N$，其中样本$(x,y\rightarrow{}z)$从域$X\times{}Y\times{}Z$中按照某种分布采样得到的，$X$是特征空间，$Y,Z$是标签空间。$x$是稀疏特征，$y,z$代表是否点击和是否购买。CVR模型的目标是预估条件概率pCVR ，与其相关的两个概率为点击率pCTR 和点击且转换率 pCTCVR ，它们之间的关系如下：pCTCVR = pCTR * pCVR<br>$$<br>p(z=1,y=1|x)=p(y=1|x)p(z=1|y=1,x)<br>$$</p>
+<p>传统的CVR预估任务通常采用类似于CTR预估的技术，比如最近很流行的深度学习模型。然而，有别于CTR预估任务，CVR预估任务面临一些特有的挑战：1) 样本选择偏差；2) 训练数据稀疏；3) 延迟反馈等。</p>
+<p><img src="http://guoshihao.site:8085/pic/ESSM0.png"></p>
+<p>延迟反馈的问题不在本文讨论的范围内，下面简单介绍一下样本选择偏差与训练数据稀疏的问题。</p>
+<h3 id="样本选择偏差"><a href="#样本选择偏差" class="headerlink" title="样本选择偏差"></a>样本选择偏差</h3><p>如图所示，最外面的大椭圆为整个样本空间$S$，其中有点击事件$y=1$的样本组成的集合为$S_c={(x_j,z_j|y_j=1)}|_{j=1}^M$，对应图中的阴影区域，传统的CVR模型就是用此集合中的样本来训练的，同时训练好的模型又需要在整个样本空间做预测推断。由于点击事件相对于展现事件来说要少很多，因此$S_c$只是样本空间$S$的一个很小的子集，从$S_c$上提取的特征相对于从$S$中提取的特征而言是有偏的，甚至是很不相同。从而，按这种方法构建的训练样本集相当于是从一个与真实分布不完全一致的分布中采样得到的，这一定程度上违背了机器学习算法之所以有效的前提：训练样本与测试样本必须独立地采样自同一个分布，即独立同分布的假设。总结一下，<strong>训练样本从整体样本空间的一个较小子集中提取，而训练得到的模型却需要对整个样本空间中的样本做推断预测的现象称之为样本选择偏差</strong>。样本选择偏差会伤害学到的模型的泛化性能。</p>
+<h3 id="训练数据稀疏"><a href="#训练数据稀疏" class="headerlink" title="训练数据稀疏"></a>训练数据稀疏</h3><p>推荐系统展现给用户的商品数量要远远大于被用户点击的商品数量，同时有点击行为的用户也仅仅只占所有用户的一小部分，$S_c$相对于样本空间$S$要小很多，这就是所谓的训练数据稀疏的问题，高度稀疏的训练数据使得模型的学习变得相当困难。</p>
+<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><p>ESMM模型借鉴了多任务学习的思路，引入了两个辅助的学习任务，分别用来拟合pCTR和pCTCVR，从而同时消除了上文提到的两个挑战。ESMM模型能够充分利用用户行为的顺序性模式，其模型架构如图所示。</p>
+<p><img src="http://guoshihao.site:8085/pic/ESSM1.png"></p>
+<p>整体来看，对于一个给定的展现，ESMM模型能够同时输出预估的pCTR、pCVR 和pCTCVR。它主要由两个子神经网络组成，左边的子网络用来拟合pCVR ，右边的子网络用来拟合pCTR。两个子网络的结构是完全相同的，这里把子网络命名为BASE模型。两个子网络的输出结果相乘之后即得到pCTCVR，并作为整个任务的输出。</p>
+<h3 id="模型特点"><a href="#模型特点" class="headerlink" title="模型特点"></a>模型特点</h3><p>ESMM模型有两个主要的特点，使其区别于传统的CVR预估模型，分别阐述如下。</p>
+<ul>
+<li>在整个样本空间建模。由下面的等式可以看出，pCVR 可以在先估计出pCTR 和pCTCVR之后推导出来。从原理上来说，相当于分别单独训练两个模型拟合出pCTR 和pCTCVR，再通过pCTCVR 除以pCTR 得到最终的拟合目标pCVR 。<strong>但是，由于pCTR 通常很小，除以一个很小的浮点数容易引起数组不稳定问题（计算内存溢出）。所以ESMM模型采用了乘法的形式，而没有采用除法形式。</strong>pCTR 和pCTCVR 是ESMM模型需要估计的两个主要因子，而且是在整个样本空间上建模得到的，pCVR 只是一个中间变量。由此可见，ESMM模型是在整个样本空间建模，而不像传统CVR预估模型那样只在点击样本空间建模。</li>
+<li>共享特征表示。ESMM模型借鉴迁移学习的思路，在两个子网络的embedding层共享embedding向量（特征表示）词典。网络的embedding层把大规模稀疏的输入数据映射到低维的表示向量，该层的参数占了整个网络参数的绝大部分，需要大量的训练样本才能充分学习得到。由于CTR任务的训练样本量要大大超过CVR任务的训练样本量，ESMM模型中特征表示共享的机制能够使得CVR子任务也能够从只有展现没有点击的样本中学习，从而能够极大地有利于缓解训练数据稀疏性问题。</li>
+</ul>
+<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p>ESMM模型的损失函数由两部分组成，对应于pCTR 和pCTCVR 两个子任务，其形式如下：<br>$$<br>L(\theta_{cvr},\theta_{ctr})=\sum_{i=1}^Nl(y_i,f(x_i;\theta_{ctr}))+\sum_{i=1}^Nl(y_i&amp;z_i,f(x_i;\theta_{ctr})\times f(x_i;\theta_{cvr}))<br>$$<br>其中，$\theta_{ctr}$和$\theta_{cvr}$分别是CTR网络和CVR网络的参数，$l(·)$是交叉熵损失函数。</p>
+<p>在CTR任务中，有点击行为的展现事件构成的样本标记为正样本，没有点击行为发生的展现事件标记为负样本；在CTCVR任务中，同时有点击和购买行为的展现事件标记为正样本，否则标记为负样本。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>综上所述，ESMM模型是一个新颖的CVR预估方法，其首创了利用用户行为序列数据在完整样本空间建模，避免了传统CVR模型经常遭遇的样本选择偏差和训练数据稀疏的问题，取得了显著的效果。另一方面，ESMM模型的贡献在于其提出的利用学习CTR和CTCVR的辅助任务，迂回地学习CVR 的思路。ESMM模型中的BASE子网络可以替换为任意的学习模型，因此ESMM的框架可以非常容易地和其他学习模型集成，从而吸收其他学习模型的优势，进一步提升学习效果，想象空间巨大。</p>
+<p>引用论文作者之一的描述：</p>
+<blockquote>
+<p>据我所知这个工作在这个领域是最早的一批，但不唯一。今天很多团队都吸收了MTL的思路来进行建模优化，不过大部分都集中在传统的MTL体系，如研究怎么对参数进行共享、多个Loss之间怎么加权或者自动学习、哪些Task可以用来联合学习等等。ESMM模型的特别之处在于我们额外<strong>关注了任务的Label域信息，</strong>通过展现&gt;点击&gt;购买所构成的行为链，巧妙地构建了multi-target概率连乘通路<strong>。</strong>传统MTL中多个task大都是隐式地共享信息、任务本身独立建模，ESMM细腻地捕捉了契合领域问题的任务间显式关系，<strong>从feature到label全面利用起来</strong>。这个角度对互联网行为建模是一个较有效的模式，后续我们还会有进一步工作。</p>
+</blockquote>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1804.07931">Entire Space Multi-Task Model: An Effective Approach for Estimating Post-Click Conversion Rate</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/37562283">知乎：CVR预估的新思路：完整空间多任务模型</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/57481330">知乎：阿里CVR预估模型之ESMM</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/54822778">镶嵌在互联网技术上的明珠：漫谈深度学习时代点击率预估技术进展</a></p>
 
           
         
@@ -601,7 +652,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E8%B4%AA%E5%BF%83-%E6%97%A0%E9%87%8D%E5%8F%A0%E5%8C%BA%E9%97%B4/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/DNNforYouTube/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -620,7 +671,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E8%B4%AA%E5%BF%83-%E6%97%A0%E9%87%8D%E5%8F%A0%E5%8C%BA%E9%97%B4/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/RecommendSystem/Rank/DNNforYouTube/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -632,7 +683,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -672,13 +723,110 @@
       
         
           
-            <h2 id="无重叠区间"><a href="#无重叠区间" class="headerlink" title="无重叠区间"></a>无重叠区间</h2><p>给定一个区间的集合，找到需要移除区间的最小数量，使剩余区间互不重叠。</p>
-<p>注意:</p>
-<p>可以认为区间的终点总是大于它的起点。<br>区间 [1,2] 和 [2,3] 的边界相互“接触”，但没有相互重叠。</p>
-<p><strong>思路：</strong>按开始时间排序，然后倒着遍历，如果左边的结束时间&gt;右边的开始时间，则需要删掉当前左边这个。否则跳过，比较下一个。</p>
-<p>为什么可以删掉左边这个呢，因为因为是按开始时间排序的，所以右边的开始时间一定不小于左边的，保留他有利于后面有更宽泛的选择。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">eraseOverlapIntervals</span>(<span class="params">self, intervals: List[List[<span class="built_in">int</span>]]</span>) -&gt; int:</span></span><br><span class="line">        intervals.sort(key = <span class="keyword">lambda</span> x:x[<span class="number">0</span>])</span><br><span class="line">        n = <span class="built_in">len</span>(intervals)</span><br><span class="line">        ans = <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> n == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        cur = intervals[n-<span class="number">1</span>][<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n-<span class="number">2</span>,-<span class="number">1</span>,-<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> intervals[i][<span class="number">1</span>]&gt;cur:</span><br><span class="line">                ans +=<span class="number">1</span> </span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                cur = intervals[i][<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">return</span> ans</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/non-overlapping-intervals/">https://leetcode-cn.com/problems/non-overlapping-intervals/</a></p>
+            <h1 id="Deep-Neural-Network-for-YouTube-Recommendation"><a href="#Deep-Neural-Network-for-YouTube-Recommendation" class="headerlink" title="Deep Neural Network for YouTube Recommendation"></a>Deep Neural Network for YouTube Recommendation</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在推荐系统领域，特别是YouTube的所在视频推荐领域，主要面临三个挑战：</p>
+<ul>
+<li><strong>规模大</strong>：用户和视频的数量都很大，只能适应小规模数据集的算法就不考虑了。</li>
+<li><strong>更新快</strong>：youtube视频更新频率很高，每秒有小时级别的视频上传，需要在新发布视频和已有存量视频间进行balance。更新快（实时性）的另一方面的体现是用户实时行为切换很快，模型需要很好的追踪用户的实时行为。</li>
+<li><strong>噪音</strong>：噪音主要体现在用户的历史行为往往是稀疏的并且是不完整的，并且没有一个明确的ground truth的满意度signal，我们面对的都是noisy implicit feedback signals。噪音另一个方面就是视频本身很多数据都是非结构化的。这两点对算法的鲁棒性提出了很高的挑战。</li>
+</ul>
+<p>之所以要在推荐系统中应用DNN解决问题，一个重要原因是google内部在机器学习问题上的通用solution的趋势正转移到Deep learning，系统实际部署在基于tensorflow的Google Brain上。</p>
+<h2 id="系统概览"><a href="#系统概览" class="headerlink" title="系统概览"></a>系统概览</h2><p>整个推荐系统分为Candidate Generation和Ranking两个阶段。Candidate Generation阶段通过i2i/u2i/u2u/user profile等方式“粗糙”的召回候选商品，Candidate Generation阶段视频的数量是百级别了；Ranking阶段对Candidate Generation后的视频采用更精细的特征计算user-item之间的排序分，作为最终输出推荐结果的依据。</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube0.jpg"></p>
+<h2 id="Candidate-Generation"><a href="#Candidate-Generation" class="headerlink" title="Candidate Generation"></a>Candidate Generation</h2><h3 id="问题建模"><a href="#问题建模" class="headerlink" title="问题建模"></a>问题建模</h3><p>我们把推荐问题建模成一个“超大规模多分类”问题。即在时刻$t$，为用户$U$（上下文信息$C$）在视频库$V$中精准的预测出视频$i$的类别（每个具体的视频视为一个类别，$i$即为一个类别），用数学公式表达如下：<br>$$<br>P(w_t=i|U,C)=\frac{e^{v_iu}}{\sum_{j\in{}V}{e^{v_ju}}}<br>$$<br>很显然上式为一个softmax多分类器的形式。向量$u\in{}\mathbb{R}^N$代表&lt;user, context&gt;信息的高维embedding，而向量$v_j\in{}\mathbb{R}^N$代表视频$j$的高维embedding。</p>
+<p>为了有效地训练这样一个有数百万类的模型，实际训练采用的是服从背景分布的<strong>Negative Sample</strong>，然后通过<strong>重要性加权</strong>来矫正这个抽样，类似于word2vec的Skip-Gram方法，采用交叉熵损失函数。文章也才用过分层Softmax的方法，但是精度不如Negative Sample。在serving阶段，则采用的<strong>基于点积空间的最近邻搜索算法</strong>，abtest结果对于最近邻算法的选择不敏感。</p>
+<p>知乎理解：有一条样本，label=item_18，如果分类总共有100个，训练到这条样本的时候，由于最后是softmax，模型更新参数使item_18的softmax输出偏向1，剩余99个item的softmax输出偏向0。负采样指的是当总分类达到十万，正常softmax需要使得剩余99999个item的softmax输出偏向0，这样更新量很大，所以采用sample softmax，在更新这次样本时指定全集只有5001，屏蔽了剩余的94999个item，即负采样数目=5000，这样这次更新只会使得当前item输出偏向1，剩余5000个item的softmax输出偏向0。这个和word2vec的negative sampling是一样的。</p>
+<h3 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h3><p>整个模型架构是包含三个隐层的DNN结构。输入是用户浏览历史、搜索历史、人口统计学信息和其余上下文信息concat成的输入向量；输出分线上和离线训练两个部分。</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube1.jpg"></p>
+<h3 id="主要特征"><a href="#主要特征" class="headerlink" title="主要特征"></a>主要特征</h3><p><strong>用户浏览历史</strong>：</p>
+<p>受CBOW模型启发，每个视频都表示为一个高维embedding，并将其输入神经网络当中。用户的观看历史记录有一个变长的稀疏视频ID序列表示，映射到稠密的向量表示，最终通过加权平均得到固定维度的watch vector。</p>
+<p><strong>历史搜索query</strong>：</p>
+<p>把历史搜索的query分词后的token的embedding向量进行加权平均，能够反映用户的整体搜索历史状态。</p>
+<p><strong>人口统计学信息</strong>：</p>
+<p>性别、年龄、地域等</p>
+<p><strong>其他上下文信息</strong>：</p>
+<p>设备、登录状态等</p>
+<p><strong>“Example Age” （样本时间）特征</strong>：</p>
+<p>视频网络的时效性是很重要的，每秒YouTube上都有大量新视频被上传，而对用户来讲，哪怕牺牲相关性代价，用户还是更倾向于更新的视频。当然我们不会单纯的因为一个视频新就直接推荐给用户。</p>
+<p>因为机器学习系统在训练阶段都是利用过去的行为预估未来，因此通常对过去的行为有个隐式的bias。视频网站视频的分布是高度非静态（non-stationary）的，但我们的推荐系统产生的视频集合在视频的分布，基本上反映的是几周的训练时间段的平均的观看喜好的视频。因此我们把样本的 “age” 作为一个feature加入模型训练中。从下图可以很清楚的看出，加入“example age” feature后和经验分布更为match。</p>
+<p><strong>知乎理解：</strong>Example Age其实是训练区间的最后一刻减去日志log产生的时间，在eval里置为0。其实我既试过paper的normalize方法（平方开方），也试过离散化后加embedding，结果发现离散化加embedding效果更好。这个特征的用处按我理解可以这样描述：比如某个视频点击集中在7天前（比如7天前点击率10%），训练前这个时间点点击率比较低（训练前10分钟点击率3%），模型学出来之后预测的时候把Example Age置为0去预测，预测出这个视频点击率就会更接近3%。同理如果某视频以前不火，训练前突然火了，预测的时候Example Age置为0就可以预测到更高的点击率。如果不带Example Age，模型学出来的该视频点击率更接近于这个训练区间下这个视频平均点击率。</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube2.jpg"></p>
+<h3 id="标签和样本选择"><a href="#标签和样本选择" class="headerlink" title="标签和样本选择"></a>标签和样本选择</h3><p>在有监督学习问题中，最重要的选择是label了，因为label决定了你做什么，决定了你的上限，而feature和model都是在逼近label。对于标签和样本选择我们的几个设计如下：</p>
+<ul>
+<li><strong>使用更广的数据源</strong>：不仅仅使用推荐场景的数据进行训练，其他场景比如搜索等的数据也要用到，这样也能为推荐场景提供一些explore。</li>
+<li><strong>为每个用户生成固定数量训练样本</strong>：我们在实际中发现的一个practical lessons，如果为每个用户固定样本数量上限，平等的对待每个用户，避免loss被少数active用户domanate，能明显提升线上效果。</li>
+<li><strong>抛弃序列信息</strong>：我们在实现时尝试的是去掉序列信息，对过去观看视频/历史搜索query的embedding向量进行加权平均。这点其实违反直觉，YouTube的落地是预测下一个观看的视频，如果用户刚刚搜索了一个关键词，将其作为主页推荐效果会很差，抛弃序列信息来表示搜索查询，可以让模型不再知道搜索标签的来源。</li>
+<li><strong>不对称的共同浏览（asymmetric co-watch）问题</strong>：所谓asymmetric co-watch值的是用户在浏览视频时候，往往都是序列式的，开始看一些比较流行的，逐渐找到细分的视频。下图所示图(a)是hled-out方式，利用<strong>上下文信息</strong>预估中间的一个视频；图(b)是predicting next watch的方式，则是利用<strong>上文信息</strong>，预估下一次浏览的视频。我们发现图(b)的方式在线上A/B test中表现更佳。而实际上，传统的协同过滤类的算法，都是隐含的采用图(a)的held-out方式，忽略了不对称的浏览模式。</li>
+</ul>
+<h3 id="不同网络深度和特征的实验"><a href="#不同网络深度和特征的实验" class="headerlink" title="不同网络深度和特征的实验"></a>不同网络深度和特征的实验</h3><p>简单介绍下我们的网络构建过程，采用的经典的“tower”模式搭建网络，所有的视频和search token都embedded到256维的向量中，开始input层直接全连接到256维的softmax层，依次增加网络深度。</p>
+<p>• Depth 0: 简单线性层 256</p>
+<p>• Depth 1: 256 ReLU</p>
+<p>• Depth 2: 512 ReLU → 256 ReLU</p>
+<p>• Depth 3: 1024 ReLU → 512 ReLU → 256 ReLU</p>
+<p>• Depth 4: 2048 ReLU → 1024 ReLU → 512 ReLU → 256 ReLU</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube4.jpg"></p>
+<p>可以很明显看出，增加了观看历史之外的特征很明显的提升了预测得准确率；从网络深度看，随着网络深度加大，预测准确率在提升，但继续增加第四层网络已经收益不大了。</p>
+<h2 id="Ranking"><a href="#Ranking" class="headerlink" title="Ranking"></a>Ranking</h2><p>Ranking阶段的最重要任务就是精准的预估用户对视频的喜好程度。不同于Candidate Generation阶段面临的是百万级的候选视频集，Ranking阶段面对的只是百级别的商品集，因此我们可以使用更多更精细的feature来刻画视频（item）以及用户与视频（user-item）的关系。比如用户可能很喜欢某个视频，但如果list页的用的“缩略图”选择不当，用户也许不会点击，等等。此外，Candidate Generation阶段的来源往往很多，没法直接比较。Ranking阶段另一个关键的作用是能够把不同来源的数据进行有效的ensemble。在目标的设定方面，单纯CTR指标是有迷惑性的，有些靠关键词吸引用户高点击的视频未必能够被播放。因此设定的目标基本与<strong>期望的观看时长</strong>相关，具体的目标调整则根据线上的A/B进行调整。</p>
+<h3 id="模型架构-1"><a href="#模型架构-1" class="headerlink" title="模型架构"></a>模型架构</h3><p>Ranking模型的架构和Candidate Generation相似，在最后一层有区别。</p>
+<p><img src="http://guoshihao.site:8085/pic/DNNforYouTube5.png"></p>
+<h3 id="特征表达"><a href="#特征表达" class="headerlink" title="特征表达"></a>特征表达</h3><p><strong>Feature Engineering：</strong></p>
+<p>尽管深度学习在图像、语音和NLP等场景都能实现end-to-end的训练，没有了人工特征工程工作。然而在搜索和推荐场景，我们的很难把原始数据直接作为DNN的输入，特征工程仍然很重要。而特征工程中最难的是如何建模用户时序行为（<strong>temporal sequence of user actions</strong>），并且关联这些行为和要rank的item。</p>
+<p>我们发现<strong>最重要的Signal是描述用户与商品本身或相似商品之间交互的Signal</strong>，这与Facebook在14年提出LR+GBDT模型的paper中得到的结论是一致的。比如我们要度量用户对视频的喜欢，可以考虑用户与视频所在频道间的关系：</p>
+<ul>
+<li><strong>数量特征</strong>：浏览该频道的次数？</li>
+<li><strong>时间特征</strong>：比如最近一次浏览该频道距离现在的时间？</li>
+</ul>
+<p>这两个连续特征的最大好处是具备非常强的泛化能力。另外除了这两个偏正向的特征，用户对于视频所在频道的一些PV但不点击的行为，即<strong>负反馈Signal同样非常重要</strong>。另外，我们还发现，把Matching阶段的信息传播到Ranking阶段同样能很好的提升效果，比如推荐来源和所在来源的分数。</p>
+<p><strong>Embedding Categorical Features</strong>：</p>
+<p>DNN更适合处理连续特征，因此稀疏的特别是高基数空间的离散特征需要embedding到稠密的向量中。每个维度（比如query/user_id）都有独立的embedding空间，一般来说空间的维度基本与log(去重后值得数量)相当。实际并非为所有的id进行embedding，比如视频id，只需要按照点击排序，选择top N视频进行embedding，其余置为0向量。而对于像“过去点击的视频”这种multivalent特征，与Matching阶段的处理相同，进行加权平均即可。</p>
+<p>另外一个值得注意的是，同维度不同feature采用的相同ID的embedding是共享的（比如“过去浏览的视频id” “seed视频id”），这样可以大大加速训练，但显然输入层仍要分别填充。</p>
+<p><strong>Normalizing Continuous Features</strong>：</p>
+<p>众所周知，NN对输入特征的尺度和分布都是非常敏感的，实际上基本上除了Tree-Based的模型（比如GBDT/RF），机器学习的大多算法都如此。我们发现归一化方法对收敛很关键，推荐一种排序分位归一到[0,1]区间的方法，即$\widetilde{x}=\int^x_{-\infty}df$，累计分位点。除此之外，我们还把归一化后的$\widetilde{x},\sqrt{\widetilde{x}},\widetilde{x}^2$作为网络输入，以期能使网络能够更容易得到特征的次线性（sub-linear）和（super-linear）超线性函数。</p>
+<h3 id="建模期望观看时长"><a href="#建模期望观看时长" class="headerlink" title="建模期望观看时长"></a>建模期望观看时长</h3><p>我们的目标是预测<strong>期望观看时长</strong>。有点击的为正样本，有PV无点击的为负样本，正样本需要根据观看时长进行加权。因此，我们训练阶段网络最后一层用的是 weighted logistic regression。</p>
+<p>回想LR的推导，$Odds=\frac{p}{1-p}$，LR是用线性变化拟合Odds的对数，即$ln(Odds)=\theta^Tx$</p>
+<p>正样本的权重为观看时长$T_i$，负样本权重为1。Weighted LR的特点是，正样本权重的加入会让正样本发生的几率变成原来的$T_i$倍，由于p很小，也就是说样本$i$的$Odds$变成了下面的式子：<br>$$<br>Odds(i)=\frac{T_ip}{1-T_ip}\approx T_ip=E(T_i)<br>$$<br>因此在线上serving的inference阶段，我们采用$e^{\theta^Tx}$作为预估分数，即使用Odds作为分数，就是近似的估计期望观看时长。</p>
+<h3 id="不同隐层的实验"><a href="#不同隐层的实验" class="headerlink" title="不同隐层的实验"></a>不同隐层的实验</h3><p>下图的table是离线利用hold-out一天数据在不同NN网络结构下的结果。如果用户对模型预估高分的反而没有观看，我们认为是预测错误的观看时长。weighted, per-user loss就是预测错误观看时长占总观看时长的比例。</p>
+<p>我们对网络结构中隐层的宽度和深度方面都做了测试，从下图结果看增加隐层网络宽度和深度都能提升模型效果。而对于1024–&gt;512–&gt;256这个网络，测试的不包含归一化后根号和方式的版本，loss增加了0.2%。而如果把weighted LR替换成LR，效果下降达到4.1%。</p>
+<table>
+<thead>
+<tr>
+<th>Hidden layers</th>
+<th>weighted,per-user loss</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>None</td>
+<td>41.6%</td>
+</tr>
+<tr>
+<td>256 ReLU</td>
+<td>36.9%</td>
+</tr>
+<tr>
+<td>512 ReLU</td>
+<td>36.7%</td>
+</tr>
+<tr>
+<td>1024 ReLU</td>
+<td>35.8%</td>
+</tr>
+<tr>
+<td>512 ReLU$\rightarrow$256 ReLU</td>
+<td>35.2%</td>
+</tr>
+<tr>
+<td>1024 ReLU$\rightarrow$512 ReLU</td>
+<td>34.7%</td>
+</tr>
+<tr>
+<td>1024 ReLU$\rightarrow$512 ReLU$\rightarrow$256 ReLU</td>
+<td>34.6%</td>
+</tr>
+</tbody></table>
+<p>[1] <a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.1145/2959100.2959190">Deep Neural Networks for YouTube Recommendations</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25343518">知乎：Deep Neural Network for YouTube Recommendation论文精读</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/52504407">知乎：YouTube深度学习推荐系统的十大工程问题</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="http://www.shataowei.com/2018/06/26/%E5%85%B3%E4%BA%8EDeep-Neural-Networks-for-YouTube-Recommendations%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83%E5%92%8C%E5%AE%9E%E7%8E%B0/">关于’Deep Neural Networks for YouTube Recommendations’的一些思考和实现</a></p>
+<p>[5] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/61827629">揭开YouTube深度推荐系统模型Serving之谜</a></p>
 
           
         
@@ -727,7 +875,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E8%B4%AA%E5%BF%83-%E5%90%88%E5%B9%B6%E5%8C%BA%E9%97%B4/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/DIN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -746,7 +894,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E8%B4%AA%E5%BF%83-%E5%90%88%E5%B9%B6%E5%8C%BA%E9%97%B4/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/RecommendSystem/Rank/DIN/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -758,7 +906,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -798,15 +946,138 @@
       
         
           
-            <h2 id="合并区间"><a href="#合并区间" class="headerlink" title="合并区间"></a>合并区间</h2><p>给出一个区间的集合，请合并所有重叠的区间。</p>
-<p>示例 1:</p>
-<p>输入: intervals = [[1,3],[2,6],[8,10],[15,18]]<br>输出: [[1,6],[8,10],[15,18]]<br>解释: 区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].<br>示例 2:</p>
-<p>输入: intervals = [[1,4],[4,5]]<br>输出: [[1,5]]<br>解释: 区间 [1,4] 和 [4,5] 可被视为重叠区间。</p>
-<p><strong>思路：</strong>先按照区间的开始端点升序排列，然后遍历区间，如果当前区间的左端点&gt;结果数组中最后一个区间的右端点，就加入结果数组；否则，就将结果数组中最后一个区间的右端点扩充为两者右端点较大的那一个。</p>
-<p><strong>证明：</strong>如果我们按照区间的左端点排序，那么在排完序的列表中，可以合并的区间一定是连续的。</p>
-<p>对于不存在i，j不能合并，i，k不能合并，i，k可以合并的情况，反证法。<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/merge-intervals/solution/he-bing-qu-jian-by-leetcode-solution/">看题解吧</a></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">self, intervals: List[List[<span class="built_in">int</span>]]</span>) -&gt; List[List[int]]:</span></span><br><span class="line">        intervals.sort(key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line">        res = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(intervals)):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> res <span class="keyword">or</span> intervals[i][<span class="number">0</span>] &gt; res[-<span class="number">1</span>][<span class="number">1</span>]:</span><br><span class="line">                res.append(intervals[i])</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res[-<span class="number">1</span>][<span class="number">1</span>] = <span class="built_in">max</span>(intervals[i][<span class="number">1</span>],res[-<span class="number">1</span>][<span class="number">1</span>])</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/merge-intervals/">https://leetcode-cn.com/problems/merge-intervals/</a></p>
+            <h1 id="Deep-Interest-Network-for-Click-Through-Rate-Prediction"><a href="#Deep-Interest-Network-for-Click-Through-Rate-Prediction" class="headerlink" title="Deep Interest Network for Click-Through Rate Prediction"></a>Deep Interest Network for Click-Through Rate Prediction</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Deep Interest Network（DIN）是阿里妈妈精准定向检索及基础算法团队在2017年6月提出的。其针对电子商务领域（e-commerce industry）的CTR预估，重点在于充分利用/挖掘用户历史行为数据中的信息。</p>
+<p>DIN通过引入attention机制，针对不同的广告构造不同的用户抽象表示，从而实现了在数据维度一定的情况下，更精准地捕捉用户当前的兴趣。</p>
+<p>DIN的核心思想是 ：用户的兴趣是多元化的（<strong>diversity</strong>），并且对于特定的广告，用户不同的兴趣会产生不同的影响（<strong>local activation</strong>）。</p>
+<p><strong>Diversity：</strong>用户在访问电商网站时会对多种商品都感兴趣。也就是用户的兴趣非常的广泛。比如一个年轻的母亲，从她的历史行为中，我们可以看到她的兴趣非常广泛：羊毛衫、手提袋、耳环、童装、运动装等等。</p>
+<p><strong>Local Activation：</strong>用户是否会点击推荐给他的商品，仅仅取决于历史行为数据中的一小部分，而不是全部。历史行为中部分数据主导是否会点击候选广告。比如一个爱游泳的人，他之前购买过travel book、ice cream、potato chips、swimming cap。当前给他推荐的商品（或者说是广告Ad）是goggle（护目镜）。那么他是否会点击这次广告，跟他之前是否购买过薯片、书籍、冰激凌一丁点关系也没有！而是与他之前购买过游泳帽有关系。也就是说在这一次CTR预估中，部分历史数据（swimming cap）起了决定作用，而其他的基本没有作用。</p>
+<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><h3 id="base-model"><a href="#base-model" class="headerlink" title="base model"></a>base model</h3><h4 id="base-model结构"><a href="#base-model结构" class="headerlink" title="base model结构"></a>base model结构</h4><p>DNN模型大多遵从 <strong>Embedding + MLP</strong>这一基础网络架构，即将原始高维的不同的离散特征映射为固定长度的低维embedding向量，并将embedding向量作为多个全连接层的输入，拟合高阶的非线性关系，最后通过Sigmoid等手段将输出值归一到0~1，表示点击概率。相比于传统的LR、GBDT、FM等模型，这类DNN的模型能减少大量的人工构造特征过程，并且能学习特征之间的非线性关系。通常的流程是Sparse Features -&gt; Embedding Vector -&gt; pooling layer -&gt; MLPs -&gt; Sigmoid -&gt; Output。下图是base model的模型结构：</p>
+<p><img src="http://guoshihao.site:8085/pic/DIN0.jpg"></p>
+<p>红蓝粉三色节点分别表示商品 ID（Goods ID）, 店铺 ID（Shop ID）, 类目 ID（Cate ID）三种稀疏特征, 其他的输入特征, 使用白色节点表示，比如左边的用户特征, 比如用户 ID; 还有右边的上下文特征, 比如广告位之类的特征。 注意 Goods 1 ~ Goods N 用来描述用户的历史行为。候选广告 Candidate Ad 本身也是商品, 也具有 Goods / Shop / Cate ID 三种特征。</p>
+<ul>
+<li><p>第一模块：特征表示。</p>
+<ul>
+<li><p>可将特征大致分为四类：user profile、user behavior、ad 以及 context 部分。</p>
+</li>
+<li><p>将广告设为目标。</p>
+</li>
+<li><p>每一类特征包含多个field，用户信息包含性别、年龄等等；用户行为包含用户访问过的物品编号；广告包含广告id，商店id等；上下文包含设计类型id，时间等等。</p>
+</li>
+<li><p>有的特征可以被编码成one-hot表示，例如女性可以被编码成[0,1]。有的特征可以进行 multi-hot 编码，与 one-hot 编码不同，multi-hot 编码中，一个向量可能存在多个 1。</p>
+</li>
+<li><p>在CTR序列模型中，值得注意的是每个字段都包含一个行为列表，每个行为对应一个one-hot向量。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://guoshihao.site:8085/pic/DIN1.jpg"></p>
+<ul>
+<li><p>第二模块：嵌入层。</p>
+<ul>
+<li>学习特征的低维向量表示，将维数较大的稀疏特征矩阵转换成低维稠密特征矩阵。</li>
+<li>每一个field都有一个独立的 embedding matrix。</li>
+<li>值得注意的是，由于每个用户的历史行为数据各不相同，因此 e 的列数是不确定的。相应地也就不能直接与其他field的嵌入向量首尾相接 作为MLP层的输入。</li>
+</ul>
+</li>
+<li><p>第三模块：pooling层。</p>
+<ul>
+<li>由于不同的用户有不同个数的行为数据，导致embedding矩阵的向量大小不一致，而全连接层只能处理固定维度的数据，因此利用Pooling Layer得到一个固定长度的向量。</li>
+<li>本层对 embedding 进行sum pooling，即将一个类别的embedding向量输入进池化操作，转化为一个固定长度的向量，解决维度不定的问题。</li>
+</ul>
+</li>
+<li><p>第四模块：链接层。</p>
+<ul>
+<li>经过embedding layer和pooling layer后，原始稀疏特征被转换成多个固定长度的用户兴趣的抽象表示向量。</li>
+<li>然后利用concat layer聚合抽象表示向量，输出该用户兴趣的唯一抽象表示向量；作为 MLP 层的输入 。</li>
+</ul>
+</li>
+<li><p>第五模块：MLP 层，将concat layer输出的抽象表示向量作为MLP的输入，自动学习数据之间的高阶交叉特征。</p>
+</li>
+<li><p>损失函数 ：基于深度学习的CTR模型广泛使用的损失函数是 负对数似然函数（the negative log-likelihood function）Loglos，使用标签作为目标项来监督整体的预测。</p>
+</li>
+</ul>
+<h4 id="base-model局限性"><a href="#base-model局限性" class="headerlink" title="base model局限性"></a>base model局限性</h4><ul>
+<li>表示用户的兴趣多样性有限制（这是最大的瓶颈） 。在对用户历史行为数据进行处理时, 每个用户的历史点击个数是不相等的, 包含了许多兴趣信息，如何对用户多种多样的兴趣建模？我们要把它们编码成一个固定长的向量（这个向量就是用户表示，是用户兴趣的代表），需要做pooling （sum or average）, 会损失信息。比如：<ul>
+<li>K维向量，最多只能表达K个独立的兴趣，而用户的兴趣可能不止K；</li>
+<li>K的大小会对计算量产生明显影响，一般用大的K效果会更好，即扩展向量的维度，但这样会增加学习的参数和在有限的数据中有过拟合的风险；</li>
+</ul>
+</li>
+<li>没有考虑用户与广告之间的关系。在电子商务领域中，用户的历史行为数据（User Behavior Data）中包含大量的用户兴趣信息，之前的研究并没有针对Behavior data<strong>特殊的结构（Diversity + Local Activation）</strong>进行建模。比如 对于同一个用户, 如果候选广告 （Candidate Ad） 发生了变化, 用户的兴趣却依然是同一个向量来表达, 显然这限制了模型的表达能力, 毕竟用户的兴趣是丰富的/变化的。</li>
+<li>忽略隐式特征的挖掘和表示。DNN模型直接将用户的行为视作用户的兴趣。行为是兴趣的载体，能反映兴趣，但若直接用行为表示兴趣则略有不妥。因为，行为是序列化产生的，如果像大部分现有的模型那样直接采用行为即兴趣的做法，会忽略行为之间的依赖关系。此外，当前时刻的兴趣往往直接导致了下一行为的发生。</li>
+<li>忽略兴趣的变化。如之前所讲，用户的兴趣是不断变化的。例如用户对衣服的喜好，会随季节、时尚风潮以及个人品味的变化而变化，呈现一种连续的变迁趋势。但在淘宝平台中，用户的兴趣是丰富多样的，且每个兴趣的演变基本互不影响。此外，影响最终行为的仅仅是与目标商品相关的兴趣。</li>
+<li>不必将某个用户所有的兴趣【用户的历史购买记录】全部压缩到向量中，因为只有用户部分的兴趣会影响当前行为（对候选广告点击或不点击）。例如，一位女游泳运动员会点击推荐的护目镜，这主要是由于购买了泳衣而不是上周购物清单中的鞋子。</li>
+</ul>
+<h3 id="DIN"><a href="#DIN" class="headerlink" title="DIN"></a>DIN</h3><p>针对DNN模型的问题，阿里提出了DIN模型。其核心思想：用户的兴趣是多元化的（<strong>diversity</strong>），并且对于特定的广告，用户不同的兴趣会产生不同的影响（<strong>local activation</strong>）。DIN同时对Diversity和Local Activation进行建模。</p>
+<p>DIN 不会通过使用同一向量来表达所有用户的不同兴趣，而是通过考虑<strong>历史行为的相关性</strong>来自适应地计算用户兴趣的表示向量（对于给定的广告）。 <strong>该表示向量随不同广告而变化</strong>。DIN 通过考虑「给定的候选广告」和「用户的历史行为」的相关性，来计算用户兴趣的表示向量。具体来说就是通过引入局部激活单元，通过软搜索历史行为的相关部分来关注相关的用户兴趣，并采用加权和来获得有关候选广告的用户兴趣的表示。与候选广告相关性较高的行为会获得较高的激活权重，并支配着用户兴趣。该表示向量在不同广告上有所不同，大大提高了模型的表达能力。</p>
+<h4 id="DIN模型结构"><a href="#DIN模型结构" class="headerlink" title="DIN模型结构"></a>DIN模型结构</h4><p><img src="http://guoshihao.site:8085/pic/DIN2.jpg"></p>
+<h2 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h2><h3 id="特征分类"><a href="#特征分类" class="headerlink" title="特征分类"></a>特征分类</h3><p>同样可将特征大致分为四类：user profile、user behavior、ad 以及 context 部分。有一些特征域是单值特征，不同的特征值之间是互斥的，例如性别只可能属于男或者女，可以转化为one-hot表示；有一些特征域是多值离散特征，例如用户行为特征，用户可能点击过多个商品，构成一个商品点击序列，只能用multi-hot编码表示。与 one-hot 编码不同，multi-hot 编码中，一个向量可能存在多个 1。</p>
+<h3 id="特征处理"><a href="#特征处理" class="headerlink" title="特征处理"></a>特征处理</h3><p>DNN 并<strong>没有进行特征组合/交叉特征</strong>。而是通过DNN去学习特征间的交互信息。对于单值特征处理比较简单，对于多值特征的处理稍微麻烦些。多值特征导致了每个用户的样本长度都是不同的。如何解决这个问题？通过 <code>Embedding -&gt; Pooling + Attention</code>。</p>
+<h2 id="embedding"><a href="#embedding" class="headerlink" title="embedding"></a>embedding</h2><ul>
+<li>深度学习在推荐系统中的应用，比如各种NN，各种FM 都是以embedding为基础的；</li>
+<li>高维、稀疏的categorical/id类特征是推荐系统中的一等公民；</li>
+<li>在Embedding层中，每一个特征域都对应着一个Embedding矩阵；</li>
+<li>embedding的作用是将原来高维、稀疏的categorical/id类特征的“精确匹配”，变为向量之间的“模糊查找”，从而提高了可扩展性；</li>
+<li>推荐系统中的Embedding与NLP中的Embedding也有不同。<ul>
+<li>NLP中，一句话的一个位置上只有一个词，所以Embedding往往变成了：从Embedding矩阵抽取与词对应的行上的行向量；</li>
+<li>推荐系统中，一个Field下往往有多个Feature，Embedding是将多个Feature Embedding合并成一个向量，即所谓的<strong>Pooling</strong>。比如某个App Field下的Feature有”微信:0.9，微博:0.5，淘宝:0.3”，所以得到<code>Embedding = 0.9 * 微信向量 + 0.5 * 微博向量 + 0.3 * 淘宝向量</code>；</li>
+</ul>
+</li>
+</ul>
+<h2 id="pooling"><a href="#pooling" class="headerlink" title="pooling"></a>pooling</h2><p>Pooling的作用是把embedding向量转化为一个固定长度的向量，解决维度不定的问题。用户有多个兴趣爱好，这导致两个问题：</p>
+<ul>
+<li>表达用户兴趣时，用户的<strong>历史行为往往涉及多个categorical/id特征</strong>，比如点击过的多个商品、看过的多个视频、输入过的多个搜索词，这就涉及了多个good_id，shop_id。</li>
+<li>不同的用户有不同数量的历史行为，即multi-hot行为特征的向量会导致所产生的embedding向量列表的长度不同，而全连接需要固定长度的输入。</li>
+</ul>
+<p>为了降低纬度并使得商品店铺间的算术运算有意义，我们先对id特征进行Embedding嵌入。那么如何对用户多种多样的兴趣建模？我们把这些id特征embedding之后的多个低维向量（embedding向量列表），“合并”成一个向量，作为用户兴趣的表示。因为全连接需要固定长度的输入，所以我们需要“合并”成一个固定长度向量，这样才能喂入DNN。这个“合并”就是所谓<strong>Pooling</strong>。</p>
+<p>围绕着这个Pooling过程，各家有各家的高招：</p>
+<ul>
+<li><p>Youtube DNN这篇论文中，Youtube的做法最简单、直观，就是将用户看过的视频embedding向量、搜索过的关键词embedding向量，做一个<strong>简单的平均</strong>。</p>
+</li>
+<li><p>Neural Factorization Machine中，将n个(n=特征数)k维向量压缩成一个k维向量，取名为bi-interaction pooling。既完成pooling，也实现了特征间的二阶交叉。</p>
+</li>
+<li><p>DIN用各embedding向量的加权平均实现了pooling，而”权重”由attention机制计算得到。</p>
+</li>
+<li><p><strong>基于深度学习的文本分类，同样面临着如何将一段话中的多个词向量压缩成一个向量来表示这段话的问题。常用的方法，就是将多个词向量喂入RNN，最后一个时刻RNN的输出向量就代表了多个词向量的“合并”结果</strong>。显然，DIEN则借鉴了这一思路，并且改造了GRU的构造，利用attention score来控制门。</p>
+</li>
+</ul>
+<p>回到阿里的展示广告系统，如架构图所示，每个商品有3个特征域，包括商品自身，商品类别，商品所属的商铺。对于每个商品来说，3个特征embedding拼接之后才是商品的表示向量。对商品序列做pooling，架构图中采用的是求和的方式，pooling之后得到用户行为序列的表示向量。然后再和其他的特征embedding做拼接，作为MLP的输入。MLP输入端的整个embedding向量，除了candidate的embedding部分，其余的embedding部分可以视为用户的表示向量。仔细的研究下Base Model中Pooling Layer就会发现，Pooling操作损失了很多信息。所以DIN 使用 Pooling（weighted sum）对Diversity建模，因为直接sum体现不出差异多样性，加权可以。即DIN用各embedding向量的加权平均实现了pooling，而”权重”由attention机制计算得到。</p>
+<h2 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h2><p>Attention机制简单的理解就是，针对不同的广告，用户历史行为与该广告的权重是不同的。假设用户有ABC三个历史行为，对于广告D，那么ABC的权重可能是0.8、0.1、0.1；对于广告E，那么ABC的权重可能是0.3、0.6、0.1。这里的权重，就是Attention机制即架构图中的Activation Unit所需要学习的。DIN模型其实就是在DNN基础上加了attention。通过Attention来实现Pooling，使用户兴趣的向量表示，根据候选物料的不同而不同，实现<strong>用户兴趣的“千物千面”</strong>。</p>
+<p>模型的目标：基于用户历史行为，充分挖掘用户兴趣和候选广告之间的关系。用户是否点击某个广告往往是基于他之前的部分兴趣，这是应用Attention机制的基础。因为无论是用户兴趣行为，还是候选广告都会被映射到<strong>Embedding空间</strong>中。所以他们两者的关系，是在Embedding空间中学习的。</p>
+<p>注意力机制顾名思义，就是模型在预测的时候，对用户不同行为的注意力是不一样的，“相关”的行为历史看重一些，“不相关”的历史甚至可以忽略。即对于不同的特征有不同的权重，这样某些特征就会主导这一次的预测，就好像模型对某些特征pay attention。 Local Activation学习候选广告和用户历史行为的关系，并给出候选广告和各个历史行为的相关性程度 （即权重参数），再对历史行为序列进行加权求和，最终得到用户兴趣的特征表达。也就是说用户针对不同的广告表现出不同的兴趣表示，即使历史兴趣行为相同，但是各个行为的权重不同。</p>
+<p>DIN 在pooling的时候，与candidate相关的商品权重大一些，与candidate不相关的商品权重小一些，<strong>这就是一种Attention的思想</strong>。将candidate与点击序列中的每个商品发生交互来计算attention分数。具体计算输入包括商品和candidate的embedding向量，以及两者的外积。对于不同的candidate，得到的用户表示向量也不同，具有更大的灵活性。DIN中，对于候选广告， 根据local activation unit计算出的用户兴趣向量为：<br>$$<br>v_u(A)=f(v_A,e_1,e_2,…,e_H)=\sum^H_{j=1}a(e_j,v_A)e_j=\sum^H_{j=1}w_je_j<br>$$<br>其中${e_1,e_2,…,e_H}$是用户$U$的长度$H$的历史行为序列的embedding向量，$v_A$是广告$A$的embedding向量，$a(·)$是前馈神经网络，输入时广告、历史行为的embedding和他们的外积，输出权重。</p>
+<p>在这种计算方式下，最终的用户$U$的兴趣向量会根据不同的广告$A$而变化。这就是 “<strong>用户兴趣的千物千面</strong>”。</p>
+<h3 id="归一化"><a href="#归一化" class="headerlink" title="归一化"></a>归一化</h3><p>一般来说，做attention的时候，需要对所有的分数通过softmax做归一化，这样做有两个好处，一是保证权重非负，二是保证权重之和为1。但是在DIN的论文中强调，不对点击序列的attention分数做归一化，直接将分数与对应商品的embedding向量做加权和，目的在于保留用户的兴趣强度。例如，用户的点击序列中90%是衣服，10%是电子产品，有一件T恤和一部手机需要预测CTR，那么T恤会激活大部分的用户行为，使得根据T恤计算出来的用户行为向量在数值上更大。</p>
+<h2 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h2><p>AUC表示正样本得分比负样本得分高的概率。在CTR实际应用场景中，CTR预测常被用于对每个用户候选广告的排序。但是不同用户之间存在差异：有些用户天生就是点击率高。以往的评价指标对样本不区分用户地进行AUC的计算。论文采用的GAUC实现了用户级别的AUC计算，<strong>在单个用户AUC的基础上，按照点击次数或展示次数进行加权平均，消除了用户偏差对模型的影响</strong>，更准确的描述了模型的表现效果。<br>$$<br>GAUC=\frac{\sum_{i=1}^nw_i<em>AUC_i}{\sum_{i=1}^nw_i}=\frac{\sum_{i=1}^nimpression_i</em>AUC_i}{\sum_{i=1}^nimpression_i}<br>$$</p>
+<p>我们首先要肯定的是，AUC是要分用户看的，我们的模型的预测结果，只要能够保证对每个用户来说，他想要的结果排在前面就好了。假设有两个用户A和B，每个用户都有10个商品，10个商品中有5个是正样本，我们分别用TA，TB，FA，FB来表示两个用户的正样本和负样本。也就是说，20个商品中有10个是正样本。假设模型预测的结果大小排序依次为TA，FA，TB，FB。如果把两个用户的结果混起来看，AUC并不是很高，因为有5个正样本排在了后面，但是分开看的话，每个用户的正样本都排在了负样本之前，AUC应该是1。显然，分开看更容易体现模型的效果，这样消除了用户本身的差异。</p>
+<p>但是上文中所说的差异是在用户点击数即样本数相同的情况下说的。还有一种差异是用户的展示次数或者点击数，如果一个用户有1个正样本，10个负样本，另一个用户有5个正样本，50个负样本，这种差异同样需要消除。那么GAUC的计算，不仅将每个用户的AUC分开计算，同时根据用户的展示数或者点击数来对每个用户的AUC进行加权处理。进一步消除了用户偏差对模型的影响。通过实验证明，GAUC确实是一个更加合理的评价指标。</p>
+<h2 id="Adaptive-Regularization"><a href="#Adaptive-Regularization" class="headerlink" title="Adaptive Regularization"></a>Adaptive Regularization</h2><p>由于深度模型比较复杂，输入又非常稀疏，导致参数非常多，非常容易过拟合。CTR中输入稀疏而且维度高，已有的L1 L2 Dropout防止过拟合的办法，论文中尝试后效果都不是很好。用户数据符合长尾定律（long-tail law），也就是说很多的feature id只出现了几次，而一小部分feature id出现很多次。这在训练过程中增加了很多噪声，并且加重了过拟合。对于这个问题一个简单的处理办法就是：人工的去掉出现次数比较少的feature id。缺点是：损失的信息不好评估；阈值的设定非常的粗糙。</p>
+<p><strong>DIN给出的解决方案是：</strong>针对feature id出现的频率，来自适应的调整他们正则化的强度；对于出现频率高的，给与较小的正则化强度；对于出现频率低的，给予较大的正则化强度。</p>
+<p>对L2正则化的改进，在进行SGD优化的时候，每个mini-batch都只会输入部分训练数据，反向传播只针对部分非零特征参数进行训练，添加上L2之后，需要对整个网络的参数包括所有特征的embedding向量进行训练，这个计算量非常大且不可接受。论文中提出，在每个mini-batch中只对该batch的特征embedding参数进行L2正则化。</p>
+<h2 id="Dice激活函数"><a href="#Dice激活函数" class="headerlink" title="Dice激活函数"></a>Dice激活函数</h2><p>Dice激活函数的全称是Data Dependent Activation Function，形式如下：<br>$$<br>y_i=a_i(1-p_i)y_i+p_iy_i<br>$$</p>
+<p>$$<br>p_i=\frac{1}{1+e^{-\frac{y_i-E[y_i]}{\sqrt{Var[y_i]+\epsilon}}}}<br>$$</p>
+<p>其中期望和方差的计算如下：<br>$$<br>E[y_i]_{t+1}’=E[y_i]_t’+\alpha E[y_i]_{t+1}<br>$$</p>
+<p>$$<br>Var[y_i]_{t+1}’=Var[y_i]_t’+\alpha Var[y_i]_{t+1}<br>$$</p>
+<h2 id="DIN的创新"><a href="#DIN的创新" class="headerlink" title="DIN的创新"></a>DIN的创新</h2><ul>
+<li><p><strong>针对Diversity：</strong> 针对用户广泛的兴趣，DIN用<em>an interest distribution</em>去表示，即用 Pooling（weighted sum）对Diversity建模（对用户多种多样的兴趣建模）。</p>
+</li>
+<li><p><strong>针对Local Activation</strong>：</p>
+<ul>
+<li>DNN 直接求sum或average损失了很多信息。所以 DIN 稍加改进，利用attention机制实现 Local Activation，从用户历史行为中动态学习用户兴趣的embedding向量，针对不同的广告构造不同的用户抽象表示，从而实现了在数据维度一定的情况下，更精准地捕捉用户当前的兴趣。</li>
+</ul>
+</li>
+<li><p>对用户历史行为进行了不同的加权处理，针对不同的广告，不同的 behavior id 赋予不同的权重，这个权重是由当前behavior id和候选广告共同决定的，这就是Attention机制。即针对当前候选Ad，去局部的激活（<em>Local Activate</em>）相关的历史兴趣信息。</p>
+<ul>
+<li>与当前候选Ad相关性越高的历史行为，会获得越高的attention score，从而会主导这一次预测。</li>
+</ul>
+</li>
+<li><p>CTR中<strong>特征稀疏而且维度高</strong>，通常利用L1、L2、Dropout等手段防止过拟合。由于传统L2正则计算的是全部参数，CTR预估场景的模型参数往往数以亿计。DIN提出<strong>Adaptive regularizaion</strong>来防止过拟合，效果显著。在每次小批量迭代中，给与不同频次的特征不同的正则权重；</p>
+</li>
+<li><p>由于传统的<strong>激活函数</strong>，如Relu在输入小于0时输出为0，将导致许多网络节点的迭代速度变慢。PRelu虽然加快了迭代速度，但是其分割点默认为0，实际上分割点应该由数据决定。因此，DIN提出了一种数据动态自适应激活函数Dice。</p>
+</li>
+</ul>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1706.06978">Deep Interest Network for Click-Through Rate Prediction</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://www.cnblogs.com/rossiXYZ/p/13796470.html">[论文阅读]阿里DIN深度兴趣网络之总体解读</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/livan1234/article/details/85159658">推荐系统遇上深度学习(十九)–探秘阿里之深度兴趣网络(DIN)浅析及实现</a></p>
 
           
         
@@ -855,7 +1126,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E8%B4%AA%E5%BF%83-%E4%BC%9A%E8%AE%AE%E5%AE%A4I/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/DIEN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -874,7 +1145,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E8%B4%AA%E5%BF%83-%E4%BC%9A%E8%AE%AE%E5%AE%A4I/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/RecommendSystem/Rank/DIEN/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -886,7 +1157,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -926,10 +1197,47 @@
       
         
           
-            <h2 id="会议室I"><a href="#会议室I" class="headerlink" title="会议室I"></a>会议室I</h2><p>给定一个会议时间安排的数组 intervals ，每个会议时间都会包括开始和结束的时间 intervals[i] = [starti, endi] ，请你判断一个人是否能够参加这里面的全部会议。</p>
-<p>先用区间前端点排序，然后遍历检查是否重合。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">canAttendMeetings</span>(<span class="params">self, intervals: List[List[<span class="built_in">int</span>]]</span>) -&gt; bool:</span></span><br><span class="line">        intervals.sort(key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(intervals)):</span><br><span class="line">            <span class="keyword">if</span> intervals[i][<span class="number">0</span>]&lt;intervals[i-<span class="number">1</span>][<span class="number">1</span>]:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/meeting-rooms/">https://leetcode-cn.com/problems/meeting-rooms/</a></p>
+            <h1 id="Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction"><a href="#Deep-Interest-Evolution-Network-for-Click-Through-Rate-Prediction" class="headerlink" title="Deep Interest Evolution Network for Click-Through Rate Prediction"></a>Deep Interest Evolution Network for Click-Through Rate Prediction</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>在大多数非搜索电商场景下，用户并不会实时表达目前的兴趣偏好。因此通过设计模型来捕获用户的动态变化的兴趣，是提升CTR预估效果的关键。阿里之前的DIN模型将用户的历史行为来表示用户的兴趣，并强调了用户兴趣的多样性和动态变化性，因此通过attention-based model来捕获和目标物品相关的兴趣。虽然DIN模型将用户的历史行为来表示兴趣，但存在两个缺点：</p>
+<ol>
+<li>用户的兴趣是不断进化的，而DIN抽取的用户兴趣之间是独立无关联的，没有捕获到兴趣的动态进化性</li>
+<li>通过用户的显式的行为来表达用户隐含的兴趣，这一准确性无法得到保证。</li>
+</ol>
+<p>基于以上两点，阿里提出了深度兴趣演化网络DIEN来CTR预估的性能。DIEN模型的主要贡献点在于：</p>
+<ol>
+<li>模型关注电商系统中兴趣演化的过程，并提出了新的网络结果来建模兴趣进化的过程，这个模型能够更精确的表达用户兴趣，同时带来更高的CTR预估准确率。</li>
+<li>设计了兴趣抽取层，并通过计算一个辅助loss，来提升兴趣表达的准确性。</li>
+<li>设计了兴趣进化层，来更加准确的表达用户兴趣的动态变化性。</li>
+</ol>
+<h2 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h2><p>首先对比DIN，DIN的网络结构如下：</p>
+<p><img src="http://guoshihao.site:8085/pic/DIN2.jpg"></p>
+<p>DIEN的网络模型结构如下：</p>
+<p><img src="http://guoshihao.site:8085/pic/DIEN0.jpg"></p>
+<p>可以看到，DIN和DIEN的最底层都是Embedding Layer，User profile， target AD和context feature的处理方式是一致的。不同的是，DIEN将user behavior组织成了序列数据的形式，并把简单的使用外积完成的activation unit变成了一个attention-based GRU网络。</p>
+<h3 id="兴趣抽取层Interest-Extractor-Layer"><a href="#兴趣抽取层Interest-Extractor-Layer" class="headerlink" title="兴趣抽取层Interest Extractor Layer"></a>兴趣抽取层Interest Extractor Layer</h3><p><strong>基于深度学习的文本分类，同样面临着如何将一段话中的多个词向量压缩成一个向量来表示这段话的问题。常用的方法，就是将多个词向量喂入RNN，最后一个时刻RNN的输出向量就代表了多个词向量的“合并”结果</strong>。显然，DIEN则借鉴了这一思路，并且改造了GRU的构造，利用attention score来控制门。</p>
+<p>兴趣抽取层Interest Extractor Layer的主要目标是从embedding数据中提取出interest。但一个用户在某一时间的interest不仅与当前的behavior有关，也与之前的behavior相关，所以作者们使用GRU单元来提取interest。<br>$$<br>u_t=\sigma(W^ui_t+U^uh_{t-1}+b^u)<br>$$</p>
+<p>$$<br>r_t=\sigma(W^ri_t+U^rh_{t-1}+b^r)<br>$$</p>
+<p>$$<br>\tilde{h_t}=tanh(W^hi_t+r_t\circ{}U^hh_{t-1}+b^h)<br>$$</p>
+<p>$$<br>h_t=(1-u_t)\circ{}h_{t-1}+u_t\circ{}\tilde{h_t}<br>$$</p>
+<p>这里我们可以认为$h(T)$是提取出的用户兴趣，但是这个地方兴趣是否表示的合理呢？文中别出心裁的增加了一个auxiliary loss，来提升兴趣表达的准确性。这里，作者设计了一个二分类模型来计算兴趣抽取的准确性，我们将用户下一时刻真实的行为$e(T+1)$作为正例，负采样得到的行为作为负例$e(T+1)’$，分别与抽取出的兴趣$h(T)$结合输入到设计的辅助网络中，得到预测结果，并通过logloss计算一个辅助的损失。带权重地加入最后的loss中。</p>
+<h3 id="兴趣进化层Interest-Evolution-Layer"><a href="#兴趣进化层Interest-Evolution-Layer" class="headerlink" title="兴趣进化层Interest Evolution Layer"></a>兴趣进化层Interest Evolution Layer</h3><p>兴趣进化层Interest Evolution Layer的主要目标是刻画用户兴趣的进化过程。举个简单的例子：</p>
+<p>以用户对衣服的interest为例，随着季节和时尚风潮的不断变化，用户的interest也会不断变化。这种变化会直接影响用户的点击决策。建模用户兴趣的进化过程有两方面的好处：</p>
+<ol>
+<li>追踪用户的interest可以使我们学习final interest的表达时包含更多的历史信息。</li>
+<li>可以根据interest的变化趋势更好地进行CTR预测。</li>
+</ol>
+<p>而interest在变化过程中遵循如下规律：</p>
+<ol>
+<li><strong>interest drift</strong>：用户在某一段时间的interest会有一定的集中性。比如用户可能在一段时间内不断买书，在另一段时间内不断买衣服。</li>
+<li><strong>interest individual</strong>：一种interest有自己的发展趋势，不同种类的interest之间很少相互影响，例如买书和买衣服的interest基本互不相关。</li>
+</ol>
+<p>为了利用这两个时序特征，我们需要再增加一层GRU的变种，并加上attention机制以找到与target AD相关的interest。</p>
+<p>attention的计算方式如下：<br>$$<br>a_t=\frac{e^{h_tW_{e_a}}}{\sum^T_{j=1}e^{h_jW_{e_a}}}<br>$$<br>而Attention和GRU结合起来的机制有很多，文中介绍了一下三种：</p>
+<h4 id="GRU-with-attentional-input-AIGRU"><a href="#GRU-with-attentional-input-AIGRU" class="headerlink" title="GRU with attentional input (AIGRU)"></a>GRU with attentional input (AIGRU)</h4><p>这种方式将attention直接作用于输入，无需修改GRU的结构：<br>$$<br>i_t’=h_t*a_t<br>$$</p>
+<h4 id="Attention-based-GRU-AGRU"><a href="#Attention-based-GRU-AGRU" class="headerlink" title="Attention based GRU(AGRU)"></a>Attention based GRU(AGRU)</h4><p>这种方式需要修改GRU的结构，此时hidden state的输出变为：<br>$$<br>h_t’=(1-a_t)<em>h_{t-1}’+a_t</em>\bar{h_t}’<br>$$</p>
+<h4 id="GRU-with-attentional-update-gate-AUGRU"><a href="#GRU-with-attentional-update-gate-AUGRU" class="headerlink" title="GRU with attentional update gate (AUGRU)"></a>GRU with attentional update gate (AUGRU)</h4><p>这种方式需要修改GRU的结构，此时hidden state的输出变为：<br>$$<br>\tilde{u_t}’=a_t*u_t’<br>$$</p>
+<p>$$<br>h_t’=(1-\tilde{u_t}’)\circ{}h_{t-1}’+\tilde{u_t}’\circ{}\bar{h_t}’<br>$$</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1809.03672">Deep Interest Evolution Network for Click-Through Rate Prediction</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6742d10b89a8">推荐系统遇上深度学习(二十四)–深度兴趣进化网络DIEN原理及实战！</a></p>
 
           
         
@@ -978,7 +1286,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E6%A8%A1%E6%8B%9F-%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/RecommendSystem/Rank/DeepFM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -997,7 +1305,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E6%A8%A1%E6%8B%9F-%E9%A1%BA%E6%97%B6%E9%92%88%E6%89%93%E5%8D%B0%E7%9F%A9%E9%98%B5/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/RecommendSystem/Rank/DeepFM/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -1009,7 +1317,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -1049,10 +1357,19 @@
       
         
           
-            <h2 id="顺时针打印矩阵"><a href="#顺时针打印矩阵" class="headerlink" title="顺时针打印矩阵"></a>顺时针打印矩阵</h2><p>输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">spiralOrder</span>(<span class="params">self, matrix: List[List[<span class="built_in">int</span>]]</span>) -&gt; List[int]:</span></span><br><span class="line">        res = []</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> matrix:</span><br><span class="line">            <span class="keyword">return</span> res</span><br><span class="line">        l,t,r,b = <span class="number">0</span>,<span class="number">0</span>,<span class="built_in">len</span>(matrix[<span class="number">0</span>])-<span class="number">1</span>,<span class="built_in">len</span>(matrix)-<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(l, r + <span class="number">1</span>): res.append(matrix[t][i]) <span class="comment"># left to right</span></span><br><span class="line">            t += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> t &gt; b: <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(t, b + <span class="number">1</span>): res.append(matrix[i][r]) <span class="comment"># top to bottom</span></span><br><span class="line">            r -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> l &gt; r: <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(r, l - <span class="number">1</span>, -<span class="number">1</span>): res.append(matrix[b][i]) <span class="comment"># right to left</span></span><br><span class="line">            b -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> t &gt; b: <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(b, t - <span class="number">1</span>, -<span class="number">1</span>): res.append(matrix[i][l]) <span class="comment"># bottom to top</span></span><br><span class="line">            l += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> l &gt; r: <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/">https://leetcode-cn.com/problems/shun-shi-zhen-da-yin-ju-zhen-lcof/</a></p>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/spiral-matrix/">https://leetcode-cn.com/problems/spiral-matrix/</a></p>
+            <h1 id="DeepFM-A-Factorization-Machine-based-Neural-Network-for-CTR-Prediction"><a href="#DeepFM-A-Factorization-Machine-based-Neural-Network-for-CTR-Prediction" class="headerlink" title="DeepFM: A Factorization-Machine based Neural Network for CTR Prediction"></a>DeepFM: A Factorization-Machine based Neural Network for CTR Prediction</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>由于DeepFM算法有效的结合了因子分解机与神经网络在特征学习中的优点：同时提取到低阶组合特征与高阶组合特征，所以越来越被广泛使用。在DeepFM中，FM算法负责对一阶特征以及由一阶特征两两组合而成的二阶特征进行特征的提取；DNN算法负责对由输入的一阶特征进行全连接等操作形成的高阶特征进行特征的提取。</p>
+<h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><p>整个模型大体分为两部分：FM和DNN。简单叙述一下模型的流程：借助FNN的思想，利用FM进行embedding，之后的wide和deep模型共享embedding之后的结果。DNN的输入完全和FNN相同（这里不用预训练，直接把embedding层看作一层的NN），而通过一定方式组合后，模型在wide上完全模拟出了FM的效果，最后将DNN和FM的结果组合后激活输出。<br>$$<br>\hat{y} = sigmoid(y_{FM}+y_{DNN})<br>$$<br><img src="http://guoshihao.site:8085/pic/DeepFM0.jpg"></p>
+<h3 id="FM部分"><a href="#FM部分" class="headerlink" title="FM部分"></a>FM部分</h3><p>FM部分即因子分解机，不仅包含了一阶特征的线性交互，还通过对特征隐向量的内积的方法对特征进行二阶的交叉。</p>
+<p>当采用神经网络将Sparse Features通过线性变换映射成Dense Embeddings时，由于特征采用One-hot编码形式，可以简单地推导出通过线性变换的映射和FM公式中的隐向量推导方式使完全等价的。<br>$$<br>y_{FM} = \sum_i w_i x_i + \sum_i \sum_{j \lt i} &lt;V_i,V_j&gt;x_i x_j<br>$$<br><img src="http://guoshihao.site:8085/pic/DeepFM1.jpg"></p>
+<h3 id="DNN部分"><a href="#DNN部分" class="headerlink" title="DNN部分"></a>DNN部分</h3><p>DNN部分依旧采用了全连接的深度神经网络方式，用来学习高阶的特征交互信息。只是在最后激活函数输出时，会叠加FM和DNN的结果。和FNN不同，FM作为模型架构的一部分，和DNN一起参与训练，以端到端的模式共同训练整个网络。</p>
+<p><img src="http://guoshihao.site:8085/pic/DeepFM2.jpg"></p>
+<h2 id="FNN-PNN-Wide-amp-Deep"><a href="#FNN-PNN-Wide-amp-Deep" class="headerlink" title="FNN,PNN,Wide&amp;Deep"></a>FNN,PNN,Wide&amp;Deep</h2><p>FNN：FM预训练策略存在两个局限性：(1)FM对嵌入参数的影响过大；(2)培训前阶段带来的开销降低了效率。此外，FNN只捕捉高阶特征交互。相比之下，DeepFM不需要预先训练，可以学习高阶和低阶特征交互。</p>
+<p>PNN：为了捕获高阶特征交互，PNN在嵌入层和第一隐藏层之间加一个Product Layer。为了提高计算效率，提出了内积和外积的近似计算方法：(1)通过消除部分神经元来近似计算内积；2)通过将m个k维特征向量压缩为一个k维向量来近似计算外部积。但是，由于外积的近似计算丢失了大量的信息，使得计算结果不稳定，因此外积的可靠性比内积差。虽然内积更可靠，但由于内积层的输出连接到第一隐层的所有神经元，因此计算复杂度较高。与PNN不同的是，DeepFM中二阶交叉层的输出只连接到最终的输出层(一个神经元)。这样有利于捕捉低阶特征交互作用。</p>
+<p>Wide&amp;Deep：Wide&amp;Deep可以同时捕捉模拟低阶和高阶特征交互。对于“Wide”部分的输入(例如在应用推荐中，被推荐的app ☓ 用户下载的app的交叉特征)，需要专业的特征工程。相比之下，DeepFM不需要这样的专业知识来处理输入，直接从输入的原始特征中学习。Wide&amp;Deep模型的一个扩展与DeepFM类似，但是DeepFM模型共享FM和DNN部分的特征embedding。特征embedding的共享策略通过低阶和高阶的特征交互作用(反向传播)影响特征的表达，从而更精确地模拟了特征的表达。</p>
+<p><img src="http://guoshihao.site:8085/pic/DeepFM3.jpg"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>DeepFM与其他基于DNN的推荐系统模型相比，不需要预先训练与专业的特征工程，并且可以捕捉低阶和高阶特征交互。</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1703.04247">DeepFM: A Factorization-Machine based Neural Network for CTR Prediction</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/zynash2/article/details/79348540">论文精读-DeepFM</a></p>
 
           
         
@@ -1101,7 +1418,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E6%A8%A1%E6%8B%9F-%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E3%80%81%E5%BC%B9%E5%87%BA%E9%98%9F%E5%88%97/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/C++/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E3%80%81%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -1120,7 +1437,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E6%A8%A1%E6%8B%9F-%E6%A0%88%E7%9A%84%E5%8E%8B%E5%85%A5%E3%80%81%E5%BC%B9%E5%87%BA%E9%98%9F%E5%88%97/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/C++/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E3%80%81%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -1132,7 +1449,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -1172,132 +1489,72 @@
       
         
           
-            <h2 id="栈的压入、弹出序列"><a href="#栈的压入、弹出序列" class="headerlink" title="栈的压入、弹出序列"></a>栈的压入、弹出序列</h2><p>输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。</p>
-<p>思路：建立一个辅助栈来实现。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">validateStackSequences</span>(<span class="params">self, pushed: List[<span class="built_in">int</span>], popped: List[<span class="built_in">int</span>]</span>) -&gt; bool:</span></span><br><span class="line">        stack = []</span><br><span class="line">        <span class="keyword">while</span> popped:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> stack <span class="keyword">or</span> stack[-<span class="number">1</span>]!=popped[<span class="number">0</span>]:</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> pushed:</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">                stack.append(pushed.pop(<span class="number">0</span>))</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                stack.pop()</span><br><span class="line">                popped.pop(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
-<h4 id="https-leetcode-cn-com-problems-zhan-de-ya-ru-dan-chu-xu-lie-lcof"><a href="#https-leetcode-cn-com-problems-zhan-de-ya-ru-dan-chu-xu-lie-lcof" class="headerlink" title="https://leetcode-cn.com/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/">https://leetcode-cn.com/problems/zhan-de-ya-ru-dan-chu-xu-lie-lcof/</a></h4>
-          
-        
-      
-    </div>
-    
-    
-    
+            <h1 id="右值引用-amp-移动构造函数"><a href="#右值引用-amp-移动构造函数" class="headerlink" title="右值引用&amp;移动构造函数"></a>右值引用&amp;移动构造函数</h1><h2 id="右值引用-amp-amp"><a href="#右值引用-amp-amp" class="headerlink" title="右值引用&amp;&amp;"></a>右值引用&amp;&amp;</h2><p>右值引用是C++11中新增加的一个很重要的特性，他主是要用来解决C++98/03中遇到的两个问题：</p>
+<ol>
+<li><p>第一个问题就是临时对象非必要的昂贵的拷贝操作</p>
+</li>
+<li><p>第二个问题是在模板函数中如何按照参数的实际类型进行转发。</p>
+</li>
+</ol>
+<h3 id="引用-amp"><a href="#引用-amp" class="headerlink" title="引用&amp;"></a>引用&amp;</h3><p>C和C++使用&amp;符号来只是变量的地址。C++给&amp;符号赋予了另一个含义，将其来声明引用。</p>
+<p>例如，要将rodents作为rats变量的别名，可以这样做：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> rats；</span><br><span class="line"><span class="keyword">int</span> &amp; rodents = rates；</span><br></pre></td></tr></table></figure>
+<p>其中，&amp;不是地址运算符，而是类型标识符的一部分。上诉引用声明允许将rats和rodents互换——它们指向相同的值和内存单元。</p>
+<p><strong>必须在声明引用时将其初始化，而不能向指针那样，先声明，再赋值。并且不能再更改。</strong></p>
+<h3 id="右值"><a href="#右值" class="headerlink" title="右值"></a>右值</h3><p>左值和右值都是针对表达式而言的，<strong>左值是指表达式结束后依然存在的持久对象，右值是指表达式结束时就不再存在的临时对象</strong>。一个区分左值与右值的便捷方法是：<strong>看能不能对表达式取地址，如果能，则为左值，否则为右值。</strong></p>
+<p>右值通常包括常值，函数的返回值，表达式的返回值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> i = getVar();</span><br><span class="line"><span class="keyword">int</span> i = <span class="number">1.8</span>*<span class="number">2</span>+<span class="number">32.0</span>;</span><br></pre></td></tr></table></figure>
+<p>右值是一种临时的值，很难获得其地址，即是获得了右值的地址，该地址可能很快就失效了。C++11 中为了引入强大的右值引用，将右值的概念进行了进一步的划分，分为：纯右值、将亡值。</p>
+<p>**纯右值(prvalue, pure rvalue)**，纯粹的右值，要么是纯粹的字面量，例如 <code>0</code>, <code>true</code>；要么是求值结果相当于字面量或匿名临时对象，例如 <code>1.8*2+32.0</code>。非引用返回的临时变量、运算表达式产生的临时变量、原始字面量、Lambda 表达式都属于纯右值。</p>
+<p><strong>将亡值(xvalue, expiring value)**，是 C++11 为了引入右值引用而提出的概念（因此在传统 C++中，纯右值和右值是统一个概念），</strong>也就是即将被销毁、却能够被移动的值**。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; temp = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v = foo();</span><br></pre></td></tr></table></figure>
+<p>函数 <code>foo</code> 的返回值 <code>temp</code> 在内部创建然后被赋值给 <code>v</code>，然而 <code>v</code> 获得这个对象时，会将整个 temp 拷贝一份，然后把 <code>temp</code> 销毁，如果这个 <code>temp</code> 非常大，这将造成大量额外的开销。</p>
+<h3 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h3><p>需要拿到一个将亡值，就需要用到右值引用的申明：<code>T &amp;&amp;</code>，其中 <code>T</code> 是类型。右值引用的声明让这个临时值的生命周期得以延长、只要变量还活着，那么将亡值将继续存活。</p>
+<p>C++11 提供了 <code>std::move</code> 这个方法将左值参数无条件的转换为右值，有了它我们就能够方便的获得一个右值临时对象，例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reference</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>&amp; str)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;左值&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reference</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; str)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;右值&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>  lv1 = <span class="string">&quot;string,&quot;</span>;			 <span class="comment">// lv1 是一个左值</span></span><br><span class="line">	<span class="comment">//std::string&amp;&amp; rv2 = lv1 ;				// 非法,lv1 是一个左值</span></span><br><span class="line">	<span class="comment">// std::string&amp;&amp; r1 = s1;				// 非法, s1 在全局上下文中没有声明</span></span><br><span class="line">	reference(<span class="built_in">std</span>::move(lv1));				<span class="comment">// std::move 可以将左值转移为右值</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv1 = <span class="built_in">std</span>::move(lv1);		<span class="comment">// 合法, std::move 可以将左值转移为右值</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;rv1 = &quot;</span> &lt;&lt; rv1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,</span></span><br><span class="line"> </span><br><span class="line">	<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; lv2 = lv1 + lv1;		<span class="comment">// 合法, 常量左值引用能够延长临时变量的生命周期</span></span><br><span class="line">	<span class="comment">// lv2 += &quot;Test&quot;;						// 非法, 引用的右值无法被修改</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;lv2 = &quot;</span> &lt;&lt; lv2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,string</span></span><br><span class="line"> </span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv2 = lv1 + lv1;		    <span class="comment">// 合法，lv1 + lv1生成一个临时对象</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv2 = lv1 + lv2;			<span class="comment">// 合法, 右值引用延长临时对象的生命周期</span></span><br><span class="line">	rv2 += <span class="string">&quot;string&quot;</span>;					    <span class="comment">// 合法, 非常量引用能够修改临时变量</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;rv2 = &quot;</span> &lt;&lt; rv2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,string,string,</span></span><br><span class="line"> </span><br><span class="line">	reference(rv2);							<span class="comment">// 输出左值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>右值<br>rv1 = string,<br>lv2 = string,string,<br>rv2 = string,string,string,string<br>左值</p>
+</blockquote>
+<p><strong>注意</strong>：<code>rv2</code> 虽然引用了一个右值，但由于它是一个引用，所以 <code>rv2</code> 依然是一个左值。</p>
+<p>在C++11中，我们用左值去初始化一个对象或为一个已有对象赋值时，会调用<strong>拷贝构造函数或拷贝赋值运算符</strong>来拷贝资源（所谓资源，就是指new出来的东西），而当我们用一个右值（包括纯右值和将亡值）来初始化或赋值时，会调用<strong>移动构造函数或移动赋值运算符</strong>来移动资源，从而避免拷贝，提高效率。</p>
+<h2 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h2><p>C++11之前已经有复制构造函数了，相比复制构造函数，移动构造函数不是复制，而是直接转移类成员的所有权</p>
+<p>C++11引入了右值引用后，水道渠成的引入了移动构造函数,其参数类型为右值引用，看下面的例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">A(<span class="keyword">int</span> size) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size = size;</span><br><span class="line">    <span class="keyword">if</span>(size)data = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; ++i)data[i] = i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A(<span class="keyword">const</span> A&amp; o) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;copy constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size=o.size;</span><br><span class="line">    data = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">    <span class="built_in">memcpy</span>(data,o.data,size*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A(A &amp;&amp;o) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;move constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    data=o.data;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size=o.size;</span><br><span class="line">    o.data=<span class="literal">nullptr</span>;</span><br><span class="line">    o.size=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">~A()&#123;<span class="keyword">delete</span> []data;&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> *data = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>移动构造函数和复制构造函数比较像，它把复制构造函数的<code>&amp;</code>替换为<code>&amp;&amp;</code>了，且没有了<code>const</code>。</strong>移动构造函数与拷贝构造函数的区别是，拷贝构造的参数是<code>const A&amp; o</code>，是常量左值引用，而移动构造的参数是<code>A &amp;&amp;o</code>，是右值引用。在上面的复制构造函数中，我们把<code>o.data</code>的内容复制给<code>this-&gt;data</code>，这就是大家常说的深拷贝；而在上面的在移动构造函数中，我们没有复制<code>o.data</code>的元素，而只是把<code>o.data</code>的指针赋值给<code>this-&gt;data</code>，将这就是大家常用的浅拷贝，但是与浅拷贝不同的是，移动构造函数还把<code>o.data</code>指针置为<code>nullptr</code>，这一步很重要，如果不将别人的指针修改为空，那么临时对象析构的时候就会释放掉这个资源。这样执行移动构造函数后，**<code>this-&gt;data</code>获得了元素的所有权，而<code>o.data</code>不再拥有之前元素的所有权，<code>o.data</code>元素的所有权被移动/过继给<code>this</code>了，这就是移动构造函数的含义**。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">A <span class="title">CreateA</span><span class="params">(<span class="keyword">int</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="function">A <span class="title">a</span><span class="params">(size)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">b = CreateA(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>constructor<br>move constructor</p>
+</blockquote>
+<h3 id="移动语义（move-semantic）"><a href="#移动语义（move-semantic）" class="headerlink" title="移动语义（move semantic）"></a>移动语义（move semantic）</h3><p>对于一个左值，肯定是调用拷贝构造函数了，但是有些左值是局部变量，生命周期也很短，如果它非常大的话，调用拷贝构造函数会造成资源的浪费，能不能也移动而不是拷贝呢？C++11为了解决这个问题，提供了<code>std::move()</code>方法来将左值转换为右值，从而方便应用移动语义。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">A b = <span class="built_in">std</span>::move(a);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>constructor<br>move constructor</p>
+</blockquote>
+<p>c++11中的所有容器都实现了<code>std::move()</code>语义，<code>std::move()</code>只是转移了资源的控制权，本质上是将左值强制转化为右值使用，以用于移动拷贝或赋值，避免对<strong>含有资源的对象</strong>发生无谓的拷贝。<code>std::move()</code>对于拥有如内存、文件句柄等资源的成员的对象有效，如果是一些基本类型，如<code>int</code>和<code>char[10]</code>数组等，如果使用<code>std::move()</code>，仍会发生拷贝（因为没有对应的移动构造函数），所以说<code>std::move()</code>对含有资源的对象说更有意义。同样需要注意的是，对于自己定义的含有资源的对象，如何实现移动构造函数是自由的，你完全可以在移动构造函数中执行复制功能，但是不要这么做，而是要遵守通用的规定。</p>
+<h4 id="移动语义的一个例子-——-emplace-back"><a href="#移动语义的一个例子-——-emplace-back" class="headerlink" title="移动语义的一个例子 —— emplace_back"></a>移动语义的一个例子 —— emplace_back</h4><p>C++11中对STL容器新增了emplace_back函数，可以更高效的向STL容器插入元素。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">vec.push_back(a);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>constructor<br>copy constructor</p>
+</blockquote>
+<p>从输出结果看，push_back过程中除了调用一次构造函数，还额外调用了一次复制构造函数，额外调用复制构造函数甚是浪费时间，假如是A a(10000000)，复制起来可是非常耗时的！如何避免额外的复制呢？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">vec.emplace_back(<span class="built_in">std</span>::move(a));</span><br></pre></td></tr></table></figure>
 
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E6%A8%A1%E6%8B%9F-%E4%BC%9A%E8%AE%AE%E5%AE%A4II/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E6%A8%A1%E6%8B%9F-%E4%BC%9A%E8%AE%AE%E5%AE%A4II/" itemprop="url">Untitled</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
-                2021-01-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="会议室II"><a href="#会议室II" class="headerlink" title="会议室II"></a>会议室II</h2><p>给你一个会议时间安排的数组 intervals ，每个会议时间都会包括开始和结束的时间 intervals[i] = [starti, endi] ，为避免会议冲突，同时要考虑充分利用会议室资源，请你计算至少需要多少间会议室，才能满足这些会议安排。</p>
-<p>将所有的开始结束时间一起排序，然后记录<strong>同时间正在进行的最大的会议数</strong>。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">minMeetingRooms</span>(<span class="params">self, intervals: List[List[<span class="built_in">int</span>]]</span>) -&gt; int:</span></span><br><span class="line">        merge = [[i[<span class="number">0</span>],<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> intervals] + [[i[<span class="number">1</span>],-<span class="number">1</span>] <span class="keyword">for</span> i <span class="keyword">in</span> intervals]</span><br><span class="line">        merge.sort(key = <span class="keyword">lambda</span> x: x[<span class="number">0</span>])</span><br><span class="line">        cnt = <span class="number">0</span> </span><br><span class="line">        m=<span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> merge:</span><br><span class="line">            <span class="keyword">if</span> i[<span class="number">1</span>]==<span class="number">1</span>:</span><br><span class="line">                cnt+=<span class="number">1</span></span><br><span class="line">                m = <span class="built_in">max</span>(m,cnt)</span><br><span class="line">            <span class="keyword">elif</span> i[<span class="number">1</span>]==-<span class="number">1</span>:</span><br><span class="line">                cnt-=<span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> m</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/meeting-rooms-ii">https://leetcode-cn.com/problems/meeting-rooms-ii</a></p>
+<blockquote>
+<p>输出：<br>constructor<br>move constructor</p>
+</blockquote>
+<p>从输出结果看，此时<strong>调用了一次构造函数，和一次移动构造函数，而移动构造函数基本是不耗时的</strong>。很明显，使用emplace_back比push_back效率更高。另外，C++11中，上面的代码可以简化为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line">vec.emplace_back(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>constructor</p>
+</blockquote>
+<p>从输出结果看，此时只调用了一次构造函数，连移动构造函数都省掉了，这是<strong>因为emplace_back把参数10完美转发给A的构造函数，直接构造了一个元素，</strong>而这个元素是直接存放在vector容器中的。</p>
+<h4 id="移动语义的一个例子-——-swap"><a href="#移动语义的一个例子-——-swap" class="headerlink" title="移动语义的一个例子 —— swap"></a>移动语义的一个例子 —— swap</h4><p>移动语义对<code>swap()</code>函数的影响也很大，之前实现swap可能需要三次内存拷贝，而有了移动语义后，就可以实现高性能的交换函数了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(T&amp; a, T&amp; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">tmp</span><span class="params">(<span class="built_in">std</span>::move(a))</span></span>;</span><br><span class="line">    a = <span class="built_in">std</span>::move(b);</span><br><span class="line">    b = <span class="built_in">std</span>::move(tmp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果<code>T</code>是可移动的，那么整个操作会很高效，如果不可移动，那么就和普通的交换函数是一样的，不会发生什么错误，很安全。</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40539125/article/details/84107068">C++ 引用&amp; 和 右值（纯右值、将亡值）引用&amp;&amp; （1）</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40539125/article/details/84228027">左值和右值、左值引用与右值引用、移动语句（2）</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/zzhongcy/article/details/86747794?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1">C++11：右值引用、move, 以及使用emplace_back代替push_back</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d19fc8447eaa">[c++11]我理解的右值引用、移动语义和完美转发</a></p>
 
           
         
@@ -1346,7 +1603,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E6%A8%A1%E6%8B%9F-Z%20%E5%AD%97%E5%BD%A2%E5%8F%98%E6%8D%A2/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/C++/using/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -1365,7 +1622,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2021/01/20/Algorithm/%E6%A8%A1%E6%8B%9F-Z%20%E5%AD%97%E5%BD%A2%E5%8F%98%E6%8D%A2/" itemprop="url">Untitled</a></h1>
+                <a class="post-title-link" href="/2021/01/20/C++/using/" itemprop="url">Untitled</a></h1>
         
 
         <div class="post-meta">
@@ -1377,7 +1634,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -1417,12 +1674,146 @@
       
         
           
-            <h2 id="Z-字形变换"><a href="#Z-字形变换" class="headerlink" title="Z 字形变换"></a>Z 字形变换</h2><p>将一个给定字符串 s 根据给定的行数 numRows ，以从上往下、从左到右进行 Z 字形排列。</p>
-<p>比如输入字符串为 “PAYPALISHIRING” 行数为 3 时，排列如下：</p>
-<p>PAHN<br>APLSIIG<br>YIR<br>之后，你的输出需要从左往右逐行读取，产生出一个新的字符串，比如：”PAHNAPLSIIGYIR”。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">convert</span>(<span class="params">self, s: <span class="built_in">str</span>, numRows: <span class="built_in">int</span></span>) -&gt; str:</span></span><br><span class="line">        <span class="keyword">if</span> numRows &lt; <span class="number">2</span>: <span class="keyword">return</span> s</span><br><span class="line">        res = [<span class="string">&quot;&quot;</span> <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(numRows)]</span><br><span class="line">        i, flag = <span class="number">0</span>, -<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> c <span class="keyword">in</span> s:</span><br><span class="line">            res[i] += c</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">0</span> <span class="keyword">or</span> i == numRows - <span class="number">1</span>: flag = -flag</span><br><span class="line">            i += flag</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>.join(res)</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/zigzag-conversion/">https://leetcode-cn.com/problems/zigzag-conversion/</a></p>
+            <h1 id="Using用法"><a href="#Using用法" class="headerlink" title="Using用法"></a>Using用法</h1><h2 id="using代替typedef"><a href="#using代替typedef" class="headerlink" title="using代替typedef"></a><code>using</code>代替<code>typedef</code></h2><p>在C++中可以重定义一个类型，被重定义的类型并不是一个新的类型，仅仅只是原有的类型取了一个新的名字，因此，重定义前后的类型不能重载。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="keyword">uint_t</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">uint_t</span>)</span></span>;  <span class="comment">// error: redefinition</span></span><br></pre></td></tr></table></figure>
+<p><code>typedef</code>的限制是不能重定义一个模板。例如我们需要一个固定以 <code>std::string</code> 为 <code>key</code> 的 <code>map</code>，它可以映射到 <code>int </code>或另一个<code> std::string</code>。然而这个简单的需求仅通过 <code>typedef </code>却很难办到。因此在C++98/03中不得不这样写：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Val&gt;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">str_map</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, Val&gt; type;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line">str_map&lt;<span class="keyword">int</span>&gt;::type map1;</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+<p>一个虽然简单但却略显烦琐的<code>str_map</code>外敷类是必要的。这明显让我们在复用某些泛型代码时非常难受。</p>
+<p>现在，在 C++11 中终于出现了可以重定义一个模板的语法。请看下面的示例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Val&gt;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">str_map_t</span> = <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, Val&gt;;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">str_map_t</span>&lt;<span class="keyword">int</span>&gt; map1;</span><br></pre></td></tr></table></figure>
+<p>这里使用新的<code>using</code>别名语法定义了<code>std::map</code>的模板别名<code>str_map_t</code>。比起前面使用外敷模板加<code>typedef</code>构建的<code>str_map</code>，它完全就像是一个新的<code>map</code>类模板，因此简洁了很多。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 重定义unsigned int</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> <span class="keyword">uint_t</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">uint_t</span> = <span class="keyword">unsigned</span> <span class="keyword">int</span>;</span><br><span class="line"><span class="comment">// 重定义std::map</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">int</span>&gt; <span class="keyword">map_int_t</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">map_int_t</span> = <span class="built_in">std</span>::<span class="built_in">map</span>&lt;<span class="built_in">std</span>::<span class="built_in">string</span>, <span class="keyword">int</span>&gt;;</span><br></pre></td></tr></table></figure>
+<p>实际上，<code>using</code>的别名语法覆盖了<code>typedef</code>的全部功能。先来看看对普通类型的重定义示例，将这两种语法对比一下：可以看到，在重定义普通类型上，两种使用方法的效果是等价的，唯一不同的是定义语法。<code>typedef</code>的定义方法和变量的声明类似：像声明一个变量一样，声明一个重定义类型，之后在声明之前加上<code>typedef</code>即可。这种写法凸显了 C/C++ 中的语法一致性，但有时却会增加代码的阅读难度。比如重定义一个函数指针时：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*<span class="keyword">func_t</span>)</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">int</span>)</span></span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">func_t</span> = <span class="keyword">void</span> (*)(<span class="keyword">int</span>, <span class="keyword">int</span>);</span><br></pre></td></tr></table></figure>
+<p>using 重定义的 func_t 是一个模板，但它既不是类模板也不是函数模板（函数模板实例化后是一个函数），而是一种新的模板形式：模板别名（alias template）。</p>
+<h2 id="using声明和using指示"><a href="#using声明和using指示" class="headerlink" title="using声明和using指示"></a>using声明和using指示</h2><h3 id="using声明"><a href="#using声明" class="headerlink" title="using声明"></a>using声明</h3><p><strong>一个using声明一次只引入一个命名空间成员。</strong>using声明中引入的名字遵循常规作用域规则：从using声明点开始，直到包含该using声明的作用域的末尾，名字都是可见的。外部作用域中定义的同名实体被屏蔽。简写名字只能在声明它的作用域及其嵌套作用域中使用，一旦该作用域结束了，就必须使用完全限定名。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">cout</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="built_in">std</span>::<span class="built_in">vector</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x;</span><br><span class="line">    <span class="built_in">cin</span>&gt;&gt;x;<span class="comment">//wrong</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;x;<span class="comment">//right</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;x;<span class="comment">//right</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="using指示"><a href="#using指示" class="headerlink" title="using指示"></a>using指示</h3><p>using指示同using声明一样，可以使我们能够使用命名空间的简写形式，简写名字从using指示点开始，直到出现using指示的作用域的末尾。但不同的是using声明可以选择性的部分可见，但<strong>using指示使得特定命名空间名的所有可见</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> blip</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> bi = <span class="number">10</span>,bj = <span class="number">20</span>,bk = <span class="number">30</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> bj = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">using</span> <span class="keyword">namespace</span> blip;</span><br><span class="line">    ++bi;<span class="comment">//right</span></span><br><span class="line">    ++bj;<span class="comment">//wrong , “bj”:不明确的符号</span></span><br><span class="line">    ++::bj;<span class="comment">//right,bj=1;此处双冒号是全局作用域符号</span></span><br><span class="line">    ++blip::bj;<span class="comment">//right,bj=21;</span></span><br><span class="line">    <span class="keyword">int</span> bk = <span class="number">97</span>;</span><br><span class="line">    ++bk;<span class="comment">//right,bk=98</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] <a href="">C++11使用using定义别名（替代typedef）</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/mlyjqx/article/details/74783811">C++using声明和using指示</a></p>
 
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/%E9%93%BE%E8%A1%A8-%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E8%8A%82%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/01/20/Algorithm/%E9%93%BE%E8%A1%A8-%E9%93%BE%E8%A1%A8%E4%B8%AD%E5%80%92%E6%95%B0%E7%AC%ACk%E4%B8%AA%E8%8A%82%E7%82%B9/" itemprop="url">Untitled</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="链表中倒数第k个节点"><a href="#链表中倒数第k个节点" class="headerlink" title="链表中倒数第k个节点"></a>链表中倒数第k个节点</h1><p>输入一个链表，输出该链表中倒数第k个节点。为了符合大多数人的习惯，本题从1开始计数，即链表的尾节点是倒数第1个节点。例如，一个链表有6个节点，从头节点开始，它们的值依次是1、2、3、4、5、6。这个链表的倒数第3个节点是值为4的节点。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getKthFromEnd</span>(<span class="params">self, head: ListNode, k: <span class="built_in">int</span></span>) -&gt; ListNode:</span></span><br><span class="line">        fast = slow = head</span><br><span class="line">        <span class="keyword">while</span> k:</span><br><span class="line">            fast = fast.<span class="built_in">next</span></span><br><span class="line">            k-=<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> fast:</span><br><span class="line">            fast = fast.<span class="built_in">next</span></span><br><span class="line">            slow = slow.<span class="built_in">next</span></span><br><span class="line">        <span class="keyword">return</span> slow</span><br></pre></td></tr></table></figure>
+<h4 id="https-leetcode-cn-com-problems-lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof"><a href="#https-leetcode-cn-com-problems-lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof" class="headerlink" title="https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/">https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/</a></h4>
           
         
       
@@ -1461,7 +1852,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+    <a class="extend prev" rel="prev" href="/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -1507,7 +1898,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

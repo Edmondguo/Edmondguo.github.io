@@ -79,15 +79,15 @@
 
 
 
-<meta name="description" content="零钱兑换给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。 你可以认为每种硬币的数量是无限的。 DP其实等价于完全背包问题，只不过背包问题的表述是装满背包的情况下价值最高是多少；零钱兑换可以把“价值”看做“钱的个数”（也就是1），把“体积”看做是“钱的面值”。所以装满就是面值达到总金额">
+<meta name="description" content="零钱兑换系列零钱兑换给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。 你可以认为每种硬币的数量是无限的。 DP其实等价于完全背包问题，只不过背包问题的表述是装满背包的情况下价值最高是多少；零钱兑换可以把“价值”看做“钱的个数”（也就是1），把“体积”看做是“钱的面值”。所以装满就是面">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/2021/01/20/Algorithm/dp-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/index.html">
+<meta property="og:url" content="http://example.com/2021/01/20/Algorithm/dp-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2%E7%B3%BB%E5%88%97/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="零钱兑换给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。 你可以认为每种硬币的数量是无限的。 DP其实等价于完全背包问题，只不过背包问题的表述是装满背包的情况下价值最高是多少；零钱兑换可以把“价值”看做“钱的个数”（也就是1），把“体积”看做是“钱的面值”。所以装满就是面值达到总金额">
+<meta property="og:description" content="零钱兑换系列零钱兑换给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。 你可以认为每种硬币的数量是无限的。 DP其实等价于完全背包问题，只不过背包问题的表述是装满背包的情况下价值最高是多少；零钱兑换可以把“价值”看做“钱的个数”（也就是1），把“体积”看做是“钱的面值”。所以装满就是面">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-01-20T02:14:23.324Z">
-<meta property="article:modified_time" content="2021-01-07T08:35:55.000Z">
+<meta property="article:published_time" content="2021-01-20T02:32:53.353Z">
+<meta property="article:modified_time" content="2021-01-20T02:28:53.533Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://example.com/2021/01/20/Algorithm/dp-零钱兑换/"/>
+  <link rel="canonical" href="http://example.com/2021/01/20/Algorithm/dp-零钱兑换系列/"/>
 
 
 
@@ -232,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/Algorithm/dp-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2%E7%B3%BB%E5%88%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="">
@@ -261,7 +261,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -299,7 +299,7 @@
       
 
       
-        <h2 id="零钱兑换"><a href="#零钱兑换" class="headerlink" title="零钱兑换"></a>零钱兑换</h2><p>给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。</p>
+        <h1 id="零钱兑换系列"><a href="#零钱兑换系列" class="headerlink" title="零钱兑换系列"></a>零钱兑换系列</h1><h2 id="零钱兑换"><a href="#零钱兑换" class="headerlink" title="零钱兑换"></a>零钱兑换</h2><p>给定不同面额的硬币 coins 和一个总金额 amount。编写一个函数来计算可以凑成总金额所需的最少的硬币个数。如果没有任何一种硬币组合能组成总金额，返回 -1。</p>
 <p>你可以认为每种硬币的数量是无限的。</p>
 <h3 id="DP"><a href="#DP" class="headerlink" title="DP"></a>DP</h3><p>其实等价于完全背包问题，只不过背包问题的表述是装满背包的情况下价值最高是多少；零钱兑换可以把“价值”看做“钱的个数”（也就是1），把“体积”看做是“钱的面值”。所以<strong>装满就是面值达到总金额</strong>，<strong>要求硬币个数最少就是要求价值最少</strong>。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">coinChange</span>(<span class="params">self, coins: List[<span class="built_in">int</span>], amount: <span class="built_in">int</span></span>) -&gt; int:</span></span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        完全背包问题，背包的容量为amount，物品的重量为coins的面额</span></span><br><span class="line"><span class="string">        硬币的个数无限。 1维写法</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">        dp = [<span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(amount+<span class="number">1</span>)]</span><br><span class="line">        dp[<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(coins)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(coins[i],amount+<span class="number">1</span>):</span><br><span class="line">                    dp[j] = <span class="built_in">min</span>(dp[j], dp[j-coins[i]]+<span class="number">1</span>)</span><br><span class="line">        <span class="comment"># print(dp)</span></span><br><span class="line">        <span class="keyword">return</span> dp[-<span class="number">1</span>] <span class="keyword">if</span> dp[-<span class="number">1</span>] != <span class="built_in">float</span>(<span class="string">&#x27;inf&#x27;</span>) <span class="keyword">else</span> -<span class="number">1</span></span><br></pre></td></tr></table></figure>
@@ -318,6 +318,11 @@
 <li><strong>循环进入dfs前，一定要判断要进入的count是否已经大于min_record，如果大于，再递归已经没有意义了</strong></li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">coinChange</span>(<span class="params">self, coins: List[<span class="built_in">int</span>], amount: <span class="built_in">int</span></span>) -&gt; int:</span></span><br><span class="line">        min_record = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> coins:</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> amount==<span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">        coins.sort(reverse=<span class="literal">True</span>)</span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">dfs</span>(<span class="params">coins,amount,index,count</span>):</span></span><br><span class="line">            <span class="keyword">nonlocal</span> min_record</span><br><span class="line">            <span class="keyword">if</span> index&gt;=<span class="built_in">len</span>(coins):</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">if</span> amount==<span class="number">0</span>:</span><br><span class="line">                min_record = <span class="built_in">min</span>(count,min_record) <span class="keyword">if</span> min_record <span class="keyword">else</span> count</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">if</span> amount%coins[index] == <span class="number">0</span>:</span><br><span class="line">                min_record = count+amount//coins[index] <span class="keyword">if</span> <span class="keyword">not</span> min_record <span class="keyword">else</span> <span class="built_in">min</span>(min_record,count+amount//coins[index])</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(amount//coins[index],-<span class="number">1</span>,-<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">if</span> min_record <span class="keyword">and</span> min_record&lt;=count+i:</span><br><span class="line">                    <span class="keyword">return</span></span><br><span class="line">                dfs(coins,amount-i*coins[index],index+<span class="number">1</span>,i+count)</span><br><span class="line">        dfs(coins,amount,<span class="number">0</span>,<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> min_record <span class="keyword">if</span> min_record <span class="keyword">else</span> -<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/coin-change/">https://leetcode-cn.com/problems/coin-change/</a></p>
+<h2 id="零钱兑换II"><a href="#零钱兑换II" class="headerlink" title="零钱兑换II"></a>零钱兑换II</h2><p>给定不同面额的硬币和一个总金额。写出函数来计算可以凑成总金额的硬币组合数。假设每一种面额的硬币有无限个。 </p>
+<p>无限背包问题，边界条件为恰巧装满，dp数组中储存方案数，除了dp[0]=1，其他初始化为0</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">change</span>(<span class="params">self, amount: <span class="built_in">int</span>, coins: List[<span class="built_in">int</span>]</span>) -&gt; int:</span></span><br><span class="line">        dp = [<span class="number">0</span>] *(amount+<span class="number">1</span>)</span><br><span class="line">        dp[<span class="number">0</span>]=<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> coin <span class="keyword">in</span> coins:</span><br><span class="line">            <span class="keyword">for</span> amo <span class="keyword">in</span> <span class="built_in">range</span>(coin,amount+<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">if</span> amo&gt;=coin:</span><br><span class="line">                    dp[amo] = dp[amo]+dp[amo-coin]</span><br><span class="line">        <span class="keyword">return</span> dp[-<span class="number">1</span>]        </span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/coin-change-2/">https://leetcode-cn.com/problems/coin-change-2/</a></p>
 
       
     </div>
@@ -352,7 +357,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/01/20/Algorithm/dp-%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II/" rel="prev" title="">
+              <a href="/2021/01/20/Algorithm/dp-%E9%9D%92%E8%9B%99%E8%BF%87%E6%B2%B3/" rel="prev" title="">
                  <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -431,7 +436,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -468,7 +473,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">零钱兑换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DP"><span class="nav-number">1.1.</span> <span class="nav-text">DP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS"><span class="nav-number">1.2.</span> <span class="nav-text">DFS</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2%E7%B3%BB%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">零钱兑换系列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2"><span class="nav-number">1.1.</span> <span class="nav-text">零钱兑换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DP"><span class="nav-number">1.1.1.</span> <span class="nav-text">DP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DFS"><span class="nav-number">1.1.2.</span> <span class="nav-text">DFS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E9%92%B1%E5%85%91%E6%8D%A2II"><span class="nav-number">1.2.</span> <span class="nav-text">零钱兑换II</span></a></li></ol></li></ol></div>
             
 
           </div>

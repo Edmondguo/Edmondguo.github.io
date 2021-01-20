@@ -86,8 +86,8 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="二叉搜索树的后序遍历序列输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回 true，否则返回 false。假设输入的数组的任意两个数字都互不相同。 朴素的递归思想，需要注意一下找左右子树分隔点时的边界条件。 123456789101112131415class Solution:    def verifyPostorder(self, postorder: List[i">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-01-20T02:14:23.397Z">
-<meta property="article:modified_time" content="2021-01-11T07:51:20.000Z">
+<meta property="article:published_time" content="2021-01-20T02:32:53.418Z">
+<meta property="article:modified_time" content="2021-01-20T02:20:18.653Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -261,7 +261,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:32:53+08:00">
                 2021-01-20
               </time>
             
@@ -299,7 +299,7 @@
       
 
       
-        <h2 id="二叉搜索树的后序遍历序列"><a href="#二叉搜索树的后序遍历序列" class="headerlink" title="二叉搜索树的后序遍历序列"></a>二叉搜索树的后序遍历序列</h2><p>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回 <code>true</code>，否则返回 <code>false</code>。假设输入的数组的任意两个数字都互不相同。</p>
+        <h1 id="二叉搜索树的后序遍历序列"><a href="#二叉搜索树的后序遍历序列" class="headerlink" title="二叉搜索树的后序遍历序列"></a>二叉搜索树的后序遍历序列</h1><p>输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。如果是则返回 <code>true</code>，否则返回 <code>false</code>。假设输入的数组的任意两个数字都互不相同。</p>
 <p>朴素的递归思想，需要注意一下找左右子树分隔点时的边界条件。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">verifyPostorder</span>(<span class="params">self, postorder: List[<span class="built_in">int</span>]</span>) -&gt; bool:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> postorder:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        mid = postorder[-<span class="number">1</span>]</span><br><span class="line">        i=<span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(postorder)):</span><br><span class="line">            <span class="keyword">if</span> postorder[i]&gt;mid:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i,<span class="built_in">len</span>(postorder)-<span class="number">1</span>):</span><br><span class="line">            <span class="keyword">if</span> postorder[j]&lt;mid:</span><br><span class="line">                print(postorder,j,mid)</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> self.verifyPostorder(postorder[:i]) <span class="keyword">and</span> self.verifyPostorder(postorder[i:-<span class="number">1</span>])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h4 id="https-leetcode-cn-com-problems-er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof"><a href="#https-leetcode-cn-com-problems-er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof" class="headerlink" title="https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/"></a><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/">https://leetcode-cn.com/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/</a></h4>
@@ -415,7 +415,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -452,7 +452,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">二叉搜索树的后序遍历序列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#https-leetcode-cn-com-problems-er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof"><span class="nav-number">1.0.1.</span> <span class="nav-text">https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof&#x2F;</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91%E7%9A%84%E5%90%8E%E5%BA%8F%E9%81%8D%E5%8E%86%E5%BA%8F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">二叉搜索树的后序遍历序列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#https-leetcode-cn-com-problems-er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">https:&#x2F;&#x2F;leetcode-cn.com&#x2F;problems&#x2F;er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof&#x2F;</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
