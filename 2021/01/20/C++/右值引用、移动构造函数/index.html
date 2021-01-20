@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="右值引用&amp;&amp;右值引用是C++11中新增加的一个很重要的特性，他主是要用来解决C++98&#x2F;03中遇到的两个问题：  第一个问题就是临时对象非必要的昂贵的拷贝操作  第二个问题是在模板函数中如何按照参数的实际类型进行转发。   引用&amp;C和C++使用&amp;符号来只是变量的地址。C++给&amp;符号赋予了另一个含义，将其来声明引用。 例如，要将rodents作为rats变量的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://example.com/2021/01/20/C++/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E3%80%81%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="右值引用&amp;&amp;右值引用是C++11中新增加的一个很重要的特性，他主是要用来解决C++98&#x2F;03中遇到的两个问题：  第一个问题就是临时对象非必要的昂贵的拷贝操作  第二个问题是在模板函数中如何按照参数的实际类型进行转发。   引用&amp;C和C++使用&amp;符号来只是变量的地址。C++给&amp;符号赋予了另一个含义，将其来声明引用。 例如，要将rodents作为rats变量的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-20T02:14:23.145Z">
+<meta property="article:modified_time" content="2021-01-02T10:10:32.706Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/20/C++/右值引用、移动构造函数/"/>
+
+
+
+
+
+  <title> | Hexo</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/20/C++/%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E3%80%81%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2021-01-20T10:14:23+08:00">
+                2021-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="右值引用-amp-amp"><a href="#右值引用-amp-amp" class="headerlink" title="右值引用&amp;&amp;"></a>右值引用&amp;&amp;</h2><p>右值引用是C++11中新增加的一个很重要的特性，他主是要用来解决C++98/03中遇到的两个问题：</p>
+<ol>
+<li><p>第一个问题就是临时对象非必要的昂贵的拷贝操作</p>
+</li>
+<li><p>第二个问题是在模板函数中如何按照参数的实际类型进行转发。</p>
+</li>
+</ol>
+<h3 id="引用-amp"><a href="#引用-amp" class="headerlink" title="引用&amp;"></a>引用&amp;</h3><p>C和C++使用&amp;符号来只是变量的地址。C++给&amp;符号赋予了另一个含义，将其来声明引用。</p>
+<p>例如，要将rodents作为rats变量的别名，可以这样做：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> rats；</span><br><span class="line"><span class="keyword">int</span> &amp; rodents = rates；</span><br></pre></td></tr></table></figure>
+<p>其中，&amp;不是地址运算符，而是类型标识符的一部分。上诉引用声明允许将rats和rodents互换——它们指向相同的值和内存单元。</p>
+<p><strong>必须在声明引用时将其初始化，而不能向指针那样，先声明，再赋值。并且不能再更改。</strong></p>
+<h3 id="右值"><a href="#右值" class="headerlink" title="右值"></a>右值</h3><p>左值和右值都是针对表达式而言的，<strong>左值是指表达式结束后依然存在的持久对象，右值是指表达式结束时就不再存在的临时对象</strong>。一个区分左值与右值的便捷方法是：<strong>看能不能对表达式取地址，如果能，则为左值，否则为右值。</strong></p>
+<p>右值通常包括常值，函数的返回值，表达式的返回值。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> i = getVar();</span><br><span class="line"><span class="keyword">int</span> i = <span class="number">1.8</span>*<span class="number">2</span>+<span class="number">32.0</span>;</span><br></pre></td></tr></table></figure>
+<p>右值是一种临时的值，很难获得其地址，即是获得了右值的地址，该地址可能很快就失效了。C++11 中为了引入强大的右值引用，将右值的概念进行了进一步的划分，分为：纯右值、将亡值。</p>
+<p>**纯右值(prvalue, pure rvalue)**，纯粹的右值，要么是纯粹的字面量，例如 <code>0</code>, <code>true</code>；要么是求值结果相当于字面量或匿名临时对象，例如 <code>1.8*2+32.0</code>。非引用返回的临时变量、运算表达式产生的临时变量、原始字面量、Lambda 表达式都属于纯右值。</p>
+<p><strong>将亡值(xvalue, expiring value)**，是 C++11 为了引入右值引用而提出的概念（因此在传统 C++中，纯右值和右值是统一个概念），</strong>也就是即将被销毁、却能够被移动的值**。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="title">foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; temp = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v = foo();</span><br></pre></td></tr></table></figure>
+<p>函数 <code>foo</code> 的返回值 <code>temp</code> 在内部创建然后被赋值给 <code>v</code>，然而 <code>v</code> 获得这个对象时，会将整个 temp 拷贝一份，然后把 <code>temp</code> 销毁，如果这个 <code>temp</code> 非常大，这将造成大量额外的开销。</p>
+<h3 id="右值引用"><a href="#右值引用" class="headerlink" title="右值引用"></a>右值引用</h3><p>需要拿到一个将亡值，就需要用到右值引用的申明：<code>T &amp;&amp;</code>，其中 <code>T</code> 是类型。右值引用的声明让这个临时值的生命周期得以延长、只要变量还活着，那么将亡值将继续存活。</p>
+<p>C++11 提供了 <code>std::move</code> 这个方法将左值参数无条件的转换为右值，有了它我们就能够方便的获得一个右值临时对象，例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reference</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>&amp; str)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;左值&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">reference</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; str)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;右值&quot;</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>  lv1 = <span class="string">&quot;string,&quot;</span>;			 <span class="comment">// lv1 是一个左值</span></span><br><span class="line">	<span class="comment">//std::string&amp;&amp; rv2 = lv1 ;				// 非法,lv1 是一个左值</span></span><br><span class="line">	<span class="comment">// std::string&amp;&amp; r1 = s1;				// 非法, s1 在全局上下文中没有声明</span></span><br><span class="line">	reference(<span class="built_in">std</span>::move(lv1));				<span class="comment">// std::move 可以将左值转移为右值</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv1 = <span class="built_in">std</span>::move(lv1);		<span class="comment">// 合法, std::move 可以将左值转移为右值</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;rv1 = &quot;</span> &lt;&lt; rv1 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,</span></span><br><span class="line"> </span><br><span class="line">	<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span>&amp; lv2 = lv1 + lv1;		<span class="comment">// 合法, 常量左值引用能够延长临时变量的生命周期</span></span><br><span class="line">	<span class="comment">// lv2 += &quot;Test&quot;;						// 非法, 引用的右值无法被修改</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;lv2 = &quot;</span> &lt;&lt; lv2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,string</span></span><br><span class="line"> </span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv2 = lv1 + lv1;		    <span class="comment">// 合法，lv1 + lv1生成一个临时对象</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span>&amp;&amp; rv2 = lv1 + lv2;			<span class="comment">// 合法, 右值引用延长临时对象的生命周期</span></span><br><span class="line">	rv2 += <span class="string">&quot;string&quot;</span>;					    <span class="comment">// 合法, 非常量引用能够修改临时变量</span></span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;rv2 = &quot;</span> &lt;&lt; rv2 &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;      <span class="comment">// string,string,string,</span></span><br><span class="line"> </span><br><span class="line">	reference(rv2);							<span class="comment">// 输出左值</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>右值<br>rv1 = string,<br>lv2 = string,string,<br>rv2 = string,string,string,string<br>左值</p>
+</blockquote>
+<p><strong>注意</strong>：<code>rv2</code> 虽然引用了一个右值，但由于它是一个引用，所以 <code>rv2</code> 依然是一个左值。</p>
+<p>在C++11中，我们用左值去初始化一个对象或为一个已有对象赋值时，会调用<strong>拷贝构造函数或拷贝赋值运算符</strong>来拷贝资源（所谓资源，就是指new出来的东西），而当我们用一个右值（包括纯右值和将亡值）来初始化或赋值时，会调用<strong>移动构造函数或移动赋值运算符</strong>来移动资源，从而避免拷贝，提高效率。</p>
+<h2 id="移动构造函数"><a href="#移动构造函数" class="headerlink" title="移动构造函数"></a>移动构造函数</h2><p>C++11之前已经有复制构造函数了，相比复制构造函数，移动构造函数不是复制，而是直接转移类成员的所有权</p>
+<p>C++11引入了右值引用后，水道渠成的引入了移动构造函数,其参数类型为右值引用，看下面的例子：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">A(<span class="keyword">int</span> size) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size = size;</span><br><span class="line">    <span class="keyword">if</span>(size)data = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; ++i)data[i] = i;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A(<span class="keyword">const</span> A&amp; o) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;copy constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size=o.size;</span><br><span class="line">    data = <span class="keyword">new</span> <span class="keyword">int</span>[size];</span><br><span class="line">    <span class="built_in">memcpy</span>(data,o.data,size*<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A(A &amp;&amp;o) &#123;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;move constructor&quot;</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    data=o.data;</span><br><span class="line">    <span class="keyword">this</span>-&gt;size=o.size;</span><br><span class="line">    o.data=<span class="literal">nullptr</span>;</span><br><span class="line">    o.size=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">~A()&#123;<span class="keyword">delete</span> []data;&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> *data = <span class="literal">nullptr</span>;</span><br><span class="line">    <span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>移动构造函数和复制构造函数比较像，它把复制构造函数的<code>&amp;</code>替换为<code>&amp;&amp;</code>了，且没有了<code>const</code>。</strong>移动构造函数与拷贝构造函数的区别是，拷贝构造的参数是<code>const A&amp; o</code>，是常量左值引用，而移动构造的参数是<code>A &amp;&amp;o</code>，是右值引用。在上面的复制构造函数中，我们把<code>o.data</code>的内容复制给<code>this-&gt;data</code>，这就是大家常说的深拷贝；而在上面的在移动构造函数中，我们没有复制<code>o.data</code>的元素，而只是把<code>o.data</code>的指针赋值给<code>this-&gt;data</code>，将这就是大家常用的浅拷贝，但是与浅拷贝不同的是，移动构造函数还把<code>o.data</code>指针置为<code>nullptr</code>，这一步很重要，如果不将别人的指针修改为空，那么临时对象析构的时候就会释放掉这个资源。这样执行移动构造函数后，**<code>this-&gt;data</code>获得了元素的所有权，而<code>o.data</code>不再拥有之前元素的所有权，<code>o.data</code>元素的所有权被移动/过继给<code>this</code>了，这就是移动构造函数的含义**。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">A <span class="title">CreateA</span><span class="params">(<span class="keyword">int</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="function">A <span class="title">a</span><span class="params">(size)</span></span>;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">b = CreateA(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>constructor<br>move constructor</p>
+</blockquote>
+<h3 id="移动语义（move-semantic）"><a href="#移动语义（move-semantic）" class="headerlink" title="移动语义（move semantic）"></a>移动语义（move semantic）</h3><p>对于一个左值，肯定是调用拷贝构造函数了，但是有些左值是局部变量，生命周期也很短，如果它非常大的话，调用拷贝构造函数会造成资源的浪费，能不能也移动而不是拷贝呢？C++11为了解决这个问题，提供了<code>std::move()</code>方法来将左值转换为右值，从而方便应用移动语义。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">A b = <span class="built_in">std</span>::move(a);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>constructor<br>move constructor</p>
+</blockquote>
+<p>c++11中的所有容器都实现了<code>std::move()</code>语义，<code>std::move()</code>只是转移了资源的控制权，本质上是将左值强制转化为右值使用，以用于移动拷贝或赋值，避免对<strong>含有资源的对象</strong>发生无谓的拷贝。<code>std::move()</code>对于拥有如内存、文件句柄等资源的成员的对象有效，如果是一些基本类型，如<code>int</code>和<code>char[10]</code>数组等，如果使用<code>std::move()</code>，仍会发生拷贝（因为没有对应的移动构造函数），所以说<code>std::move()</code>对含有资源的对象说更有意义。同样需要注意的是，对于自己定义的含有资源的对象，如何实现移动构造函数是自由的，你完全可以在移动构造函数中执行复制功能，但是不要这么做，而是要遵守通用的规定。</p>
+<h4 id="移动语义的一个例子-——-emplace-back"><a href="#移动语义的一个例子-——-emplace-back" class="headerlink" title="移动语义的一个例子 —— emplace_back"></a>移动语义的一个例子 —— emplace_back</h4><p>C++11中对STL容器新增了emplace_back函数，可以更高效的向STL容器插入元素。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">vec.push_back(a);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>constructor<br>copy constructor</p>
+</blockquote>
+<p>从输出结果看，push_back过程中除了调用一次构造函数，还额外调用了一次复制构造函数，额外调用复制构造函数甚是浪费时间，假如是A a(10000000)，复制起来可是非常耗时的！如何避免额外的复制呢？</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line"><span class="function">A <span class="title">a</span><span class="params">(<span class="number">10</span>)</span></span>;</span><br><span class="line">vec.emplace_back(<span class="built_in">std</span>::move(a));</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>输出：<br>constructor<br>move constructor</p>
+</blockquote>
+<p>从输出结果看，此时<strong>调用了一次构造函数，和一次移动构造函数，而移动构造函数基本是不耗时的</strong>。很明显，使用emplace_back比push_back效率更高。另外，C++11中，上面的代码可以简化为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vector</span>&lt;A&gt; vec;</span><br><span class="line">vec.emplace_back(<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>输出：<br>constructor</p>
+</blockquote>
+<p>从输出结果看，此时只调用了一次构造函数，连移动构造函数都省掉了，这是<strong>因为emplace_back把参数10完美转发给A的构造函数，直接构造了一个元素，</strong>而这个元素是直接存放在vector容器中的。</p>
+<h4 id="移动语义的一个例子-——-swap"><a href="#移动语义的一个例子-——-swap" class="headerlink" title="移动语义的一个例子 —— swap"></a>移动语义的一个例子 —— swap</h4><p>移动语义对<code>swap()</code>函数的影响也很大，之前实现swap可能需要三次内存拷贝，而有了移动语义后，就可以实现高性能的交换函数了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(T&amp; a, T&amp; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">T <span class="title">tmp</span><span class="params">(<span class="built_in">std</span>::move(a))</span></span>;</span><br><span class="line">    a = <span class="built_in">std</span>::move(b);</span><br><span class="line">    b = <span class="built_in">std</span>::move(tmp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果<code>T</code>是可移动的，那么整个操作会很高效，如果不可移动，那么就和普通的交换函数是一样的，不会发生什么错误，很安全。</p>
+<p>[1] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40539125/article/details/84107068">C++ 引用&amp; 和 右值（纯右值、将亡值）引用&amp;&amp; （1）</a></p>
+<p>[2] <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_40539125/article/details/84228027">左值和右值、左值引用与右值引用、移动语句（2）</a></p>
+<p>[3] <a target="_blank" rel="noopener" href="https://blog.csdn.net/zzhongcy/article/details/86747794?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1">C++11：右值引用、move, 以及使用emplace_back代替push_back</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d19fc8447eaa">[c++11]我理解的右值引用、移动语义和完美转发</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/20/C++/using/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/20/Algorithm/bfs-%E8%AF%BE%E7%A8%8B%E8%A1%A8/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">94</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8-amp-amp"><span class="nav-number">1.</span> <span class="nav-text">右值引用&amp;&amp;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8-amp"><span class="nav-number">1.1.</span> <span class="nav-text">引用&amp;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC"><span class="nav-number">1.2.</span> <span class="nav-text">右值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8"><span class="nav-number">1.3.</span> <span class="nav-text">右值引用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">移动构造函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%EF%BC%88move-semantic%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">移动语义（move semantic）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90-%E2%80%94%E2%80%94-emplace-back"><span class="nav-number">2.1.1.</span> <span class="nav-text">移动语义的一个例子 —— emplace_back</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E7%9A%84%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90-%E2%80%94%E2%80%94-swap"><span class="nav-number">2.1.2.</span> <span class="nav-text">移动语义的一个例子 —— swap</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
